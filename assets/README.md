@@ -39,6 +39,10 @@ assets/
 
 ### `/images` - All Website Images
 
+#### Logo & Branding
+- **logo.svg** (2.3 KB) - Main logo with mandala pattern and "SA" monogram
+- **favicon.svg** (1.3 KB) - Favicon/shortcut icon for browser tabs
+
 #### Hero Slideshow (1920px HD)
 - **hero-1.jpg** (197 KB) - Traditional Red Silk Saree
 - **hero-2.jpg** (912 KB) - Blue Handwoven Cotton Saree
@@ -62,7 +66,7 @@ assets/
 - **gallery-6.jpg** (50 KB) - Printed Cotton Saree Collection
 
 ## Total Size
-**~3.1 MB** (all assets combined)
+**~3.1 MB** (all assets combined including 18 images + 2 SVG logos)
 
 ## Path References
 

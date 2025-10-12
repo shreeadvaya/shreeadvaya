@@ -123,6 +123,22 @@ h6 {
     align-items: center;
 }
 
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.logo-image {
+    height: 45px;
+    width: 45px;
+    transition: transform 0.3s ease;
+}
+
+.logo-image:hover {
+    transform: rotate(360deg);
+}
+
 .nav-logo h2 {
     font-family: 'Playfair Display', serif;
     font-size: 1.8rem;
@@ -131,6 +147,7 @@ h6 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    margin: 0;
 }
 
 .nav-menu {
@@ -878,6 +895,15 @@ h6 {
 @media (max-width: 768px) {
     .hamburger {
         display: flex;
+    }
+
+    .logo-image {
+        height: 38px;
+        width: 38px;
+    }
+
+    .nav-logo h2 {
+        font-size: 1.5rem;
     }
 
     .nav-menu {
