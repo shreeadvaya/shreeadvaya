@@ -232,22 +232,22 @@ h6 {
 }
 
 .hero-slide:nth-child(1) {
-    background-image: url('../images/hero-1.jpg');
+    background-image: url('../images/hero-1.webp');
     animation-delay: 0s;
 }
 
 .hero-slide:nth-child(2) {
-    background-image: url('../images/hero-2.jpg');
+    background-image: url('../images/hero-2.webp');
     animation-delay: 6s;
 }
 
 .hero-slide:nth-child(3) {
-    background-image: url('../images/hero-3.jpg');
+    background-image: url('../images/hero-3.webp');
     animation-delay: 12s;
 }
 
 .hero-slide:nth-child(4) {
-    background-image: url('../images/hero-4.jpg');
+    background-image: url('../images/hero-4.webp');
     animation-delay: 18s;
 }
 

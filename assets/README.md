@@ -40,33 +40,34 @@ assets/
 ### `/images` - All Website Images
 
 #### Logo & Branding
-- **logo.svg** (2.3 KB) - Main logo with mandala pattern and "SA" monogram
-- **favicon.svg** (1.3 KB) - Favicon/shortcut icon for browser tabs
+- **logo.svg** (3.0 KB) - Main logo with mandala pattern and "SA" monogram
+- **favicon.svg** (1.7 KB) - Favicon/shortcut icon for browser tabs
 
-#### Hero Slideshow (1920px HD)
-- **hero-1.jpg** (197 KB) - Traditional Red Silk Saree
-- **hero-2.jpg** (912 KB) - Blue Handwoven Cotton Saree
-- **hero-3.jpg** (197 KB) - Traditional Red Silk Saree variation
-- **hero-4.jpg** (912 KB) - Blue Handwoven Cotton Saree variation
+#### Hero Slideshow (1920px HD WebP)
+- **hero-1.webp** (124 KB) - Traditional Red Silk Saree
+- **hero-2.webp** (848 KB) - Blue Handwoven Cotton Saree
+- **hero-3.webp** (124 KB) - Traditional Red Silk Saree variation
+- **hero-4.webp** (848 KB) - Blue Handwoven Cotton Saree variation
 
-#### Product Cards (600px)
-- **product-1.jpg** (22 KB) - Traditional Silk Saree
-- **product-2.jpg** (122 KB) - Handwoven Cotton Saree
-- **product-3.jpg** (22 KB) - Embroidered Designer Saree
-- **product-4.jpg** (22 KB) - Bridal Red & Gold Saree
-- **product-5.jpg** (34 KB) - Royal Purple Silk Saree
-- **product-6.jpg** (34 KB) - Printed Cotton Saree
+#### Product Cards (600px WebP)
+- **product-1.webp** (16 KB) - Traditional Silk Saree
+- **product-2.webp** (134 KB) - Handwoven Cotton Saree
+- **product-3.webp** (16 KB) - Embroidered Designer Saree
+- **product-4.webp** (16 KB) - Bridal Red & Gold Saree
+- **product-5.webp** (26 KB) - Royal Purple Silk Saree
+- **product-6.webp** (26 KB) - Printed Cotton Saree
 
-#### Gallery (800px)
-- **gallery-1.jpg** (33 KB) - Elegant Red Silk Saree Collection
-- **gallery-2.jpg** (202 KB) - Traditional Blue Saree Collection
-- **gallery-3.jpg** (33 KB) - Designer Saree Collection
-- **gallery-4.jpg** (202 KB) - Bridal Saree Collection
-- **gallery-5.jpg** (50 KB) - Purple Silk Saree Collection
-- **gallery-6.jpg** (50 KB) - Printed Cotton Saree Collection
+#### Gallery (800px WebP)
+- **gallery-1.webp** (23 KB) - Elegant Red Silk Saree Collection
+- **gallery-2.webp** (214 KB) - Traditional Blue Saree Collection
+- **gallery-3.webp** (23 KB) - Designer Saree Collection
+- **gallery-4.webp** (214 KB) - Bridal Saree Collection
+- **gallery-5.webp** (37 KB) - Purple Silk Saree Collection
+- **gallery-6.webp** (37 KB) - Printed Cotton Saree Collection
 
 ## Total Size
-**~3.1 MB** (all assets combined including 18 images + 2 SVG logos)
+**~2.7 MB** (all assets combined - 16 WebP images + 2 SVG logos)
+**13% smaller** than original JPG format for faster loading!
 
 ## Path References
 
@@ -74,21 +75,23 @@ assets/
 ```html
 <link rel="stylesheet" href="assets/css/styles.css">
 <script src="assets/js/script.js"></script>
-<img src="assets/images/product-1.jpg">
+<img src="assets/images/product-1.webp">
 ```
 
 ### In styles.css:
 ```css
-background-image: url('../images/hero-1.jpg');
+background-image: url('../images/hero-1.webp');
 /* Relative to css/ folder, goes up to assets/ then into images/ */
 ```
 
-## Image Sources
-All images are sourced from Pexels (royalty-free) and saved locally for:
-- ⚡ Faster loading times
-- 🔒 Offline accessibility  
-- 📦 Version control
-- 🚫 No external dependencies
+## Image Format & Optimization
+All images are in **WebP format** for superior compression and performance:
+- 🚀 **13% smaller** than JPG format
+- ⚡ **Faster loading** times
+- 📱 **Better mobile** performance
+- ✨ **Same visual quality** at 80% compression
+- 🔒 **Offline accessibility** - all images stored locally
+- 📦 **No external dependencies**
 
 ## Benefits of This Structure
 - **Organized**: Clear separation of concerns (CSS, JS, Images)
