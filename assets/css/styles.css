@@ -769,10 +769,10 @@ h6 {
 
 .footer-content {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 3rem;
     margin-bottom: 3rem;
-    max-width: 1200px;
+    max-width: 800px;
     margin-left: auto;
     margin-right: auto;
     padding: 0 20px;
@@ -780,6 +780,12 @@ h6 {
 
 .footer-section {
     text-align: left;
+}
+
+/* Hide Categories and Customer Service sections (can be shown later by removing this) */
+.footer-content .footer-section:nth-child(2),
+.footer-content .footer-section:nth-child(3) {
+    display: none;
 }
 
 .footer-section h4 {
