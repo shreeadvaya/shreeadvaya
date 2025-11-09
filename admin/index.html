@@ -9,8 +9,34 @@
 </head>
 
 <body>
+  <script>
+    // Check if user needs to login
+    if (!localStorage.getItem('githubToken')) {
+      if (confirm('You need to login first. Click OK to go to login page.')) {
+        window.location.href = '/admin/login.html';
+      }
+    }
+  </script>
   <!-- Include the script that builds the page and powers Decap CMS -->
   <script src="https://unpkg.com/decap-cms@3.1.11/dist/decap-cms.js"></script>
+  <script>
+    // Override GitHub API authentication with stored token
+    if (localStorage.getItem('githubToken')) {
+      const token = localStorage.getItem('githubToken');
+      
+      // Intercept all fetch requests to GitHub API
+      const originalFetch = window.fetch;
+      window.fetch = function(url, options = {}) {
+        if (typeof url === 'string' && url.includes('api.github.com')) {
+          options.headers = options.headers || {};
+          if (!options.headers['Authorization']) {
+            options.headers['Authorization'] = `token ${token}`;
+          }
+        }
+        return originalFetch.call(this, url, options);
+      };
+    }
+  </script>
 </body>
 
 </html>

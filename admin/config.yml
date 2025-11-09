@@ -1,5 +1,9 @@
 backend:
-  name: test-repo
+  name: github
+  repo: Giridharsalana/ShreeAdvaya
+  branch: main
+  base_url: https://shreeadvaya.vercel.app
+  auth_endpoint: /admin/auth
 
 media_folder: "assets/images"
 public_folder: "assets/images"
