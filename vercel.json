@@ -3,6 +3,13 @@
     {
       "src": "/admin",
       "dest": "/admin/index.html"
+    },
+    {
+      "src": "/admin/config.yml",
+      "headers": {
+        "Content-Type": "text/yaml"
+      },
+      "dest": "/admin/config.yml"
     }
   ]
 }
