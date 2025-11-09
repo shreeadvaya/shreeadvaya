@@ -22,8 +22,14 @@ navLinks.forEach(link => {
 // Smooth scrolling for navigation links
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
-        e.preventDefault();
         const targetId = link.getAttribute('href');
+        
+        // Skip smooth scrolling for external links (admin, etc)
+        if (!targetId.startsWith('#')) {
+            return; // Let the browser handle normal navigation
+        }
+        
+        e.preventDefault();
         const targetSection = document.querySelector(targetId);
         
         if (targetSection) {
