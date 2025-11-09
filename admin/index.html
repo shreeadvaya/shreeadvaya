@@ -12,27 +12,24 @@
   <!-- Include the script that builds the page and powers Decap CMS -->
   <script>
     // Check if user has token, if not redirect to login
-    if (!localStorage.getItem('githubToken')) {
+    const token = localStorage.getItem('githubToken');
+    if (!token) {
       window.location.href = '/admin/login.html';
+    } else {
+      // Intercept fetch to add auth token
+      const originalFetch = window.fetch;
+      window.fetch = function(...args) {
+        const url = args[0];
+        if (typeof url === 'string' && url.includes('api.github.com')) {
+          args[1] = args[1] || {};
+          args[1].headers = args[1].headers || {};
+          args[1].headers['Authorization'] = `token ${token}`;
+        }
+        return originalFetch.apply(this, args);
+      };
     }
   </script>
   <script src="https://unpkg.com/decap-cms@3.1.11/dist/decap-cms.js"></script>
-  <script>
-    // Initialize CMS with GitHub token from localStorage
-    if (localStorage.getItem('githubToken')) {
-      CMS.init({
-        config: {
-          backend: {
-            name: 'github',
-            repo: 'Giridharsalana/ShreeAdvaya',
-            branch: 'main',
-            auth_type: 'token',
-            token: localStorage.getItem('githubToken')
-          }
-        }
-      });
-    }
-  </script>
 </body>
 
 </html>
