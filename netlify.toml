@@ -1,0 +1,21 @@
+[build]
+  publish = "."
+  command = "echo 'No build command needed for static site'"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Enable Git Gateway for Decap CMS
+[build.environment]
+  NODE_VERSION = "18"
+
+# Redirects for clean URLs (optional)
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200

@@ -1,0 +1,57 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Traditional Silk Saree",
+      "category": "silk",
+      "price": 8999,
+      "image": "assets/images/product-1.webp",
+      "description": "Elegant traditional red silk saree with intricate designs"
+    },
+    {
+      "id": 2,
+      "name": "Handwoven Cotton Saree",
+      "category": "cotton",
+      "price": 3999,
+      "image": "assets/images/product-2.webp",
+      "description": "Beautiful handwoven cotton saree in blue"
+    },
+    {
+      "id": 3,
+      "name": "Embroidered Designer Saree",
+      "category": "designer",
+      "price": 12999,
+      "image": "assets/images/product-3.webp",
+      "description": "Stunning embroidered designer saree with gold work"
+    },
+    {
+      "id": 4,
+      "name": "Bridal Red & Gold Saree",
+      "category": "bridal",
+      "price": 25999,
+      "image": "assets/images/product-4.webp",
+      "description": "Premium bridal saree in red and gold combination"
+    },
+    {
+      "id": 5,
+      "name": "Royal Purple Silk Saree",
+      "category": "silk",
+      "price": 9999,
+      "image": "assets/images/product-5.webp",
+      "description": "Royal purple silk saree with traditional motifs"
+    },
+    {
+      "id": 6,
+      "name": "Printed Green Cotton Saree",
+      "category": "cotton",
+      "price": 4499,
+      "image": "assets/images/product-6.webp",
+      "description": "Comfortable printed cotton saree in green"
+    }
+  ],
+  "siteContent": {
+    "heroTitle": "Elegance Redefined",
+    "heroSubtitle": "Discover our exquisite collection of premium sarees that blend traditional craftsmanship with modern sophistication",
+    "aboutDescription": "ShreeAdvaya represents the perfect fusion of traditional Indian craftsmanship and contemporary design. We curate the finest collection of sarees, each piece telling a story of heritage, elegance, and timeless beauty. Our commitment to quality and authenticity ensures that every saree in our collection is a masterpiece, carefully selected to celebrate the rich cultural heritage of India while meeting modern fashion sensibilities."
+  }
+}
