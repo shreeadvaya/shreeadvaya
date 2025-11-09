@@ -1,9 +1,10 @@
 backend:
-  name: github
-  repo: Giridharsalana/ShreeAdvaya
+  name: git-gateway
   branch: main
-  base_url: https://decap-oauth.vercel.app
-  auth_endpoint: /api/auth
+
+# Alternatively you can use the test backend for testing
+# backend:
+#   name: test-repo
 
 media_folder: "assets/images"
 public_folder: "assets/images"
