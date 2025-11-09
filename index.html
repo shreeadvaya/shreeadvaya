@@ -31,7 +31,8 @@
                 <li><a href="#products" class="nav-link">Products</a></li>
                 <li><a href="#gallery" class="nav-link">Gallery</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
-                <li><a href="admin/" class="nav-link" style="opacity: 0.6;" title="Admin Access"><i class="fas fa-lock"></i></a></li>
+                <li><a href="admin/" class="nav-link" style="opacity: 0.6;" title="Admin Access"><i
+                            class="fas fa-lock"></i></a></li>
             </ul>
             <div class="hamburger">
                 <span class="bar"></span>
@@ -380,20 +381,8 @@
         </div>
     </footer>
 
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script src="assets/js/content-loader.js"></script>
     <script src="assets/js/script.js"></script>
-    <script>
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", user => {
-          if (!user) {
-            window.netlifyIdentity.on("login", () => {
-              document.location.href = "/admin/";
-            });
-          }
-        });
-      }
-    </script>
 </body>
 
 </html>

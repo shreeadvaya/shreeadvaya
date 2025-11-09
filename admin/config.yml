@@ -1,10 +1,9 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: Giridharsalana/ShreeAdvaya
   branch: main
-
-# Alternatively you can use the test backend for testing
-# backend:
-#   name: test-repo
+  base_url: https://shreeadvaya.vercel.app
+  auth_endpoint: /api/auth
 
 media_folder: "assets/images"
 public_folder: "assets/images"
