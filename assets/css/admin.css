@@ -38,11 +38,15 @@ body {
     margin-bottom: 30px;
     color: #2c1810;
     font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
 }
 
-.login-box i {
+.login-box h1 i {
     color: #d4af37;
-    margin-right: 10px;
+    margin: 0;
 }
 
 .form-group {
