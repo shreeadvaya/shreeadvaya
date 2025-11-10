@@ -22,11 +22,5 @@
     "image": "assets/images/new-4.webp",
     "alt": "Luxury Silk Saree",
     "createdAt": "2024-01-01T00:00:00.000Z"
-  },
-  {
-    "id": "5",
-    "image": "assets/images/product-5.webp",
-    "alt": "Royal Purple Designer Saree",
-    "createdAt": "2024-01-01T00:00:00.000Z"
   }
 ]
