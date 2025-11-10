@@ -1,3 +1,256 @@
+// API Base URL
+const API_BASE = '/api';
+
+// Load all dynamic content
+async function loadDynamicContent() {
+    try {
+        await Promise.all([
+            loadProducts(),
+            loadGallery(),
+            loadHeroImages(),
+            loadContent()
+        ]);
+    } catch (error) {
+        console.error('Error loading dynamic content:', error);
+    }
+}
+
+// Load Products
+async function loadProducts() {
+    try {
+        const response = await fetch(`${API_BASE}/products`);
+        if (!response.ok) throw new Error('Failed to load products');
+        const products = await response.json();
+        
+        const productsGrid = document.getElementById('productsGrid');
+        if (!productsGrid) return;
+        
+        productsGrid.innerHTML = '';
+        
+        if (products.length === 0) {
+            productsGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px;">No products available at the moment.</p>';
+            return;
+        }
+        
+        products.forEach((product, index) => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.setAttribute('data-category', product.category);
+            card.innerHTML = `
+                <div class="product-image">
+                    <img src="${product.image}" alt="${product.alt || product.name}" loading="lazy" onerror="this.src='assets/images/product-1.webp'">
+                    <div class="product-overlay">
+                        <button class="btn btn-primary" onclick="openWhatsApp('${product.name}')">Inquire Now</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>${product.name}</h3>
+                    <p class="product-price">₹${product.price}</p>
+                </div>
+            `;
+            productsGrid.appendChild(card);
+        });
+        
+        // Reinitialize product cards for animations
+        const newProductCards = document.querySelectorAll('.product-card');
+        initProductCards(newProductCards);
+    } catch (error) {
+        console.error('Error loading products:', error);
+        const productsGrid = document.getElementById('productsGrid');
+        if (productsGrid) {
+            productsGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px; color: #999;">Unable to load products. Please try again later.</p>';
+        }
+    }
+}
+
+// Load Gallery
+async function loadGallery() {
+    try {
+        const response = await fetch(`${API_BASE}/gallery`);
+        if (!response.ok) throw new Error('Failed to load gallery');
+        const gallery = await response.json();
+        
+        const galleryGrid = document.getElementById('galleryGrid');
+        if (!galleryGrid) return;
+        
+        galleryGrid.innerHTML = '';
+        
+        if (gallery.length === 0) {
+            galleryGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px;">No gallery images available.</p>';
+            return;
+        }
+        
+        gallery.forEach((item) => {
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item';
+            galleryItem.innerHTML = `<img src="${item.image}" alt="${item.alt}" loading="lazy" onerror="this.src='assets/images/new-1.webp'">`;
+            galleryGrid.appendChild(galleryItem);
+        });
+        
+        // Reinitialize gallery lightbox
+        initGalleryLightbox();
+    } catch (error) {
+        console.error('Error loading gallery:', error);
+    }
+}
+
+// Load Hero Images
+async function loadHeroImages() {
+    try {
+        const response = await fetch(`${API_BASE}/hero`);
+        if (!response.ok) throw new Error('Failed to load hero images');
+        const heroes = await response.json();
+        
+        const heroSlideshow = document.getElementById('heroSlideshow');
+        if (!heroSlideshow) return;
+        
+        heroSlideshow.innerHTML = '';
+        
+        if (heroes.length === 0) {
+            // Default hero image if none available
+            heroSlideshow.innerHTML = '<div class="hero-slide active" style="background-image: url(\'assets/images/hero-1.webp\')"></div>';
+            return;
+        }
+        
+        heroes.forEach((hero, index) => {
+            const slide = document.createElement('div');
+            slide.className = 'hero-slide';
+            if (index === 0) slide.classList.add('active');
+            slide.style.backgroundImage = `url(${hero.image})`;
+            heroSlideshow.appendChild(slide);
+        });
+        
+        // Initialize hero slideshow
+        initHeroSlideshow();
+    } catch (error) {
+        console.error('Error loading hero images:', error);
+        const heroSlideshow = document.getElementById('heroSlideshow');
+        if (heroSlideshow) {
+            heroSlideshow.innerHTML = '<div class="hero-slide active" style="background-image: url(\'assets/images/hero-1.webp\')"></div>';
+        }
+    }
+}
+
+// Load Content (About, Contact Info)
+async function loadContent() {
+    try {
+        const response = await fetch(`${API_BASE}/content`);
+        if (!response.ok) throw new Error('Failed to load content');
+        const content = await response.json();
+        
+        // Update about description
+        const aboutDesc = document.getElementById('aboutDescription');
+        if (aboutDesc && content.about) {
+            aboutDesc.textContent = content.about;
+        }
+        
+        // Update contact information
+        if (content.whatsapp) {
+            const whatsappEl = document.getElementById('whatsappNumber');
+            const whatsappLink = document.getElementById('whatsappLink');
+            if (whatsappEl) {
+                const formatted = content.whatsapp.replace(/(\d{2})(\d{5})(\d{5})/, '+91 $1 $2 $3');
+                whatsappEl.textContent = formatted;
+            }
+            if (whatsappLink) {
+                whatsappLink.href = `https://wa.me/${content.whatsapp}`;
+            }
+            // Update global WhatsApp function
+            window.whatsappNumber = content.whatsapp;
+        }
+        
+        if (content.email) {
+            const emailEl = document.getElementById('contactEmail');
+            if (emailEl) emailEl.textContent = content.email;
+        }
+        
+        if (content.phone) {
+            const phoneEl = document.getElementById('contactPhone');
+            if (phoneEl) phoneEl.textContent = content.phone;
+        }
+    } catch (error) {
+        console.error('Error loading content:', error);
+    }
+}
+
+// Initialize hero slideshow
+function initHeroSlideshow() {
+    const slides = document.querySelectorAll('.hero-slide');
+    if (slides.length === 0) return;
+    
+    let currentSlide = 0;
+    
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.remove('active');
+            if (i === index) {
+                slide.classList.add('active');
+            }
+        });
+    }
+    
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+    
+    // Auto-advance slides every 5 seconds
+    if (slides.length > 1) {
+        setInterval(nextSlide, 5000);
+    }
+}
+
+// Initialize product cards for filtering
+function initProductCards(cards) {
+    const categoryBtns = document.querySelectorAll(".category-btn");
+    
+    categoryBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            categoryBtns.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            
+            const category = btn.getAttribute("data-category");
+            
+            cards.forEach((card, index) => {
+                if (category === "all" || card.getAttribute("data-category") === category) {
+                    card.style.display = "block";
+                    card.style.opacity = "0";
+                    card.style.transform = "translateY(30px)";
+                    
+                    setTimeout(() => {
+                        card.style.transition = "opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)";
+                        card.style.opacity = "1";
+                        card.style.transform = "translateY(0)";
+                    }, index * 80);
+                } else {
+                    card.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+                    card.style.opacity = "0";
+                    card.style.transform = "translateY(20px)";
+                    setTimeout(() => {
+                        card.style.display = "none";
+                    }, 300);
+                }
+            });
+        });
+    });
+}
+
+// Initialize gallery lightbox
+function initGalleryLightbox() {
+    const galleryItems = document.querySelectorAll(".gallery-item");
+    galleryItems.forEach((item) => {
+        item.addEventListener("click", () => {
+            const img = item.querySelector("img");
+            const lightbox = createLightbox(img.src, img.alt);
+            document.body.appendChild(lightbox);
+            
+            setTimeout(() => {
+                lightbox.style.opacity = "1";
+            }, 10);
+        });
+    });
+}
+
 // DOM Elements
 const hamburger = document.querySelector(".hamburger");
 const navMenu = document.querySelector(".nav-menu");
@@ -82,7 +335,7 @@ categoryBtns.forEach((btn) => {
 
 // WhatsApp Integration
 function openWhatsApp(productName = "") {
-  const phoneNumber = "919876543210"; // Replace with actual WhatsApp business number
+  const phoneNumber = window.whatsappNumber || "919876543210";
   const message = productName
     ? `Hi! I'm interested in: ${productName}`
     : "Hi! I would like to know more about your saree collection.";
