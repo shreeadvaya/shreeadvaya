@@ -416,57 +416,67 @@ function initGalleryLightbox() {
     });
 }
 
-// DOM Elements
-const hamburger = document.querySelector(".hamburger");
-const navMenu = document.querySelector(".nav-menu");
-const navLinks = document.querySelectorAll(".nav-link");
-const categoryBtns = document.querySelectorAll(".category-btn");
-const productCards = document.querySelectorAll(".product-card");
+// DOM Elements - Wait for DOM to be ready
+let hamburger, navMenu, navLinks, categoryBtns, productCards;
 
-// Mobile Navigation Toggle
-hamburger.addEventListener("click", () => {
-  hamburger.classList.toggle("active");
-  navMenu.classList.toggle("active");
-});
+// Initialize DOM elements and event listeners
+function initDOM() {
+    hamburger = document.querySelector(".hamburger");
+    navMenu = document.querySelector(".nav-menu");
+    navLinks = document.querySelectorAll(".nav-link");
+    categoryBtns = document.querySelectorAll(".category-btn");
+    productCards = document.querySelectorAll(".product-card");
 
-// Close mobile menu when clicking on a link
-navLinks.forEach((link) => {
-  link.addEventListener("click", () => {
-    hamburger.classList.remove("active");
-    navMenu.classList.remove("active");
-  });
-});
-
-// Smooth scrolling for navigation links
-navLinks.forEach((link) => {
-  link.addEventListener("click", (e) => {
-    const targetId = link.getAttribute("href");
-
-    // Skip smooth scrolling for external links (admin, etc)
-    if (!targetId.startsWith("#")) {
-      return; // Let the browser handle normal navigation
+    if (!hamburger || !navMenu) {
+        console.warn('Navigation elements not found');
+        return;
     }
 
-    e.preventDefault();
-    const targetSection = document.querySelector(targetId);
+    // Mobile Navigation Toggle
+    hamburger.addEventListener("click", () => {
+        hamburger.classList.toggle("active");
+        navMenu.classList.toggle("active");
+    });
 
-    if (targetSection) {
-      const offsetTop = targetSection.offsetTop - 80;
-      window.scrollTo({
-        top: offsetTop,
-        behavior: "smooth"
-      });
-    }
-  });
-});
+    // Close mobile menu when clicking on a link
+    navLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+            hamburger.classList.remove("active");
+            navMenu.classList.remove("active");
+        });
+    });
 
-// Product Category Filtering with Smooth Animation
-categoryBtns.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    // Remove active class from all buttons
-    categoryBtns.forEach((b) => b.classList.remove("active"));
-    // Add active class to clicked button
-    btn.classList.add("active");
+    // Smooth scrolling for navigation links
+    navLinks.forEach((link) => {
+        link.addEventListener("click", (e) => {
+            const targetId = link.getAttribute("href");
+
+            // Skip smooth scrolling for external links (admin, etc)
+            if (!targetId.startsWith("#")) {
+                return; // Let the browser handle normal navigation
+            }
+
+            e.preventDefault();
+            const targetSection = document.querySelector(targetId);
+
+            if (targetSection) {
+                const offsetTop = targetSection.offsetTop - 80;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: "smooth"
+                });
+            }
+        });
+    });
+
+    // Product Category Filtering with Smooth Animation
+    if (categoryBtns.length > 0) {
+        categoryBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                // Remove active class from all buttons
+                categoryBtns.forEach((b) => b.classList.remove("active"));
+                // Add active class to clicked button
+                btn.classList.add("active");
 
     const category = btn.getAttribute("data-category");
 
