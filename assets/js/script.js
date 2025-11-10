@@ -751,13 +751,59 @@ function createWhatsAppFloat() {
   document.body.appendChild(whatsappFloat);
 }
 
+    // Product Category Filtering with Smooth Animation
+    if (categoryBtns.length > 0) {
+        categoryBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                // Remove active class from all buttons
+                categoryBtns.forEach((b) => b.classList.remove("active"));
+                // Add active class to clicked button
+                btn.classList.add("active");
+
+                const category = btn.getAttribute("data-category");
+
+                if (productCards && productCards.length > 0) {
+                    productCards.forEach((card, index) => {
+                        if (
+                            category === "all" ||
+                            card.getAttribute("data-category") === category
+                        ) {
+                            card.style.display = "block";
+                            card.style.opacity = "0";
+                            card.style.transform = "translateY(30px)";
+
+                            // Animate in with stagger effect
+                            setTimeout(() => {
+                                card.style.transition =
+                                    "opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)";
+                                card.style.opacity = "1";
+                                card.style.transform = "translateY(0)";
+                            }, index * 80);
+                        } else {
+                            card.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+                            card.style.opacity = "0";
+                            card.style.transform = "translateY(20px)";
+                            setTimeout(() => {
+                                card.style.display = "none";
+                            }, 300);
+                        }
+                    });
+                }
+            });
+        });
+    }
+}
+
 // Initialize on page load
 document.addEventListener("DOMContentLoaded", () => {
-  // Load dynamic content from APIs
-  loadDynamicContent();
-  
-  // Initialize scroll animations
-  initScrollAnimations();
+    // Initialize DOM elements and event listeners
+    initDOM();
+    
+    // Load dynamic content from APIs
+    loadDynamicContent();
+    
+    // Initialize scroll animations
+    initScrollAnimations();
 });
 
 // Smooth Scroll Reveal Animations
@@ -890,10 +936,12 @@ document.addEventListener("click", (e) => {
 
 // Initialize product cards animation on page load
 window.addEventListener("load", () => {
-  productCards.forEach((card, index) => {
-    setTimeout(() => {
-      card.style.opacity = "1";
-      card.style.transform = "translateY(0)";
-    }, index * 100);
-  });
+    if (productCards && productCards.length > 0) {
+        productCards.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.opacity = "1";
+                card.style.transform = "translateY(0)";
+            }, index * 100);
+        });
+    }
 });
