@@ -4,10 +4,20 @@
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
+    }
+
+    // Verify authentication for write operations
+    if (req.method !== 'GET') {
+        const authHeader = req.headers.authorization;
+        const token = authHeader?.replace('Bearer ', '');
+        
+        if (!token || !(await verifyToken(token))) {
+            return res.status(401).json({ error: 'Unauthorized. Please login.' });
+        }
     }
 
     // Parse request body for POST/PUT requests
