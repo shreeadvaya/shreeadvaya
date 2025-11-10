@@ -138,38 +138,71 @@ async function loadContent() {
         if (!response.ok) throw new Error('Failed to load content');
         const content = await response.json();
         
+        // Default values
+        const defaults = {
+            whatsapp: '919876543210',
+            email: 'info@shreeadvaya.com',
+            phone: '+91 98765 43210',
+            about: 'ShreeAdvaya represents the perfect fusion of traditional Indian craftsmanship and contemporary design. We curate the finest collection of sarees, each piece telling a story of heritage, elegance, and timeless beauty. Our commitment to quality and authenticity ensures that every saree in our collection is a masterpiece, carefully selected to celebrate the rich cultural heritage of India while meeting modern fashion sensibilities.'
+        };
+        
         // Update about description
         const aboutDesc = document.getElementById('aboutDescription');
-        if (aboutDesc && content.about) {
-            aboutDesc.textContent = content.about;
+        if (aboutDesc) {
+            aboutDesc.textContent = content.about || defaults.about;
         }
         
         // Update contact information
-        if (content.whatsapp) {
-            const whatsappEl = document.getElementById('whatsappNumber');
-            const whatsappLink = document.getElementById('whatsappLink');
-            if (whatsappEl) {
-                const formatted = content.whatsapp.replace(/(\d{2})(\d{5})(\d{5})/, '+91 $1 $2 $3');
-                whatsappEl.textContent = formatted;
-            }
-            if (whatsappLink) {
-                whatsappLink.href = `https://wa.me/${content.whatsapp}`;
-            }
-            // Update global WhatsApp function
-            window.whatsappNumber = content.whatsapp;
+        const whatsapp = content.whatsapp || defaults.whatsapp;
+        const whatsappEl = document.getElementById('whatsappNumber');
+        const whatsappLink = document.getElementById('whatsappLink');
+        if (whatsappEl) {
+            const formatted = whatsapp.replace(/(\d{2})(\d{5})(\d{5})/, '+91 $1 $2 $3');
+            whatsappEl.textContent = formatted;
         }
+        if (whatsappLink) {
+            whatsappLink.href = `https://wa.me/${whatsapp}`;
+        }
+        // Update global WhatsApp function
+        window.whatsappNumber = whatsapp;
         
-        if (content.email) {
-            const emailEl = document.getElementById('contactEmail');
-            if (emailEl) emailEl.textContent = content.email;
-        }
+        const email = content.email || defaults.email;
+        const emailEl = document.getElementById('contactEmail');
+        if (emailEl) emailEl.textContent = email;
         
-        if (content.phone) {
-            const phoneEl = document.getElementById('contactPhone');
-            if (phoneEl) phoneEl.textContent = content.phone;
-        }
+        const phone = content.phone || defaults.phone;
+        const phoneEl = document.getElementById('contactPhone');
+        if (phoneEl) phoneEl.textContent = phone;
+        
+        // Update footer contact info
+        const footerPhone = document.getElementById('footerPhone');
+        const footerEmail = document.getElementById('footerEmail');
+        if (footerPhone) footerPhone.innerHTML = `<i class="fas fa-phone"></i> ${phone}`;
+        if (footerEmail) footerEmail.innerHTML = `<i class="fas fa-envelope"></i> ${email}`;
     } catch (error) {
         console.error('Error loading content:', error);
+        // Set defaults on error
+        const defaults = {
+            whatsapp: '919876543210',
+            email: 'info@shreeadvaya.com',
+            phone: '+91 98765 43210',
+            about: 'ShreeAdvaya represents the perfect fusion of traditional Indian craftsmanship and contemporary design. We curate the finest collection of sarees, each piece telling a story of heritage, elegance, and timeless beauty. Our commitment to quality and authenticity ensures that every saree in our collection is a masterpiece, carefully selected to celebrate the rich cultural heritage of India while meeting modern fashion sensibilities.'
+        };
+        
+        const aboutDesc = document.getElementById('aboutDescription');
+        if (aboutDesc) aboutDesc.textContent = defaults.about;
+        
+        const whatsappEl = document.getElementById('whatsappNumber');
+        const whatsappLink = document.getElementById('whatsappLink');
+        if (whatsappEl) whatsappEl.textContent = '+91 98 765 43210';
+        if (whatsappLink) whatsappLink.href = `https://wa.me/${defaults.whatsapp}`;
+        window.whatsappNumber = defaults.whatsapp;
+        
+        const emailEl = document.getElementById('contactEmail');
+        if (emailEl) emailEl.textContent = defaults.email;
+        
+        const phoneEl = document.getElementById('contactPhone');
+        if (phoneEl) phoneEl.textContent = defaults.phone;
     }
 }
 
@@ -563,10 +596,11 @@ function createWhatsAppFloat() {
   document.body.appendChild(whatsappFloat);
 }
 
-// Initialize WhatsApp float button
+// Initialize on page load
 document.addEventListener("DOMContentLoaded", () => {
-  // createWhatsAppFloat(); // Commented out to hide floating WhatsApp button
-
+  // Load dynamic content from APIs
+  loadDynamicContent();
+  
   // Initialize scroll animations
   initScrollAnimations();
 });
