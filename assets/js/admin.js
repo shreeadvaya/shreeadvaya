@@ -803,11 +803,11 @@ async function saveAllChanges() {
             await apiCall('/products', 'POST', itemData);
         }
         for (const item of pendingChanges.products.update) {
-            await apiCall(`/products/${item.id}`, 'PUT', item);
+            await apiCall(`/products?id=${item.id}`, 'PUT', item);
         }
         for (const id of pendingChanges.products.delete) {
             if (!id.startsWith('temp_')) {
-                await apiCall(`/products/${id}`, 'DELETE');
+                await apiCall(`/products?id=${id}`, 'DELETE');
             }
         }
         
@@ -817,11 +817,11 @@ async function saveAllChanges() {
             await apiCall('/gallery', 'POST', itemData);
         }
         for (const item of pendingChanges.gallery.update) {
-            await apiCall(`/gallery/${item.id}`, 'PUT', item);
+            await apiCall(`/gallery?id=${item.id}`, 'PUT', item);
         }
         for (const id of pendingChanges.gallery.delete) {
             if (!id.startsWith('temp_')) {
-                await apiCall(`/gallery/${id}`, 'DELETE');
+                await apiCall(`/gallery?id=${id}`, 'DELETE');
             }
         }
         
@@ -831,11 +831,11 @@ async function saveAllChanges() {
             await apiCall('/hero', 'POST', itemData);
         }
         for (const item of pendingChanges.hero.update) {
-            await apiCall(`/hero/${item.id}`, 'PUT', item);
+            await apiCall(`/hero?id=${item.id}`, 'PUT', item);
         }
         for (const id of pendingChanges.hero.delete) {
             if (!id.startsWith('temp_')) {
-                await apiCall(`/hero/${id}`, 'DELETE');
+                await apiCall(`/hero?id=${id}`, 'DELETE');
             }
         }
         
