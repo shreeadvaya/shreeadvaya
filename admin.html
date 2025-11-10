@@ -30,30 +30,31 @@
     <!-- Admin Dashboard -->
     <div id="adminDashboard" class="admin-dashboard" style="display: none;">
         <header class="admin-header">
-            <h1><i class="fas fa-cog"></i> ShreeAdvaya Admin Panel</h1>
-            <button id="logoutBtn" class="btn btn-secondary">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
+            <div class="header-left">
+                <h1><i class="fas fa-cog"></i> ShreeAdvaya Admin Panel</h1>
+            </div>
+            <nav class="admin-nav">
+                <a href="#products" class="nav-tab active" data-tab="products">
+                    <i class="fas fa-box"></i> Products
+                </a>
+                <a href="#gallery" class="nav-tab" data-tab="gallery">
+                    <i class="fas fa-images"></i> Gallery
+                </a>
+                <a href="#hero" class="nav-tab" data-tab="hero">
+                    <i class="fas fa-image"></i> Hero Images
+                </a>
+                <a href="#content" class="nav-tab" data-tab="content">
+                    <i class="fas fa-edit"></i> Content
+                </a>
+            </nav>
+            <div class="header-right">
+                <button id="logoutBtn" class="btn btn-secondary">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
         </header>
 
         <div class="admin-container">
-            <nav class="admin-sidebar">
-                <ul>
-                    <li><a href="#products" class="nav-tab active" data-tab="products">
-                            <i class="fas fa-box"></i> Products
-                        </a></li>
-                    <li><a href="#gallery" class="nav-tab" data-tab="gallery">
-                            <i class="fas fa-images"></i> Gallery
-                        </a></li>
-                    <li><a href="#hero" class="nav-tab" data-tab="hero">
-                            <i class="fas fa-image"></i> Hero Images
-                        </a></li>
-                    <li><a href="#content" class="nav-tab" data-tab="content">
-                            <i class="fas fa-edit"></i> Content
-                        </a></li>
-                </ul>
-            </nav>
-
             <main class="admin-content">
                 <!-- Products Tab -->
                 <div id="productsTab" class="tab-content active">
