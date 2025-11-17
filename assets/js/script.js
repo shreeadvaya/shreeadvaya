@@ -36,13 +36,54 @@ async function loadProducts() {
             const card = document.createElement('div');
             card.className = 'product-card';
             card.setAttribute('data-category', product.category);
-            card.innerHTML = `
-                <div class="product-image">
-                    <img src="${product.image}" alt="${product.alt || product.name}" loading="lazy" onerror="this.src='assets/images/product-1.webp'">
-                    <div class="product-overlay">
-                        <button class="btn btn-primary" onclick="openWhatsApp('${product.name}')">Inquire Now</button>
+            
+            // Support both single image (backward compatibility) and multiple images
+            const images = product.images || (product.image ? [product.image] : ['assets/images/product-1.webp']);
+            const primaryImage = images[0];
+            const hasMultipleImages = images.length > 1;
+            
+            // Build image carousel HTML if multiple images
+            let imageHTML = '';
+            if (hasMultipleImages) {
+                imageHTML = `
+                    <div class="product-image-carousel">
+                        <div class="product-image-wrapper">
+                            ${images.map((img, imgIndex) => `
+                                <img src="${img}" alt="${product.alt || product.name} - Image ${imgIndex + 1}" 
+                                     class="product-carousel-image ${imgIndex === 0 ? 'active' : ''}" 
+                                     loading="lazy" 
+                                     onerror="this.src='assets/images/product-1.webp'">
+                            `).join('')}
+                        </div>
+                        ${hasMultipleImages ? `
+                            <div class="product-carousel-controls">
+                                <button class="carousel-prev" onclick="changeProductImage(this, -1)"><i class="fas fa-chevron-left"></i></button>
+                                <button class="carousel-next" onclick="changeProductImage(this, 1)"><i class="fas fa-chevron-right"></i></button>
+                                <div class="carousel-indicators">
+                                    ${images.map((_, imgIndex) => `
+                                        <span class="indicator ${imgIndex === 0 ? 'active' : ''}" onclick="goToProductImage(this, ${imgIndex})"></span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                        <div class="product-overlay">
+                            <button class="btn btn-primary" onclick="openWhatsApp('${product.name}')">Inquire Now</button>
+                        </div>
                     </div>
-                </div>
+                `;
+            } else {
+                imageHTML = `
+                    <div class="product-image">
+                        <img src="${primaryImage}" alt="${product.alt || product.name}" loading="lazy" onerror="this.src='assets/images/product-1.webp'">
+                        <div class="product-overlay">
+                            <button class="btn btn-primary" onclick="openWhatsApp('${product.name}')">Inquire Now</button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            card.innerHTML = `
+                ${imageHTML}
                 <div class="product-info">
                     <h3>${product.name}</h3>
                     <p class="product-price">₹${product.price}</p>
@@ -140,6 +181,7 @@ async function loadContent() {
         
         // Default values
         const defaults = {
+            logo: 'assets/images/logo.svg',
             hero: {
                 title: 'Elegance Redefined',
                 subtitle: 'Discover our exquisite collection of premium sarees that blend traditional craftsmanship with modern sophistication'
@@ -162,6 +204,17 @@ async function loadContent() {
             phone: '+91 98765 43210',
             about: 'ShreeAdvaya represents the perfect fusion of traditional Indian craftsmanship and contemporary design. We curate the finest collection of sarees, each piece telling a story of heritage, elegance, and timeless beauty. Our commitment to quality and authenticity ensures that every saree in our collection is a masterpiece, carefully selected to celebrate the rich cultural heritage of India while meeting modern fashion sensibilities.'
         };
+        
+        // Update logo
+        const logo = content.logo || defaults.logo;
+        const siteLogo = document.getElementById('siteLogo');
+        if (siteLogo) {
+            siteLogo.src = logo;
+            siteLogo.onerror = function() {
+                // Fallback to default logo if custom logo fails to load
+                this.src = defaults.logo;
+            };
+        }
         
         // Update hero section
         const heroTitle = document.getElementById('heroTitle');
@@ -272,6 +325,7 @@ async function loadContent() {
         console.error('Error loading content:', error);
         // Set defaults on error
         const defaults = {
+            logo: 'assets/images/logo.svg',
             hero: {
                 title: 'Elegance Redefined',
                 subtitle: 'Discover our exquisite collection of premium sarees that blend traditional craftsmanship with modern sophistication'
@@ -287,6 +341,12 @@ async function loadContent() {
             phone: '+91 98765 43210',
             about: 'ShreeAdvaya represents the perfect fusion of traditional Indian craftsmanship and contemporary design. We curate the finest collection of sarees, each piece telling a story of heritage, elegance, and timeless beauty. Our commitment to quality and authenticity ensures that every saree in our collection is a masterpiece, carefully selected to celebrate the rich cultural heritage of India while meeting modern fashion sensibilities.'
         };
+        
+        // Update logo on error
+        const siteLogo = document.getElementById('siteLogo');
+        if (siteLogo) {
+            siteLogo.src = defaults.logo;
+        }
         
         const heroTitle = document.getElementById('heroTitle');
         const heroSubtitle = document.getElementById('heroSubtitle');
@@ -510,6 +570,46 @@ function initDOM() {
             });
         });
     }
+}
+
+// Product Image Carousel Functions
+function changeProductImage(button, direction) {
+    const carousel = button.closest('.product-image-carousel');
+    const images = carousel.querySelectorAll('.product-carousel-image');
+    const indicators = carousel.querySelectorAll('.indicator');
+    let currentIndex = 0;
+    
+    images.forEach((img, index) => {
+        if (img.classList.contains('active')) {
+            currentIndex = index;
+        }
+    });
+    
+    let newIndex = currentIndex + direction;
+    if (newIndex < 0) newIndex = images.length - 1;
+    if (newIndex >= images.length) newIndex = 0;
+    
+    images[currentIndex].classList.remove('active');
+    images[newIndex].classList.add('active');
+    
+    if (indicators.length > 0) {
+        indicators[currentIndex].classList.remove('active');
+        indicators[newIndex].classList.add('active');
+    }
+}
+
+function goToProductImage(indicator, index) {
+    const carousel = indicator.closest('.product-image-carousel');
+    const images = carousel.querySelectorAll('.product-carousel-image');
+    const indicators = carousel.querySelectorAll('.indicator');
+    
+    images.forEach((img, i) => {
+        img.classList.toggle('active', i === index);
+    });
+    
+    indicators.forEach((ind, i) => {
+        ind.classList.toggle('active', i === index);
+    });
 }
 
 // WhatsApp Integration

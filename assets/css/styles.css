@@ -522,6 +522,115 @@ h6 {
     transform: scale(1.1);
 }
 
+/* Product Image Carousel */
+.product-image-carousel {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+}
+
+.product-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.product-carousel-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.3s ease;
+    transform: scale(1);
+}
+
+.product-carousel-image.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.product-card:hover .product-carousel-image.active {
+    transform: scale(1.1);
+}
+
+.product-carousel-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.carousel-prev,
+.carousel-next {
+    pointer-events: all;
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 10px;
+    color: #2c1810;
+    opacity: 0;
+}
+
+.product-card:hover .carousel-prev,
+.product-card:hover .carousel-next {
+    opacity: 1;
+}
+
+.carousel-prev:hover,
+.carousel-next:hover {
+    background: rgba(212, 175, 55, 0.9);
+    color: white;
+    transform: scale(1.1);
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.carousel-indicators .indicator {
+    pointer-events: all;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.product-card:hover .carousel-indicators .indicator {
+    opacity: 1;
+}
+
+.carousel-indicators .indicator.active {
+    background: #d4af37;
+    width: 24px;
+    border-radius: 4px;
+}
+
 .product-overlay {
     position: absolute;
     top: 0;
@@ -534,6 +643,7 @@ h6 {
     justify-content: center;
     opacity: 0;
     transition: opacity 0.3s ease;
+    z-index: 4;
 }
 
 .product-card:hover .product-overlay {

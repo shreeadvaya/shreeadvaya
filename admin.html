@@ -125,7 +125,19 @@
                         <h2>Edit Website Content</h2>
                     </div>
                     <form id="contentForm" class="content-form">
-                        <h3 style="margin-bottom: 20px; color: #2c1810; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">Hero Section</h3>
+                        <h3 style="margin-bottom: 20px; color: #2c1810; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">Logo</h3>
+                        <div class="form-group">
+                            <label>Logo URL</label>
+                            <input type="text" id="siteLogoUrl" placeholder="assets/images/logo.svg">
+                            <small>Or upload new logo below (URL will be auto-filled)</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Upload Logo</label>
+                            <input type="file" id="logoUpload" accept="image/*">
+                            <div id="logoPreview" class="image-preview"></div>
+                        </div>
+
+                        <h3 style="margin: 30px 0 20px 0; color: #2c1810; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">Hero Section</h3>
                         <div class="form-group">
                             <label>Hero Title</label>
                             <input type="text" id="heroTitle" placeholder="Elegance Redefined">
@@ -221,13 +233,19 @@
                     <input type="number" id="productPrice" required>
                 </div>
                 <div class="form-group">
-                    <label>Image URL</label>
-                    <input type="text" id="productImage" placeholder="assets/images/product-X.webp">
-                    <small>Or upload new image below (URL will be auto-filled)</small>
+                    <label>Product Images</label>
+                    <small style="display: block; margin-bottom: 10px; color: #666;">You can add multiple images. Use URLs or upload files.</small>
+                    <div id="productImagesContainer">
+                        <!-- Image inputs will be dynamically added here -->
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="addProductImageField()" style="margin-top: 10px;">
+                        <i class="fas fa-plus"></i> Add Another Image
+                    </button>
                 </div>
                 <div class="form-group">
-                    <label>Upload Image</label>
-                    <input type="file" id="productImageUpload" accept="image/*">
+                    <label>Upload Images (Multiple)</label>
+                    <input type="file" id="productImageUpload" accept="image/*" multiple>
+                    <small>Select multiple images at once</small>
                     <div id="productImagePreview" class="image-preview"></div>
                 </div>
                 <div class="form-group">
