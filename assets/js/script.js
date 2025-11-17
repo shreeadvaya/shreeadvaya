@@ -36,13 +36,54 @@ async function loadProducts() {
             const card = document.createElement('div');
             card.className = 'product-card';
             card.setAttribute('data-category', product.category);
-            card.innerHTML = `
-                <div class="product-image">
-                    <img src="${product.image}" alt="${product.alt || product.name}" loading="lazy" onerror="this.src='assets/images/product-1.webp'">
-                    <div class="product-overlay">
-                        <button class="btn btn-primary" onclick="openWhatsApp('${product.name}')">Inquire Now</button>
+            
+            // Support both single image (backward compatibility) and multiple images
+            const images = product.images || (product.image ? [product.image] : ['assets/images/product-1.webp']);
+            const primaryImage = images[0];
+            const hasMultipleImages = images.length > 1;
+            
+            // Build image carousel HTML if multiple images
+            let imageHTML = '';
+            if (hasMultipleImages) {
+                imageHTML = `
+                    <div class="product-image-carousel">
+                        <div class="product-image-wrapper">
+                            ${images.map((img, imgIndex) => `
+                                <img src="${img}" alt="${product.alt || product.name} - Image ${imgIndex + 1}" 
+                                     class="product-carousel-image ${imgIndex === 0 ? 'active' : ''}" 
+                                     loading="lazy" 
+                                     onerror="this.src='assets/images/product-1.webp'">
+                            `).join('')}
+                        </div>
+                        ${hasMultipleImages ? `
+                            <div class="product-carousel-controls">
+                                <button class="carousel-prev" onclick="changeProductImage(this, -1)"><i class="fas fa-chevron-left"></i></button>
+                                <button class="carousel-next" onclick="changeProductImage(this, 1)"><i class="fas fa-chevron-right"></i></button>
+                                <div class="carousel-indicators">
+                                    ${images.map((_, imgIndex) => `
+                                        <span class="indicator ${imgIndex === 0 ? 'active' : ''}" onclick="goToProductImage(this, ${imgIndex})"></span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                        <div class="product-overlay">
+                            <button class="btn btn-primary" onclick="openWhatsApp('${product.name}')">Inquire Now</button>
+                        </div>
                     </div>
-                </div>
+                `;
+            } else {
+                imageHTML = `
+                    <div class="product-image">
+                        <img src="${primaryImage}" alt="${product.alt || product.name}" loading="lazy" onerror="this.src='assets/images/product-1.webp'">
+                        <div class="product-overlay">
+                            <button class="btn btn-primary" onclick="openWhatsApp('${product.name}')">Inquire Now</button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            card.innerHTML = `
+                ${imageHTML}
                 <div class="product-info">
                     <h3>${product.name}</h3>
                     <p class="product-price">₹${product.price}</p>
@@ -510,6 +551,46 @@ function initDOM() {
             });
         });
     }
+}
+
+// Product Image Carousel Functions
+function changeProductImage(button, direction) {
+    const carousel = button.closest('.product-image-carousel');
+    const images = carousel.querySelectorAll('.product-carousel-image');
+    const indicators = carousel.querySelectorAll('.indicator');
+    let currentIndex = 0;
+    
+    images.forEach((img, index) => {
+        if (img.classList.contains('active')) {
+            currentIndex = index;
+        }
+    });
+    
+    let newIndex = currentIndex + direction;
+    if (newIndex < 0) newIndex = images.length - 1;
+    if (newIndex >= images.length) newIndex = 0;
+    
+    images[currentIndex].classList.remove('active');
+    images[newIndex].classList.add('active');
+    
+    if (indicators.length > 0) {
+        indicators[currentIndex].classList.remove('active');
+        indicators[newIndex].classList.add('active');
+    }
+}
+
+function goToProductImage(indicator, index) {
+    const carousel = indicator.closest('.product-image-carousel');
+    const images = carousel.querySelectorAll('.product-carousel-image');
+    const indicators = carousel.querySelectorAll('.indicator');
+    
+    images.forEach((img, i) => {
+        img.classList.toggle('active', i === index);
+    });
+    
+    indicators.forEach((ind, i) => {
+        ind.classList.toggle('active', i === index);
+    });
 }
 
 // WhatsApp Integration

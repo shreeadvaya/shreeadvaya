@@ -221,13 +221,19 @@
                     <input type="number" id="productPrice" required>
                 </div>
                 <div class="form-group">
-                    <label>Image URL</label>
-                    <input type="text" id="productImage" placeholder="assets/images/product-X.webp">
-                    <small>Or upload new image below (URL will be auto-filled)</small>
+                    <label>Product Images</label>
+                    <small style="display: block; margin-bottom: 10px; color: #666;">You can add multiple images. Use URLs or upload files.</small>
+                    <div id="productImagesContainer">
+                        <!-- Image inputs will be dynamically added here -->
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="addProductImageField()" style="margin-top: 10px;">
+                        <i class="fas fa-plus"></i> Add Another Image
+                    </button>
                 </div>
                 <div class="form-group">
-                    <label>Upload Image</label>
-                    <input type="file" id="productImageUpload" accept="image/*">
+                    <label>Upload Images (Multiple)</label>
+                    <input type="file" id="productImageUpload" accept="image/*" multiple>
+                    <small>Select multiple images at once</small>
                     <div id="productImagePreview" class="image-preview"></div>
                 </div>
                 <div class="form-group">

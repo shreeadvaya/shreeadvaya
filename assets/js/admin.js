@@ -281,10 +281,18 @@ function getDisplayProducts() {
 }
 
 function createProductCard(product) {
+    // Support both single image (backward compatibility) and multiple images
+    const images = product.images || (product.image ? [product.image] : ['assets/images/product-1.webp']);
+    const primaryImage = images[0];
+    const imageCount = images.length;
+    
     const card = document.createElement('div');
     card.className = 'item-card';
     card.innerHTML = `
-        <img src="${product.image}" alt="${product.alt || product.name}" onerror="this.src='assets/images/product-1.webp'">
+        <img src="${primaryImage}" alt="${product.alt || product.name}" onerror="this.src='assets/images/product-1.webp'">
+        ${imageCount > 1 ? `<div class="image-count-badge" style="position: absolute; top: 10px; right: 10px; background: rgba(212, 175, 55, 0.9); color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+            <i class="fas fa-images"></i> ${imageCount} images
+        </div>` : ''}
         <div class="item-card-body">
             <div class="item-card-title">${product.name}</div>
             <div class="item-card-info">
@@ -312,6 +320,10 @@ function openProductModal(productId = null) {
     form.reset();
     document.getElementById('productImagePreview').innerHTML = '';
     document.getElementById('productImageUpload').value = ''; // Clear file input
+    document.getElementById('productImagesContainer').innerHTML = '';
+    
+    // Add initial image field
+    addProductImageField();
 
     if (productId) {
         title.textContent = 'Edit Product';
@@ -323,6 +335,32 @@ function openProductModal(productId = null) {
     }
 
     modal.classList.add('active');
+}
+
+// Add product image field
+function addProductImageField(imageUrl = '') {
+    const container = document.getElementById('productImagesContainer');
+    const imageIndex = container.children.length;
+    const imageFieldDiv = document.createElement('div');
+    imageFieldDiv.className = 'product-image-field';
+    imageFieldDiv.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start;';
+    imageFieldDiv.innerHTML = `
+        <input type="text" class="product-image-url" placeholder="assets/images/product-X.webp" value="${imageUrl}" style="flex: 1;">
+        <button type="button" class="btn btn-danger" onclick="removeProductImageField(this)" style="padding: 8px 15px;">
+            <i class="fas fa-trash"></i>
+        </button>
+    `;
+    container.appendChild(imageFieldDiv);
+}
+
+// Remove product image field
+function removeProductImageField(button) {
+    const container = document.getElementById('productImagesContainer');
+    if (container.children.length > 1) {
+        button.closest('.product-image-field').remove();
+    } else {
+        showNotification('At least one image is required', 'error');
+    }
 }
 
 async function loadProductData(productId) {
@@ -339,8 +377,20 @@ async function loadProductData(productId) {
         document.getElementById('productName').value = product.name;
         document.getElementById('productCategory').value = product.category;
         document.getElementById('productPrice').value = product.price;
-        document.getElementById('productImage').value = product.image;
         document.getElementById('productAlt').value = product.alt || '';
+        
+        // Handle images - support both single image (backward compatibility) and multiple images
+        const images = product.images || (product.image ? [product.image] : []);
+        const container = document.getElementById('productImagesContainer');
+        container.innerHTML = '';
+        
+        if (images.length > 0) {
+            images.forEach(imageUrl => {
+                addProductImageField(imageUrl);
+            });
+        } else {
+            addProductImageField();
+        }
     } catch (error) {
         showNotification('Error loading product', 'error');
     }
@@ -350,32 +400,41 @@ document.getElementById('productForm')?.addEventListener('submit', async (e) => 
     e.preventDefault();
     
     const productId = document.getElementById('productId').value;
-    const imageUrl = document.getElementById('productImage').value.trim();
-    const imageFile = document.getElementById('productImageUpload').files[0];
     
-    // Validate that either URL or file is provided
-    // Note: If imageFile exists (user uploaded a file), validation passes even if imageUrl is empty
-    // The URL field is NOT required when uploading a file
-    if (!imageUrl && !imageFile) {
-        showNotification('Please provide either an image URL or upload an image file', 'error');
+    // Collect images from URL inputs
+    const imageUrlInputs = document.querySelectorAll('.product-image-url');
+    const imageUrls = Array.from(imageUrlInputs)
+        .map(input => input.value.trim())
+        .filter(url => url.length > 0);
+    
+    // Collect images from file uploads
+    const imageFiles = Array.from(document.getElementById('productImageUpload').files);
+    
+    // Convert uploaded files to data URLs
+    const uploadedImageUrls = await Promise.all(
+        imageFiles.map(file => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.readAsDataURL(file);
+            });
+        })
+    );
+    
+    // Combine URL images and uploaded images
+    const allImages = [...imageUrls, ...uploadedImageUrls];
+    
+    // Validate that at least one image is provided
+    if (allImages.length === 0) {
+        showNotification('Please provide at least one image URL or upload an image file', 'error');
         return;
-    }
-    
-    // Prioritize uploaded file over URL if both are provided
-    let finalImageUrl = imageUrl;
-    if (imageFile) {
-        finalImageUrl = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => resolve(e.target.result);
-            reader.readAsDataURL(imageFile);
-        });
     }
     
     const productData = {
         name: document.getElementById('productName').value,
         category: document.getElementById('productCategory').value,
         price: document.getElementById('productPrice').value,
-        image: finalImageUrl,
+        images: allImages, // Store as array
         alt: document.getElementById('productAlt').value
     };
 
@@ -924,7 +983,7 @@ window.onclick = function(event) {
 
 // Image preview handlers
 document.getElementById('productImageUpload')?.addEventListener('change', (e) => {
-    handleImagePreview(e, 'productImagePreview', 'productImage');
+    handleMultipleImagePreview(e, 'productImagePreview');
 });
 
 document.getElementById('galleryImageUpload')?.addEventListener('change', (e) => {
@@ -962,6 +1021,50 @@ function handleImagePreview(event, previewId, inputId) {
         if (urlInput && !urlInput.value.startsWith('data:')) {
             urlInput.value = '';
         }
+    }
+}
+
+function handleMultipleImagePreview(event, previewId) {
+    const files = Array.from(event.target.files);
+    if (files.length > 0) {
+        const preview = document.getElementById(previewId);
+        preview.innerHTML = '';
+        
+        files.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imgDiv = document.createElement('div');
+                imgDiv.style.cssText = 'display: inline-block; margin: 5px; position: relative;';
+                imgDiv.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview ${index + 1}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px;">
+                    <div style="text-align: center; font-size: 0.75rem; color: #666; margin-top: 5px;">Image ${index + 1}</div>
+                `;
+                preview.appendChild(imgDiv);
+                
+                // Auto-add to image fields if there's an empty field
+                const imageFields = document.querySelectorAll('.product-image-url');
+                let added = false;
+                imageFields.forEach(field => {
+                    if (!field.value.trim() && !added) {
+                        field.value = e.target.result;
+                        field.style.backgroundColor = '#e8f5e9';
+                        setTimeout(() => {
+                            field.style.backgroundColor = '';
+                        }, 2000);
+                        added = true;
+                    }
+                });
+                
+                // If no empty field, add a new one
+                if (!added) {
+                    addProductImageField(e.target.result);
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+    } else {
+        const preview = document.getElementById(previewId);
+        if (preview) preview.innerHTML = '';
     }
 }
 
