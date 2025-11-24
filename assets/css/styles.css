@@ -682,6 +682,34 @@ h6 {
     font-size: 1.2rem;
     font-weight: 600;
     color: #d4af37;
+    margin-bottom: 1rem;
+}
+
+.product-inquire-btn {
+    width: 100%;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.product-inquire-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+    background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
+}
+
+.product-inquire-btn i {
+    font-size: 1.2rem;
 }
 
 /* Gallery Section */

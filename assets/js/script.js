@@ -66,18 +66,12 @@ async function loadProducts() {
                                 </div>
                             </div>
                         ` : ''}
-                        <div class="product-overlay">
-                            <button class="btn btn-primary" onclick="openWhatsApp('${product.name}')">Inquire Now</button>
-                        </div>
                     </div>
                 `;
             } else {
                 imageHTML = `
                     <div class="product-image">
                         <img src="${primaryImage}" alt="${product.alt || product.name}" loading="lazy" onerror="this.src='assets/images/product-1.webp'">
-                        <div class="product-overlay">
-                            <button class="btn btn-primary" onclick="openWhatsApp('${product.name}')">Inquire Now</button>
-                        </div>
                     </div>
                 `;
             }
@@ -88,6 +82,9 @@ async function loadProducts() {
                     <h3>${product.name}</h3>
                     ${product.description ? `<p class="product-description">${product.description}</p>` : ''}
                     <p class="product-price">₹${product.price}</p>
+                    <button class="btn btn-primary product-inquire-btn" onclick="openWhatsApp('${product.name}')">
+                        <i class="fab fa-whatsapp"></i> Inquire Now
+                    </button>
                 </div>
             `;
             productsGrid.appendChild(card);
