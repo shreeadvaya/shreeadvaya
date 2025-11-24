@@ -1,6 +1,15 @@
 // API route: /api/upload
 // Handles file uploads and saves them to GitHub repository
-// Accepts base64 data URLs or file buffers, saves as actual files, returns URLs
+// Supports both multipart/form-data (file uploads) and JSON (base64)
+
+import formidable from 'formidable';
+import fs from 'fs';
+
+export const config = {
+    api: {
+        bodyParser: false, // Disable default body parser to handle multipart/form-data
+    },
+};
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -32,18 +41,87 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Parse request body
-        let body = {};
-        try {
-            body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-        } catch (e) {
-            return res.status(400).json({ error: 'Invalid JSON body' });
-        }
+        const contentType = req.headers['content-type'] || '';
+        let images = [];
+        let folder = 'images';
 
-        const { images, folder } = body;
-        
-        if (!images || !Array.isArray(images) || images.length === 0) {
-            return res.status(400).json({ error: 'No images provided. Expected array of base64 data URLs or file data.' });
+        // Handle multipart/form-data (actual file uploads)
+        if (contentType.includes('multipart/form-data')) {
+            const form = formidable({
+                maxFileSize: 10 * 1024 * 1024, // 10MB max per file
+                allowEmptyFiles: false,
+                multiples: true,
+            });
+
+            const [fields, files] = await new Promise((resolve, reject) => {
+                form.parse(req, (err, fields, files) => {
+                    if (err) reject(err);
+                    else resolve([fields, files]);
+                });
+            });
+
+            folder = fields.folder?.[0] || fields.folder || 'images';
+            
+            // Get uploaded files
+            const uploadedFiles = files.images ? (Array.isArray(files.images) ? files.images : [files.images]) : [];
+            
+            if (uploadedFiles.length === 0) {
+                return res.status(400).json({ error: 'No files uploaded' });
+            }
+
+            // Convert uploaded files to buffer format
+            images = await Promise.all(uploadedFiles.map(async (file) => {
+                const fileBuffer = fs.readFileSync(file.filepath);
+                const extension = file.originalFilename?.split('.').pop()?.toLowerCase() || 
+                                 file.mimetype?.split('/')[1] || 'jpg';
+                
+                return {
+                    buffer: fileBuffer,
+                    filename: file.originalFilename || `image-${Date.now()}.${extension}`,
+                    mimetype: file.mimetype || 'image/jpeg'
+                };
+            }));
+        } 
+        // Handle JSON (base64 data URLs) - legacy support
+        else {
+            let body = {};
+            try {
+                body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+            } catch (e) {
+                return res.status(400).json({ error: 'Invalid request body' });
+            }
+
+            const { images: imageData, folder: folderData } = body;
+            folder = folderData || 'images';
+            
+            if (!imageData || !Array.isArray(imageData) || imageData.length === 0) {
+                return res.status(400).json({ error: 'No images provided' });
+            }
+
+            // Convert base64 data URLs to buffer format
+            images = imageData.map((data) => {
+                if (typeof data === 'string' && data.startsWith('data:')) {
+                    const matches = data.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,(.+)$/);
+                    if (!matches) {
+                        throw new Error('Invalid base64 data URL format');
+                    }
+                    
+                    let extension = matches[1].toLowerCase();
+                    if (extension === 'jpeg') extension = 'jpg';
+                    if (extension === 'svg+xml') extension = 'svg';
+                    
+                    const base64Data = matches[2];
+                    const fileBuffer = Buffer.from(base64Data, 'base64');
+                    
+                    return {
+                        buffer: fileBuffer,
+                        filename: `image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${extension}`,
+                        mimetype: `image/${extension}`
+                    };
+                } else {
+                    throw new Error('Invalid image data format');
+                }
+            });
         }
 
         const targetFolder = folder || 'images';
@@ -51,69 +129,15 @@ export default async function handler(req, res) {
 
         // Process each image
         for (const imageData of images) {
-            let fileBuffer;
-            let extension = 'webp';
-            let fileName;
+            let fileBuffer = imageData.buffer;
+            let fileName = imageData.filename;
+            let extension = fileName.split('.').pop().toLowerCase();
 
-            // Handle base64 data URL (data:image/png;base64,...)
-            if (typeof imageData === 'string' && imageData.startsWith('data:')) {
-                try {
-                    // More flexible regex to handle various image types
-                    const matches = imageData.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,(.+)$/);
-                    if (!matches || matches.length < 3) {
-                        throw new Error('Invalid base64 data URL format. Expected: data:image/<type>;base64,<data>');
-                    }
-                    
-                    extension = matches[1] === 'jpeg' ? 'jpg' : matches[1].toLowerCase();
-                    // Validate extension
-                    const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg+xml', 'bmp'];
-                    if (!validExtensions.includes(extension)) {
-                        extension = 'png'; // Default fallback
-                    }
-                    if (extension === 'svg+xml') extension = 'svg';
-                    
-                    const base64Data = matches[2];
-                    // Validate base64 string is not empty and has reasonable length
-                    if (!base64Data || base64Data.length < 10) {
-                        throw new Error('Base64 data is empty or too short');
-                    }
-                    
-                    fileBuffer = Buffer.from(base64Data, 'base64');
-                    fileName = `image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${extension}`;
-                } catch (error) {
-                    console.error('Base64 parsing error:', error.message);
-                    throw new Error(`Invalid base64 data URL: ${error.message}`);
-                }
-            } 
-            // Handle file object with name and data
-            else if (typeof imageData === 'object' && imageData.data) {
-                try {
-                    if (imageData.data.startsWith('data:')) {
-                        const matches = imageData.data.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,(.+)$/);
-                        if (!matches || matches.length < 3) {
-                            throw new Error('Invalid base64 data URL format in object');
-                        }
-                        extension = matches[1] === 'jpeg' ? 'jpg' : matches[1].toLowerCase();
-                        if (extension === 'svg+xml') extension = 'svg';
-                        fileBuffer = Buffer.from(matches[2], 'base64');
-                    } else {
-                        fileBuffer = Buffer.from(imageData.data, 'base64');
-                    }
-                    
-                    if (imageData.filename) {
-                        fileName = imageData.filename;
-                        if (fileName.includes('.')) {
-                            extension = fileName.split('.').pop().toLowerCase();
-                        }
-                    } else {
-                        fileName = `image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${extension}`;
-                    }
-                } catch (error) {
-                    console.error('Object data parsing error:', error.message);
-                    throw new Error(`Invalid image data in object: ${error.message}`);
-                }
-            } else {
-                throw new Error('Invalid image data format. Expected base64 data URL string or object with data property.');
+            // Validate file extension - support all common image formats
+            const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico', 'tiff', 'tif', 'heic', 'heif', 'avif'];
+            if (!validExtensions.includes(extension)) {
+                console.warn(`Uncommon extension: ${extension}, converting to jpg`);
+                extension = 'jpg'; // Default fallback for unknown types
             }
 
             const filePath = `assets/${targetFolder}/${fileName}`;

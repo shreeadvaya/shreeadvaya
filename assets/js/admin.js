@@ -136,8 +136,103 @@ document.querySelectorAll('.nav-tab').forEach(tab => {
     });
 });
 
+// Compress image to reduce file size before upload
+// Skips compression for HEIF/HEIC and other formats that browsers can't render
+async function compressImage(file, maxWidth = 1920, maxHeight = 1920, quality = 0.85) {
+    return new Promise((resolve, reject) => {
+        // If it's already a string (base64), try to convert it to blob first
+        if (typeof file === 'string' && file.startsWith('data:image/')) {
+            fetch(file)
+                .then(res => res.blob())
+                .then(blob => compressImage(blob, maxWidth, maxHeight, quality))
+                .then(resolve)
+                .catch(reject);
+            return;
+        }
+        
+        // If it's a File or Blob object
+        if (file instanceof File || file instanceof Blob) {
+            // Check file type - skip compression for formats browsers can't render
+            const fileName = file.name || '';
+            const fileType = file.type || '';
+            const ext = fileName.split('.').pop()?.toLowerCase() || '';
+            
+            // Skip compression for HEIF/HEIC and other non-browser-renderable formats
+            const skipCompressionFormats = ['heic', 'heif', 'avif', 'tiff', 'tif'];
+            const skipCompressionTypes = ['image/heic', 'image/heif', 'image/avif', 'image/tiff'];
+            
+            if (skipCompressionFormats.includes(ext) || skipCompressionTypes.includes(fileType)) {
+                console.log(`Skipping compression for ${ext || fileType} format`);
+                resolve(file);
+                return;
+            }
+            
+            // Check if file is too large (>8MB) - skip compression for very large files to avoid memory issues
+            if (file.size > 8 * 1024 * 1024) {
+                console.warn('File too large for compression, uploading as-is');
+                resolve(file);
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    // Calculate new dimensions
+                    if (width > maxWidth || height > maxHeight) {
+                        const ratio = Math.min(maxWidth / width, maxHeight / height);
+                        width = Math.floor(width * ratio);
+                        height = Math.floor(height * ratio);
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Convert to blob (compressed file)
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            // Create a File object with proper name
+                            const originalExt = fileName.split('.').pop()?.toLowerCase();
+                            const newFileName = fileName.replace(/\.[^/.]+$/, '') + '.jpg';
+                            const compressedFile = new File([blob], newFileName, {
+                                type: 'image/jpeg',
+                                lastModified: Date.now()
+                            });
+                            console.log(`Compressed ${fileName} from ${(file.size/1024).toFixed(2)}KB to ${(blob.size/1024).toFixed(2)}KB`);
+                            resolve(compressedFile);
+                        } else {
+                            reject(new Error('Failed to compress image'));
+                        }
+                    }, 'image/jpeg', quality);
+                };
+                img.onerror = (error) => {
+                    console.warn('Failed to load image for compression, uploading original:', error);
+                    // If image fails to load (e.g., unsupported format), just upload original
+                    resolve(file);
+                };
+                img.src = e.target.result;
+            };
+            reader.onerror = () => {
+                console.warn('Failed to read file, uploading original');
+                resolve(file);
+            };
+            reader.readAsDataURL(file);
+            return;
+        }
+        
+        reject(new Error('Invalid file type'));
+    });
+}
+
 // Upload images to GitHub and get URLs back
-// Accepts File objects, Blob objects, or base64 data URL strings
+// Now uses FormData to upload actual files instead of base64
 async function uploadImages(files, folder = 'images') {
     try {
         const token = localStorage.getItem(STORAGE_KEY);
@@ -145,52 +240,41 @@ async function uploadImages(files, folder = 'images') {
             throw new Error('Not authenticated');
         }
 
-        // Convert File/Blob objects to base64 data URLs, or use strings as-is
-        const imageDataArray = await Promise.all(
-            files.map(file => {
-                // If it's already a base64 data URL string, use it directly
-                if (typeof file === 'string' && file.startsWith('data:image/')) {
-                    return Promise.resolve(file);
+        // Compress images first
+        const compressedFiles = await Promise.all(
+            files.map(async (file) => {
+                try {
+                    return await compressImage(file);
+                } catch (error) {
+                    console.error('Compression error:', error);
+                    // If compression fails, use original file if it's a File object
+                    if (file instanceof File || file instanceof Blob) {
+                        return file;
+                    }
+                    throw error;
                 }
-                
-                // If it's a File or Blob, convert to base64
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => resolve(e.target.result);
-                    reader.onerror = reject;
-                    reader.readAsDataURL(file);
-                });
             })
         );
-
-        // Validate imageDataArray
-        const validImages = imageDataArray.filter(img => {
-            if (typeof img !== 'string' || !img.startsWith('data:image/')) {
-                console.warn('Skipping invalid image data:', img?.substring(0, 50));
-                return false;
-            }
-            return true;
-        });
         
-        if (validImages.length === 0) {
+        if (compressedFiles.length === 0) {
             throw new Error('No valid images to upload');
         }
         
-        if (validImages.length !== imageDataArray.length) {
-            console.warn(`Filtered out ${imageDataArray.length - validImages.length} invalid image(s)`);
-        }
+        // Use FormData to upload files
+        const formData = new FormData();
+        compressedFiles.forEach((file, index) => {
+            formData.append('images', file);
+        });
+        formData.append('folder', folder);
         
-        // Upload to API
+        // Upload to API using FormData (not JSON)
         const response = await fetch(`${API_BASE}/upload`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
+                // Don't set Content-Type - browser will set it with boundary for multipart/form-data
             },
-            body: JSON.stringify({
-                images: validImages,
-                folder: folder
-            })
+            body: formData
         });
 
         if (!response.ok) {
