@@ -57,38 +57,63 @@ export default async function handler(req, res) {
 
             // Handle base64 data URL (data:image/png;base64,...)
             if (typeof imageData === 'string' && imageData.startsWith('data:')) {
-                const matches = imageData.match(/^data:image\/(\w+);base64,(.+)$/);
-                if (!matches) {
-                    throw new Error('Invalid base64 data URL format');
+                try {
+                    // More flexible regex to handle various image types
+                    const matches = imageData.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,(.+)$/);
+                    if (!matches || matches.length < 3) {
+                        throw new Error('Invalid base64 data URL format. Expected: data:image/<type>;base64,<data>');
+                    }
+                    
+                    extension = matches[1] === 'jpeg' ? 'jpg' : matches[1].toLowerCase();
+                    // Validate extension
+                    const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg+xml', 'bmp'];
+                    if (!validExtensions.includes(extension)) {
+                        extension = 'png'; // Default fallback
+                    }
+                    if (extension === 'svg+xml') extension = 'svg';
+                    
+                    const base64Data = matches[2];
+                    // Validate base64 string is not empty and has reasonable length
+                    if (!base64Data || base64Data.length < 10) {
+                        throw new Error('Base64 data is empty or too short');
+                    }
+                    
+                    fileBuffer = Buffer.from(base64Data, 'base64');
+                    fileName = `image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${extension}`;
+                } catch (error) {
+                    console.error('Base64 parsing error:', error.message);
+                    throw new Error(`Invalid base64 data URL: ${error.message}`);
                 }
-                
-                extension = matches[1] === 'jpeg' ? 'jpg' : matches[1];
-                fileBuffer = Buffer.from(matches[2], 'base64');
-                fileName = `image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${extension}`;
             } 
             // Handle file object with name and data
             else if (typeof imageData === 'object' && imageData.data) {
-                if (imageData.data.startsWith('data:')) {
-                    const matches = imageData.data.match(/^data:image\/(\w+);base64,(.+)$/);
-                    if (!matches) {
-                        throw new Error('Invalid base64 data URL format');
+                try {
+                    if (imageData.data.startsWith('data:')) {
+                        const matches = imageData.data.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,(.+)$/);
+                        if (!matches || matches.length < 3) {
+                            throw new Error('Invalid base64 data URL format in object');
+                        }
+                        extension = matches[1] === 'jpeg' ? 'jpg' : matches[1].toLowerCase();
+                        if (extension === 'svg+xml') extension = 'svg';
+                        fileBuffer = Buffer.from(matches[2], 'base64');
+                    } else {
+                        fileBuffer = Buffer.from(imageData.data, 'base64');
                     }
-                    extension = matches[1] === 'jpeg' ? 'jpg' : matches[1];
-                    fileBuffer = Buffer.from(matches[2], 'base64');
-                } else {
-                    fileBuffer = Buffer.from(imageData.data, 'base64');
-                }
-                
-                if (imageData.filename) {
-                    fileName = imageData.filename;
-                    if (fileName.includes('.')) {
-                        extension = fileName.split('.').pop().toLowerCase();
+                    
+                    if (imageData.filename) {
+                        fileName = imageData.filename;
+                        if (fileName.includes('.')) {
+                            extension = fileName.split('.').pop().toLowerCase();
+                        }
+                    } else {
+                        fileName = `image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${extension}`;
                     }
-                } else {
-                    fileName = `image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${extension}`;
+                } catch (error) {
+                    console.error('Object data parsing error:', error.message);
+                    throw new Error(`Invalid image data in object: ${error.message}`);
                 }
             } else {
-                throw new Error('Invalid image data format');
+                throw new Error('Invalid image data format. Expected base64 data URL string or object with data property.');
             }
 
             const filePath = `assets/${targetFolder}/${fileName}`;

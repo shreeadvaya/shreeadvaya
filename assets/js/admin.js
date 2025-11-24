@@ -163,6 +163,23 @@ async function uploadImages(files, folder = 'images') {
             })
         );
 
+        // Validate imageDataArray
+        const validImages = imageDataArray.filter(img => {
+            if (typeof img !== 'string' || !img.startsWith('data:image/')) {
+                console.warn('Skipping invalid image data:', img?.substring(0, 50));
+                return false;
+            }
+            return true;
+        });
+        
+        if (validImages.length === 0) {
+            throw new Error('No valid images to upload');
+        }
+        
+        if (validImages.length !== imageDataArray.length) {
+            console.warn(`Filtered out ${imageDataArray.length - validImages.length} invalid image(s)`);
+        }
+        
         // Upload to API
         const response = await fetch(`${API_BASE}/upload`, {
             method: 'POST',
@@ -171,14 +188,21 @@ async function uploadImages(files, folder = 'images') {
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                images: imageDataArray,
+                images: validImages,
                 folder: folder
             })
         });
 
         if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.error || 'Failed to upload images');
+            const errorText = await response.text();
+            let errorMsg = 'Failed to upload images';
+            try {
+                const error = JSON.parse(errorText);
+                errorMsg = error.error || errorMsg;
+            } catch (e) {
+                errorMsg = errorText || errorMsg;
+            }
+            throw new Error(errorMsg);
         }
 
         const result = await response.json();
@@ -191,7 +215,19 @@ async function uploadImages(files, folder = 'images') {
 
 // Helper function to check if a string is a base64 data URL
 function isBase64DataUrl(str) {
-    return typeof str === 'string' && str.startsWith('data:image/');
+    if (typeof str !== 'string' || !str.startsWith('data:image/')) {
+        return false;
+    }
+    
+    // Validate format: data:image/<type>;base64,<data>
+    const matches = str.match(/^data:image\/[a-zA-Z0-9+.-]+;base64,(.+)$/);
+    if (!matches || matches.length < 2) {
+        return false;
+    }
+    
+    // Check that base64 data is not empty
+    const base64Data = matches[1];
+    return base64Data && base64Data.length > 10;
 }
 
 // API Functions
