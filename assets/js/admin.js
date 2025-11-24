@@ -598,62 +598,18 @@ document.getElementById('productForm')?.addEventListener('submit', async (e) => 
     e.preventDefault();
     
     const productId = document.getElementById('productId').value;
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.textContent;
     
-    try {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Uploading images...';
-        
-        // Collect images from URL inputs
-        const imageUrlInputs = document.querySelectorAll('.product-image-url');
-        const imageUrls = Array.from(imageUrlInputs)
-            .map(input => input.value.trim())
-            .filter(url => url.length > 0 && !isBase64DataUrl(url)); // Filter out base64 URLs
-        
-        // Collect images from file uploads
-        const imageFiles = Array.from(document.getElementById('productImageUpload').files);
-        
-        // Upload files and get URLs
-        let uploadedImageUrls = [];
-        if (imageFiles.length > 0) {
-            try {
-                uploadedImageUrls = await uploadImages(imageFiles, 'images');
-            } catch (uploadError) {
-                showNotification('Error uploading images: ' + uploadError.message, 'error');
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalBtnText;
-                return;
-            }
-        }
-        
-        // Check for any base64 URLs that need to be uploaded (from previous uploads that weren't saved)
-        const base64Urls = Array.from(imageUrlInputs)
-            .map(input => input.value.trim())
-            .filter(url => isBase64DataUrl(url));
-        
-        if (base64Urls.length > 0) {
-            try {
-                const base64UploadedUrls = await uploadImages(base64Urls, 'images');
-                uploadedImageUrls.push(...base64UploadedUrls);
-            } catch (uploadError) {
-                showNotification('Error uploading base64 images: ' + uploadError.message, 'error');
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalBtnText;
-                return;
-            }
-        }
-        
-        // Combine URL images and uploaded images
-        const allImages = [...imageUrls, ...uploadedImageUrls];
-        
-        // Validate that at least one image is provided
-        if (allImages.length === 0) {
-            showNotification('Please provide at least one image URL or upload an image file', 'error');
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalBtnText;
-            return;
-        }
+    // Collect images from URL inputs
+    const imageUrlInputs = document.querySelectorAll('.product-image-url');
+    const allImages = Array.from(imageUrlInputs)
+        .map(input => input.value.trim())
+        .filter(url => url.length > 0);
+    
+    // Validate that at least one image is provided
+    if (allImages.length === 0) {
+        showNotification('Please provide at least one image URL', 'error');
+        return;
+    }
         
         const productData = {
             name: document.getElementById('productName').value,
@@ -1209,34 +1165,7 @@ document.getElementById('contentForm')?.addEventListener('submit', async (e) => 
         submitBtn.disabled = true;
         submitBtn.textContent = 'Uploading logo...';
         
-        const logoUrl = document.getElementById('siteLogoUrl').value.trim();
-        const logoFile = document.getElementById('logoUpload').files[0];
-        
-        // Handle logo - prioritize uploaded file over URL if both are provided
-        let finalLogoUrl = logoUrl;
-        if (logoFile) {
-            try {
-                // Upload file and get URL
-                const uploadedUrls = await uploadImages([logoFile], 'images');
-                finalLogoUrl = uploadedUrls[0];
-            } catch (uploadError) {
-                console.error('Logo upload failed:', uploadError);
-                showNotification('Warning: Logo upload failed. Using existing logo. Error: ' + uploadError.message, 'error');
-                // Keep existing logo from originalData
-                finalLogoUrl = originalData.content?.logo || logoUrl || 'assets/images/logo.svg';
-            }
-        } else if (isBase64DataUrl(logoUrl)) {
-            try {
-                // Upload base64 data URL
-                const uploadedUrls = await uploadImages([logoUrl], 'images');
-                finalLogoUrl = uploadedUrls[0];
-            } catch (uploadError) {
-                console.error('Base64 logo upload failed:', uploadError);
-                showNotification('Warning: Logo upload failed. Using existing logo.', 'error');
-                finalLogoUrl = originalData.content?.logo || 'assets/images/logo.svg';
-            }
-        }
-        // If logoUrl is already a regular URL (not base64), use it as-is
+        const finalLogoUrl = document.getElementById('siteLogoUrl').value.trim() || 'assets/images/logo.svg';
         
         const contentData = {
             logo: finalLogoUrl || 'assets/images/logo.svg', // Default fallback
