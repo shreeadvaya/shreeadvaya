@@ -635,7 +635,7 @@ function goToProductImage(indicator, index) {
     startCarouselAutoPlay(carousel);
 }
 
-// Auto-play carousel - changes image every 10 seconds
+// Auto-play carousel - changes image every 2 seconds
 function startCarouselAutoPlay(carousel) {
     if (!carousel) return;
     
@@ -662,7 +662,7 @@ function startCarouselAutoPlay(carousel) {
             indicators[currentIndex].classList.remove('active');
             indicators[newIndex].classList.add('active');
         }
-    }, 10000); // 10 seconds
+    }, 2000); // 2 seconds
 }
 
 // Initialize all product carousels with auto-play
