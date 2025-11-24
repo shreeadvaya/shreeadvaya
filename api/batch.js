@@ -33,11 +33,62 @@ export default async function handler(req, res) {
     console.log('[DEBUG] GitHub Config:', { 
         owner: GITHUB_OWNER, 
         repo: GITHUB_REPO,
-        hasToken: !!GITHUB_TOKEN 
+        hasToken: !!GITHUB_TOKEN,
+        tokenPrefix: GITHUB_TOKEN ? GITHUB_TOKEN.substring(0, 7) + '...' : 'none',
+        tokenLength: GITHUB_TOKEN ? GITHUB_TOKEN.length : 0
     });
 
     if (!GITHUB_TOKEN) {
-        return res.status(500).json({ error: 'GitHub token not configured' });
+        return res.status(500).json({ error: 'GitHub token not configured in environment variables' });
+    }
+
+    // Test token validity first
+    try {
+        const testResponse = await fetch(
+            `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${GITHUB_TOKEN}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'X-GitHub-Api-Version': '2022-11-28'
+                }
+            }
+        );
+        
+        console.log('[DEBUG] Token test response:', {
+            status: testResponse.status,
+            ok: testResponse.ok
+        });
+
+        if (testResponse.status === 401) {
+            return res.status(401).json({ 
+                error: 'GitHub token is invalid or expired. Please create a new token and update it in Vercel environment variables.' 
+            });
+        }
+
+        if (testResponse.status === 403) {
+            return res.status(403).json({ 
+                error: 'GitHub token does not have required permissions. Make sure the token has "repo" scope checked when creating it.' 
+            });
+        }
+
+        if (testResponse.status === 404) {
+            return res.status(404).json({ 
+                error: `Repository ${GITHUB_OWNER}/${GITHUB_REPO} not found. Check repository name or token access.` 
+            });
+        }
+
+        if (!testResponse.ok) {
+            const errorData = await testResponse.json();
+            return res.status(testResponse.status).json({ 
+                error: `GitHub API error: ${errorData.message || testResponse.statusText}` 
+            });
+        }
+    } catch (error) {
+        console.error('[DEBUG] Token validation error:', error);
+        return res.status(500).json({ 
+            error: `Failed to validate GitHub token: ${error.message}` 
+        });
     }
 
     try {
