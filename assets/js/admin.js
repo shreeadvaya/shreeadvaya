@@ -136,6 +136,64 @@ document.querySelectorAll('.nav-tab').forEach(tab => {
     });
 });
 
+// Upload images to GitHub and get URLs back
+// Accepts File objects, Blob objects, or base64 data URL strings
+async function uploadImages(files, folder = 'images') {
+    try {
+        const token = localStorage.getItem(STORAGE_KEY);
+        if (!token) {
+            throw new Error('Not authenticated');
+        }
+
+        // Convert File/Blob objects to base64 data URLs, or use strings as-is
+        const imageDataArray = await Promise.all(
+            files.map(file => {
+                // If it's already a base64 data URL string, use it directly
+                if (typeof file === 'string' && file.startsWith('data:image/')) {
+                    return Promise.resolve(file);
+                }
+                
+                // If it's a File or Blob, convert to base64
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            })
+        );
+
+        // Upload to API
+        const response = await fetch(`${API_BASE}/upload`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                images: imageDataArray,
+                folder: folder
+            })
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Failed to upload images');
+        }
+
+        const result = await response.json();
+        return result.files.map(f => f.url); // Return array of URLs
+    } catch (error) {
+        console.error('Upload error:', error);
+        throw error;
+    }
+}
+
+// Helper function to check if a string is a base64 data URL
+function isBase64DataUrl(str) {
+    return typeof str === 'string' && str.startsWith('data:image/');
+}
+
 // API Functions
 async function apiCall(endpoint, method = 'GET', data = null) {
     try {
@@ -400,45 +458,71 @@ document.getElementById('productForm')?.addEventListener('submit', async (e) => 
     e.preventDefault();
     
     const productId = document.getElementById('productId').value;
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
     
-    // Collect images from URL inputs
-    const imageUrlInputs = document.querySelectorAll('.product-image-url');
-    const imageUrls = Array.from(imageUrlInputs)
-        .map(input => input.value.trim())
-        .filter(url => url.length > 0);
-    
-    // Collect images from file uploads
-    const imageFiles = Array.from(document.getElementById('productImageUpload').files);
-    
-    // Convert uploaded files to data URLs
-    const uploadedImageUrls = await Promise.all(
-        imageFiles.map(file => {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = (e) => resolve(e.target.result);
-                reader.readAsDataURL(file);
-            });
-        })
-    );
-    
-    // Combine URL images and uploaded images
-    const allImages = [...imageUrls, ...uploadedImageUrls];
-    
-    // Validate that at least one image is provided
-    if (allImages.length === 0) {
-        showNotification('Please provide at least one image URL or upload an image file', 'error');
-        return;
-    }
-    
-    const productData = {
-        name: document.getElementById('productName').value,
-        category: document.getElementById('productCategory').value,
-        price: document.getElementById('productPrice').value,
-        images: allImages, // Store as array
-        alt: document.getElementById('productAlt').value
-    };
-
     try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Uploading images...';
+        
+        // Collect images from URL inputs
+        const imageUrlInputs = document.querySelectorAll('.product-image-url');
+        const imageUrls = Array.from(imageUrlInputs)
+            .map(input => input.value.trim())
+            .filter(url => url.length > 0 && !isBase64DataUrl(url)); // Filter out base64 URLs
+        
+        // Collect images from file uploads
+        const imageFiles = Array.from(document.getElementById('productImageUpload').files);
+        
+        // Upload files and get URLs
+        let uploadedImageUrls = [];
+        if (imageFiles.length > 0) {
+            try {
+                uploadedImageUrls = await uploadImages(imageFiles, 'images');
+            } catch (uploadError) {
+                showNotification('Error uploading images: ' + uploadError.message, 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+                return;
+            }
+        }
+        
+        // Check for any base64 URLs that need to be uploaded (from previous uploads that weren't saved)
+        const base64Urls = Array.from(imageUrlInputs)
+            .map(input => input.value.trim())
+            .filter(url => isBase64DataUrl(url));
+        
+        if (base64Urls.length > 0) {
+            try {
+                const base64UploadedUrls = await uploadImages(base64Urls, 'images');
+                uploadedImageUrls.push(...base64UploadedUrls);
+            } catch (uploadError) {
+                showNotification('Error uploading base64 images: ' + uploadError.message, 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+                return;
+            }
+        }
+        
+        // Combine URL images and uploaded images
+        const allImages = [...imageUrls, ...uploadedImageUrls];
+        
+        // Validate that at least one image is provided
+        if (allImages.length === 0) {
+            showNotification('Please provide at least one image URL or upload an image file', 'error');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText;
+            return;
+        }
+        
+        const productData = {
+            name: document.getElementById('productName').value,
+            category: document.getElementById('productCategory').value,
+            price: document.getElementById('productPrice').value,
+            images: allImages, // Store as array of URLs (no base64)
+            alt: document.getElementById('productAlt').value
+        };
+
         if (productId) {
             // Remove from create if it was a new item
             pendingChanges.products.create = pendingChanges.products.create.filter(p => p.id !== productId);
@@ -463,7 +547,10 @@ document.getElementById('productForm')?.addEventListener('submit', async (e) => 
         loadProducts();
         updatePendingCount();
     } catch (error) {
-        showNotification('Error saving product', 'error');
+        showNotification('Error saving product: ' + error.message, 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
     }
 });
 
@@ -595,33 +682,42 @@ document.getElementById('galleryForm')?.addEventListener('submit', async (e) => 
     e.preventDefault();
     
     const itemId = document.getElementById('galleryId').value;
-    const imageUrl = document.getElementById('galleryImage').value.trim();
-    const imageFile = document.getElementById('galleryImageUpload').files[0];
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
     
-    // Validate that either URL or file is provided
-    // Note: If imageFile exists (user uploaded a file), validation passes even if imageUrl is empty
-    // The URL field is NOT required when uploading a file
-    if (!imageUrl && !imageFile) {
-        showNotification('Please provide either an image URL or upload an image file', 'error');
-        return;
-    }
-    
-    // Prioritize uploaded file over URL if both are provided
-    let finalImageUrl = imageUrl;
-    if (imageFile) {
-        finalImageUrl = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => resolve(e.target.result);
-            reader.readAsDataURL(imageFile);
-        });
-    }
-    
-    const galleryData = {
-        image: finalImageUrl,
-        alt: document.getElementById('galleryAlt').value
-    };
-
     try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Uploading image...';
+        
+        const imageUrl = document.getElementById('galleryImage').value.trim();
+        const imageFile = document.getElementById('galleryImageUpload').files[0];
+        
+        // Validate that either URL or file is provided
+        if (!imageUrl && !imageFile) {
+            showNotification('Please provide either an image URL or upload an image file', 'error');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText;
+            return;
+        }
+        
+        // Prioritize uploaded file over URL if both are provided
+        let finalImageUrl = imageUrl;
+        if (imageFile) {
+            // Upload file and get URL
+            const uploadedUrls = await uploadImages([imageFile], 'images');
+            finalImageUrl = uploadedUrls[0];
+        } else if (isBase64DataUrl(imageUrl)) {
+            // Upload base64 data URL
+            const uploadedUrls = await uploadImages([imageUrl], 'images');
+            finalImageUrl = uploadedUrls[0];
+        }
+        // If imageUrl is already a regular URL (not base64), use it as-is
+        
+        const galleryData = {
+            image: finalImageUrl,
+            alt: document.getElementById('galleryAlt').value
+        };
+
         if (itemId) {
             pendingChanges.gallery.create = pendingChanges.gallery.create.filter(g => g.id !== itemId);
             const existingUpdateIndex = pendingChanges.gallery.update.findIndex(g => g.id === itemId);
@@ -641,7 +737,10 @@ document.getElementById('galleryForm')?.addEventListener('submit', async (e) => 
         loadGallery();
         updatePendingCount();
     } catch (error) {
-        showNotification('Error saving gallery image', 'error');
+        showNotification('Error saving gallery image: ' + error.message, 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
     }
 });
 
@@ -770,32 +869,41 @@ document.getElementById('heroForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const itemId = document.getElementById('heroId').value;
-    const imageUrl = document.getElementById('heroImage').value.trim();
-    const imageFile = document.getElementById('heroImageUpload').files[0];
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
     
-    // Validate that either URL or file is provided
-    // Note: If imageFile exists (user uploaded a file), validation passes even if imageUrl is empty
-    // The URL field is NOT required when uploading a file
-    if (!imageUrl && !imageFile) {
-        showNotification('Please provide either an image URL or upload an image file', 'error');
-        return;
-    }
-    
-    // Prioritize uploaded file over URL if both are provided
-    let finalImageUrl = imageUrl;
-    if (imageFile) {
-        finalImageUrl = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => resolve(e.target.result);
-            reader.readAsDataURL(imageFile);
-        });
-    }
-    
-    const heroData = {
-        image: finalImageUrl
-    };
-
     try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Uploading image...';
+        
+        const imageUrl = document.getElementById('heroImage').value.trim();
+        const imageFile = document.getElementById('heroImageUpload').files[0];
+        
+        // Validate that either URL or file is provided
+        if (!imageUrl && !imageFile) {
+            showNotification('Please provide either an image URL or upload an image file', 'error');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText;
+            return;
+        }
+        
+        // Prioritize uploaded file over URL if both are provided
+        let finalImageUrl = imageUrl;
+        if (imageFile) {
+            // Upload file and get URL
+            const uploadedUrls = await uploadImages([imageFile], 'images');
+            finalImageUrl = uploadedUrls[0];
+        } else if (isBase64DataUrl(imageUrl)) {
+            // Upload base64 data URL
+            const uploadedUrls = await uploadImages([imageUrl], 'images');
+            finalImageUrl = uploadedUrls[0];
+        }
+        // If imageUrl is already a regular URL (not base64), use it as-is
+        
+        const heroData = {
+            image: finalImageUrl
+        };
+
         if (itemId) {
             pendingChanges.hero.create = pendingChanges.hero.create.filter(h => h.id !== itemId);
             const existingUpdateIndex = pendingChanges.hero.update.findIndex(h => h.id === itemId);
@@ -815,7 +923,10 @@ document.getElementById('heroForm')?.addEventListener('submit', async (e) => {
         loadHeroImages();
         updatePendingCount();
     } catch (error) {
-        showNotification('Error saving hero image', 'error');
+        showNotification('Error saving hero image: ' + error.message, 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
     }
 });
 
@@ -951,45 +1062,57 @@ function getFeaturesFromForm() {
 document.getElementById('contentForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const logoUrl = document.getElementById('siteLogoUrl').value.trim();
-    const logoFile = document.getElementById('logoUpload').files[0];
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
     
-    // Handle logo - prioritize uploaded file over URL if both are provided
-    let finalLogoUrl = logoUrl;
-    if (logoFile) {
-        finalLogoUrl = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => resolve(e.target.result);
-            reader.readAsDataURL(logoFile);
-        });
-    }
-    
-    const contentData = {
-        logo: finalLogoUrl || 'assets/images/logo.svg', // Default fallback
-        hero: {
-            title: document.getElementById('heroTitle').value.trim(),
-            subtitle: document.getElementById('heroSubtitle').value.trim()
-        },
-        features: getFeaturesFromForm(),
-        social: {
-            facebook: document.getElementById('socialFacebook').value.trim(),
-            instagram: document.getElementById('socialInstagram').value.trim(),
-            twitter: document.getElementById('socialTwitter').value.trim(),
-            youtube: document.getElementById('socialYouTube').value.trim(),
-            pinterest: document.getElementById('socialPinterest').value.trim()
-        },
-        about: document.getElementById('aboutText').value.trim(),
-        email: document.getElementById('contactEmail').value.trim(),
-        phone: document.getElementById('contactPhone').value.trim(),
-        whatsapp: document.getElementById('whatsappNumber').value.trim()
-    };
-
     try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Uploading logo...';
+        
+        const logoUrl = document.getElementById('siteLogoUrl').value.trim();
+        const logoFile = document.getElementById('logoUpload').files[0];
+        
+        // Handle logo - prioritize uploaded file over URL if both are provided
+        let finalLogoUrl = logoUrl;
+        if (logoFile) {
+            // Upload file and get URL
+            const uploadedUrls = await uploadImages([logoFile], 'images');
+            finalLogoUrl = uploadedUrls[0];
+        } else if (isBase64DataUrl(logoUrl)) {
+            // Upload base64 data URL
+            const uploadedUrls = await uploadImages([logoUrl], 'images');
+            finalLogoUrl = uploadedUrls[0];
+        }
+        // If logoUrl is already a regular URL (not base64), use it as-is
+        
+        const contentData = {
+            logo: finalLogoUrl || 'assets/images/logo.svg', // Default fallback
+            hero: {
+                title: document.getElementById('heroTitle').value.trim(),
+                subtitle: document.getElementById('heroSubtitle').value.trim()
+            },
+            features: getFeaturesFromForm(),
+            social: {
+                facebook: document.getElementById('socialFacebook').value.trim(),
+                instagram: document.getElementById('socialInstagram').value.trim(),
+                twitter: document.getElementById('socialTwitter').value.trim(),
+                youtube: document.getElementById('socialYouTube').value.trim(),
+                pinterest: document.getElementById('socialPinterest').value.trim()
+            },
+            about: document.getElementById('aboutText').value.trim(),
+            email: document.getElementById('contactEmail').value.trim(),
+            phone: document.getElementById('contactPhone').value.trim(),
+            whatsapp: document.getElementById('whatsappNumber').value.trim()
+        };
+
         pendingChanges.content.update = contentData;
         showNotification('Content changes saved locally. Click "Save All Changes" to commit.', 'info');
         updatePendingCount();
     } catch (error) {
-        showNotification('Error updating content', 'error');
+        showNotification('Error updating content: ' + error.message, 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
     }
 });
 
@@ -1111,6 +1234,8 @@ function showNotification(message, type = 'success') {
 function setupEventListeners() {
     // Save All Changes button
     document.getElementById('saveAllBtn')?.addEventListener('click', saveAllChanges);
+    // Discard All Changes button
+    document.getElementById('discardAllBtn')?.addEventListener('click', discardAllChanges);
 }
 
 // Update pending changes count
@@ -1122,13 +1247,42 @@ function updatePendingCount() {
     if (pendingChanges.content.update) count += 1;
     
     const saveBtn = document.getElementById('saveAllBtn');
+    const discardBtn = document.getElementById('discardAllBtn');
     const countBadge = document.getElementById('pendingCount');
     
     if (count > 0) {
         saveBtn.style.display = 'inline-flex';
+        discardBtn.style.display = 'block';
         countBadge.textContent = count;
     } else {
         saveBtn.style.display = 'none';
+        discardBtn.style.display = 'none';
+    }
+}
+
+// Discard all pending changes
+async function discardAllChanges() {
+    if (!confirm('Are you sure you want to discard all pending changes? This action cannot be undone.')) {
+        return;
+    }
+
+    try {
+        // Clear all pending changes
+        pendingChanges.products = { create: [], update: [], delete: [] };
+        pendingChanges.gallery = { create: [], update: [], delete: [] };
+        pendingChanges.hero = { create: [], update: [], delete: [] };
+        pendingChanges.content.update = null;
+        
+        // Update UI
+        updatePendingCount();
+        
+        // Reload data to show original state
+        await loadData();
+        
+        showNotification('All pending changes have been discarded.', 'success');
+    } catch (error) {
+        console.error('Error discarding changes:', error);
+        showNotification('Error discarding changes: ' + error.message, 'error');
     }
 }
 
