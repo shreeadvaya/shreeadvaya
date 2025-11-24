@@ -138,7 +138,8 @@ document.querySelectorAll('.nav-tab').forEach(tab => {
 
 // Compress image to reduce file size before upload
 // Skips compression for HEIF/HEIC and other formats that browsers can't render
-async function compressImage(file, maxWidth = 1920, maxHeight = 1920, quality = 0.85) {
+// Aggressive compression to stay under Vercel's 4.5MB payload limit
+async function compressImage(file, maxWidth = 1200, maxHeight = 1200, quality = 0.7) {
     return new Promise((resolve, reject) => {
         // If it's already a string (base64), try to convert it to blob first
         if (typeof file === 'string' && file.startsWith('data:image/')) {
@@ -230,7 +231,7 @@ async function compressImage(file, maxWidth = 1920, maxHeight = 1920, quality = 
 }
 
 // Upload images to GitHub and get URLs back
-// Uses compressed base64 - no dependencies needed
+// Uses compressed base64 - uploads one at a time to avoid payload limits
 async function uploadImages(files, folder = 'images') {
     try {
         const token = localStorage.getItem(STORAGE_KEY);
@@ -238,58 +239,78 @@ async function uploadImages(files, folder = 'images') {
             throw new Error('Not authenticated');
         }
 
-        // Compress images to base64
-        const compressedBase64 = await Promise.all(
-            files.map(async (file) => {
-                try {
-                    return await compressImage(file); // Returns base64 string
-                } catch (error) {
-                    console.error('Compression error:', error);
-                    // If compression fails, try to convert original to base64
-                    if (file instanceof File || file instanceof Blob) {
-                        return new Promise((resolve, reject) => {
-                            const reader = new FileReader();
-                            reader.onload = (e) => resolve(e.target.result);
-                            reader.onerror = reject;
-                            reader.readAsDataURL(file);
-                        });
-                    }
-                    throw error;
-                }
-            })
-        );
+        if (files.length === 0) {
+            throw new Error('No files to upload');
+        }
+
+        const uploadedUrls = [];
         
-        if (compressedBase64.length === 0) {
-            throw new Error('No valid images to upload');
+        // Show initial notification
+        if (files.length > 1) {
+            showNotification(`Uploading ${files.length} images...`, 'info');
         }
         
-        // Upload to API using JSON with base64
-        const response = await fetch(`${API_BASE}/upload`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                images: compressedBase64,
-                folder: folder
-            })
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            let errorMsg = 'Failed to upload images';
-            try {
-                const error = JSON.parse(errorText);
-                errorMsg = error.error || errorMsg;
-            } catch (e) {
-                errorMsg = errorText || errorMsg;
+        // Upload images one at a time to stay under Vercel's 4.5MB payload limit
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            console.log(`Uploading image ${i + 1} of ${files.length}...`);
+            
+            if (files.length > 1) {
+                showNotification(`Uploading image ${i + 1} of ${files.length}...`, 'info');
             }
-            throw new Error(errorMsg);
-        }
+            
+            try {
+                // Compress image to base64
+                const compressedBase64 = await compressImage(file);
+                
+                // Check size - warn if still large
+                const sizeInMB = (compressedBase64.length * 0.75) / (1024 * 1024); // Estimate actual size
+                if (sizeInMB > 4) {
+                    console.warn(`Image ${i + 1} is ${sizeInMB.toFixed(2)}MB - may fail upload`);
+                }
+                
+                // Upload single image
+                const response = await fetch(`${API_BASE}/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        images: [compressedBase64], // Single image array
+                        folder: folder
+                    })
+                });
 
-        const result = await response.json();
-        return result.files.map(f => f.url); // Return array of URLs
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    let errorMsg = `Failed to upload image ${i + 1}`;
+                    try {
+                        const error = JSON.parse(errorText);
+                        errorMsg = error.error || errorMsg;
+                    } catch (e) {
+                        errorMsg = errorText || errorMsg;
+                    }
+                    throw new Error(errorMsg);
+                }
+
+                const result = await response.json();
+                const url = result.files[0]?.url;
+                
+                if (!url) {
+                    throw new Error(`No URL returned for image ${i + 1}`);
+                }
+                
+                uploadedUrls.push(url);
+                console.log(`✓ Uploaded image ${i + 1} of ${files.length}`);
+                
+            } catch (error) {
+                console.error(`Error uploading image ${i + 1}:`, error);
+                throw new Error(`Failed to upload image ${i + 1}: ${error.message}`);
+            }
+        }
+        
+        return uploadedUrls; // Return array of URLs
     } catch (error) {
         console.error('Upload error:', error);
         throw error;
