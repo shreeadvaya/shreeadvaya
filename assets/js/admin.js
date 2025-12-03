@@ -136,99 +136,7 @@ document.querySelectorAll('.nav-tab').forEach(tab => {
     });
 });
 
-// Upload images to GitHub and get URLs back
-// Accepts File objects, Blob objects, or base64 data URL strings
-async function uploadImages(files, folder = 'images') {
-    try {
-        const token = localStorage.getItem(STORAGE_KEY);
-        if (!token) {
-            throw new Error('Not authenticated');
-        }
-
-        // Convert File/Blob objects to base64 data URLs, or use strings as-is
-        const imageDataArray = await Promise.all(
-            files.map(file => {
-                // If it's already a base64 data URL string, use it directly
-                if (typeof file === 'string' && file.startsWith('data:image/')) {
-                    return Promise.resolve(file);
-                }
-                
-                // If it's a File or Blob, convert to base64
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => resolve(e.target.result);
-                    reader.onerror = reject;
-                    reader.readAsDataURL(file);
-                });
-            })
-        );
-
-        // Validate imageDataArray
-        const validImages = imageDataArray.filter(img => {
-            if (typeof img !== 'string' || !img.startsWith('data:image/')) {
-                console.warn('Skipping invalid image data:', img?.substring(0, 50));
-                return false;
-            }
-            return true;
-        });
-        
-        if (validImages.length === 0) {
-            throw new Error('No valid images to upload');
-        }
-        
-        if (validImages.length !== imageDataArray.length) {
-            console.warn(`Filtered out ${imageDataArray.length - validImages.length} invalid image(s)`);
-        }
-        
-        // Upload to API
-        const response = await fetch(`${API_BASE}/upload`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                images: validImages,
-                folder: folder
-            })
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            let errorMsg = 'Failed to upload images';
-            try {
-                const error = JSON.parse(errorText);
-                errorMsg = error.error || errorMsg;
-            } catch (e) {
-                errorMsg = errorText || errorMsg;
-            }
-            throw new Error(errorMsg);
-        }
-
-        const result = await response.json();
-        return result.files.map(f => f.url); // Return array of URLs
-    } catch (error) {
-        console.error('Upload error:', error);
-        throw error;
-    }
-}
-
-// Helper function to check if a string is a base64 data URL
-function isBase64DataUrl(str) {
-    if (typeof str !== 'string' || !str.startsWith('data:image/')) {
-        return false;
-    }
-    
-    // Validate format: data:image/<type>;base64,<data>
-    const matches = str.match(/^data:image\/[a-zA-Z0-9+.-]+;base64,(.+)$/);
-    if (!matches || matches.length < 2) {
-        return false;
-    }
-    
-    // Check that base64 data is not empty
-    const base64Data = matches[1];
-    return base64Data && base64Data.length > 10;
-}
+// Image upload functionality removed - using URL-based images only
 
 // API Functions
 async function apiCall(endpoint, method = 'GET', data = null) {
@@ -412,8 +320,6 @@ function openProductModal(productId = null) {
     const title = document.getElementById('productModalTitle');
 
     form.reset();
-    document.getElementById('productImagePreview').innerHTML = '';
-    document.getElementById('productImageUpload').value = ''; // Clear file input
     document.getElementById('productImagesContainer').innerHTML = '';
     
     // Add initial image field
@@ -471,6 +377,7 @@ async function loadProductData(productId) {
         document.getElementById('productName').value = product.name;
         document.getElementById('productCategory').value = product.category;
         document.getElementById('productPrice').value = product.price;
+        document.getElementById('productDescription').value = product.description || '';
         document.getElementById('productAlt').value = product.alt || '';
         
         // Handle images - support both single image (backward compatibility) and multiple images
@@ -494,67 +401,25 @@ document.getElementById('productForm')?.addEventListener('submit', async (e) => 
     e.preventDefault();
     
     const productId = document.getElementById('productId').value;
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.textContent;
+    
+    // Collect images from URL inputs
+    const imageUrlInputs = document.querySelectorAll('.product-image-url');
+    const allImages = Array.from(imageUrlInputs)
+        .map(input => input.value.trim())
+        .filter(url => url.length > 0);
+    
+    // Validate that at least one image is provided
+    if (allImages.length === 0) {
+        showNotification('Please provide at least one image URL', 'error');
+        return;
+    }
     
     try {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Uploading images...';
-        
-        // Collect images from URL inputs
-        const imageUrlInputs = document.querySelectorAll('.product-image-url');
-        const imageUrls = Array.from(imageUrlInputs)
-            .map(input => input.value.trim())
-            .filter(url => url.length > 0 && !isBase64DataUrl(url)); // Filter out base64 URLs
-        
-        // Collect images from file uploads
-        const imageFiles = Array.from(document.getElementById('productImageUpload').files);
-        
-        // Upload files and get URLs
-        let uploadedImageUrls = [];
-        if (imageFiles.length > 0) {
-            try {
-                uploadedImageUrls = await uploadImages(imageFiles, 'images');
-            } catch (uploadError) {
-                showNotification('Error uploading images: ' + uploadError.message, 'error');
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalBtnText;
-                return;
-            }
-        }
-        
-        // Check for any base64 URLs that need to be uploaded (from previous uploads that weren't saved)
-        const base64Urls = Array.from(imageUrlInputs)
-            .map(input => input.value.trim())
-            .filter(url => isBase64DataUrl(url));
-        
-        if (base64Urls.length > 0) {
-            try {
-                const base64UploadedUrls = await uploadImages(base64Urls, 'images');
-                uploadedImageUrls.push(...base64UploadedUrls);
-            } catch (uploadError) {
-                showNotification('Error uploading base64 images: ' + uploadError.message, 'error');
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalBtnText;
-                return;
-            }
-        }
-        
-        // Combine URL images and uploaded images
-        const allImages = [...imageUrls, ...uploadedImageUrls];
-        
-        // Validate that at least one image is provided
-        if (allImages.length === 0) {
-            showNotification('Please provide at least one image URL or upload an image file', 'error');
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalBtnText;
-            return;
-        }
-        
         const productData = {
             name: document.getElementById('productName').value,
             category: document.getElementById('productCategory').value,
             price: document.getElementById('productPrice').value,
+            description: document.getElementById('productDescription').value.trim(),
             images: allImages, // Store as array of URLs (no base64)
             alt: document.getElementById('productAlt').value
         };
@@ -584,9 +449,6 @@ document.getElementById('productForm')?.addEventListener('submit', async (e) => 
         updatePendingCount();
     } catch (error) {
         showNotification('Error saving product: ' + error.message, 'error');
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
     }
 });
 
@@ -681,8 +543,6 @@ function openGalleryModal(itemId = null) {
     const title = document.getElementById('galleryModalTitle');
 
     form.reset();
-    document.getElementById('galleryImagePreview').innerHTML = '';
-    document.getElementById('galleryImageUpload').value = ''; // Clear file input
 
     if (itemId) {
         title.textContent = 'Edit Gallery Image';
@@ -723,31 +583,19 @@ document.getElementById('galleryForm')?.addEventListener('submit', async (e) => 
     
     try {
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Uploading image...';
+        submitBtn.textContent = 'Saving gallery image...';
         
         const imageUrl = document.getElementById('galleryImage').value.trim();
-        const imageFile = document.getElementById('galleryImageUpload').files[0];
         
-        // Validate that either URL or file is provided
-        if (!imageUrl && !imageFile) {
-            showNotification('Please provide either an image URL or upload an image file', 'error');
+        // Validate that URL is provided
+        if (!imageUrl) {
+            showNotification('Please provide an image URL', 'error');
             submitBtn.disabled = false;
             submitBtn.textContent = originalBtnText;
             return;
         }
         
-        // Prioritize uploaded file over URL if both are provided
-        let finalImageUrl = imageUrl;
-        if (imageFile) {
-            // Upload file and get URL
-            const uploadedUrls = await uploadImages([imageFile], 'images');
-            finalImageUrl = uploadedUrls[0];
-        } else if (isBase64DataUrl(imageUrl)) {
-            // Upload base64 data URL
-            const uploadedUrls = await uploadImages([imageUrl], 'images');
-            finalImageUrl = uploadedUrls[0];
-        }
-        // If imageUrl is already a regular URL (not base64), use it as-is
+        const finalImageUrl = imageUrl;
         
         const galleryData = {
             image: finalImageUrl,
@@ -869,8 +717,6 @@ function openHeroModal(itemId = null) {
     const title = document.getElementById('heroModalTitle');
 
     form.reset();
-    document.getElementById('heroImagePreview').innerHTML = '';
-    document.getElementById('heroImageUpload').value = ''; // Clear file input
 
     if (itemId) {
         title.textContent = 'Edit Hero Image';
@@ -910,31 +756,19 @@ document.getElementById('heroForm')?.addEventListener('submit', async (e) => {
     
     try {
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Uploading image...';
+        submitBtn.textContent = 'Saving hero image...';
         
         const imageUrl = document.getElementById('heroImage').value.trim();
-        const imageFile = document.getElementById('heroImageUpload').files[0];
         
-        // Validate that either URL or file is provided
-        if (!imageUrl && !imageFile) {
-            showNotification('Please provide either an image URL or upload an image file', 'error');
+        // Validate that URL is provided
+        if (!imageUrl) {
+            showNotification('Please provide an image URL', 'error');
             submitBtn.disabled = false;
             submitBtn.textContent = originalBtnText;
             return;
         }
         
-        // Prioritize uploaded file over URL if both are provided
-        let finalImageUrl = imageUrl;
-        if (imageFile) {
-            // Upload file and get URL
-            const uploadedUrls = await uploadImages([imageFile], 'images');
-            finalImageUrl = uploadedUrls[0];
-        } else if (isBase64DataUrl(imageUrl)) {
-            // Upload base64 data URL
-            const uploadedUrls = await uploadImages([imageUrl], 'images');
-            finalImageUrl = uploadedUrls[0];
-        }
-        // If imageUrl is already a regular URL (not base64), use it as-is
+        const finalImageUrl = imageUrl;
         
         const heroData = {
             image: finalImageUrl
@@ -1105,21 +939,7 @@ document.getElementById('contentForm')?.addEventListener('submit', async (e) => 
         submitBtn.disabled = true;
         submitBtn.textContent = 'Uploading logo...';
         
-        const logoUrl = document.getElementById('siteLogoUrl').value.trim();
-        const logoFile = document.getElementById('logoUpload').files[0];
-        
-        // Handle logo - prioritize uploaded file over URL if both are provided
-        let finalLogoUrl = logoUrl;
-        if (logoFile) {
-            // Upload file and get URL
-            const uploadedUrls = await uploadImages([logoFile], 'images');
-            finalLogoUrl = uploadedUrls[0];
-        } else if (isBase64DataUrl(logoUrl)) {
-            // Upload base64 data URL
-            const uploadedUrls = await uploadImages([logoUrl], 'images');
-            finalLogoUrl = uploadedUrls[0];
-        }
-        // If logoUrl is already a regular URL (not base64), use it as-is
+        const finalLogoUrl = document.getElementById('siteLogoUrl').value.trim() || 'assets/images/logo.svg';
         
         const contentData = {
             logo: finalLogoUrl || 'assets/images/logo.svg', // Default fallback
@@ -1164,22 +984,7 @@ window.onclick = function(event) {
     }
 }
 
-// Image preview handlers
-document.getElementById('productImageUpload')?.addEventListener('change', (e) => {
-    handleMultipleImagePreview(e, 'productImagePreview');
-});
-
-document.getElementById('galleryImageUpload')?.addEventListener('change', (e) => {
-    handleImagePreview(e, 'galleryImagePreview', 'galleryImage');
-});
-
-document.getElementById('heroImageUpload')?.addEventListener('change', (e) => {
-    handleImagePreview(e, 'heroImagePreview', 'heroImage');
-});
-
-document.getElementById('logoUpload')?.addEventListener('change', (e) => {
-    handleImagePreview(e, 'logoPreview', 'siteLogoUrl');
-});
+// Image preview handlers removed - using URL-based images only
 
 function handleImagePreview(event, previewId, inputId) {
     const file = event.target.files[0];

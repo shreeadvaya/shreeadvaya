@@ -1,6 +1,6 @@
 // API route: /api/upload
 // Handles file uploads and saves them to GitHub repository
-// Accepts base64 data URLs or file buffers, saves as actual files, returns URLs
+// Simple base64 approach - no dependencies needed
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -24,8 +24,8 @@ export default async function handler(req, res) {
     }
 
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-    const GITHUB_OWNER = process.env.VERCEL_GIT_REPO_OWNER || process.env.GITHUB_OWNER || 'your-username';
-    const GITHUB_REPO = process.env.VERCEL_GIT_REPO_SLUG || process.env.GITHUB_REPO || 'ShreeAdvaya';
+    const GITHUB_OWNER = process.env.VERCEL_GIT_REPO_OWNER || process.env.GITHUB_OWNER || 'Giridharsalana';
+    const GITHUB_REPO = process.env.VERCEL_GIT_REPO_SLUG || process.env.GITHUB_REPO || 'Shree-Advaya';
 
     if (!GITHUB_TOKEN) {
         return res.status(500).json({ error: 'GitHub token not configured' });
@@ -40,40 +40,41 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Invalid JSON body' });
         }
 
-        const { images, folder } = body;
+        const { images: imageData, folder } = body;
+        let images = [];
         
-        if (!images || !Array.isArray(images) || images.length === 0) {
-            return res.status(400).json({ error: 'No images provided. Expected array of base64 data URLs or file data.' });
+        if (!imageData || !Array.isArray(imageData) || imageData.length === 0) {
+            return res.status(400).json({ error: 'No images provided. Expected array of base64 data URLs.' });
         }
 
         const targetFolder = folder || 'images';
         const uploadedFiles = [];
 
         // Process each image
-        for (const imageData of images) {
+        for (const data of imageData) {
             let fileBuffer;
-            let extension = 'webp';
+            let extension = 'jpg';
             let fileName;
 
             // Handle base64 data URL (data:image/png;base64,...)
-            if (typeof imageData === 'string' && imageData.startsWith('data:')) {
+            if (typeof data === 'string' && data.startsWith('data:')) {
                 try {
-                    // More flexible regex to handle various image types
-                    const matches = imageData.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,(.+)$/);
+                    // Flexible regex to handle various image types
+                    const matches = data.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,(.+)$/);
                     if (!matches || matches.length < 3) {
-                        throw new Error('Invalid base64 data URL format. Expected: data:image/<type>;base64,<data>');
+                        throw new Error('Invalid base64 data URL format');
                     }
                     
                     extension = matches[1] === 'jpeg' ? 'jpg' : matches[1].toLowerCase();
-                    // Validate extension
-                    const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg+xml', 'bmp'];
-                    if (!validExtensions.includes(extension)) {
-                        extension = 'png'; // Default fallback
-                    }
                     if (extension === 'svg+xml') extension = 'svg';
                     
+                    // Validate extension
+                    const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico', 'tiff', 'tif', 'heic', 'heif', 'avif'];
+                    if (!validExtensions.includes(extension)) {
+                        extension = 'jpg'; // Default fallback
+                    }
+                    
                     const base64Data = matches[2];
-                    // Validate base64 string is not empty and has reasonable length
                     if (!base64Data || base64Data.length < 10) {
                         throw new Error('Base64 data is empty or too short');
                     }
@@ -84,36 +85,8 @@ export default async function handler(req, res) {
                     console.error('Base64 parsing error:', error.message);
                     throw new Error(`Invalid base64 data URL: ${error.message}`);
                 }
-            } 
-            // Handle file object with name and data
-            else if (typeof imageData === 'object' && imageData.data) {
-                try {
-                    if (imageData.data.startsWith('data:')) {
-                        const matches = imageData.data.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,(.+)$/);
-                        if (!matches || matches.length < 3) {
-                            throw new Error('Invalid base64 data URL format in object');
-                        }
-                        extension = matches[1] === 'jpeg' ? 'jpg' : matches[1].toLowerCase();
-                        if (extension === 'svg+xml') extension = 'svg';
-                        fileBuffer = Buffer.from(matches[2], 'base64');
-                    } else {
-                        fileBuffer = Buffer.from(imageData.data, 'base64');
-                    }
-                    
-                    if (imageData.filename) {
-                        fileName = imageData.filename;
-                        if (fileName.includes('.')) {
-                            extension = fileName.split('.').pop().toLowerCase();
-                        }
-                    } else {
-                        fileName = `image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${extension}`;
-                    }
-                } catch (error) {
-                    console.error('Object data parsing error:', error.message);
-                    throw new Error(`Invalid image data in object: ${error.message}`);
-                }
             } else {
-                throw new Error('Invalid image data format. Expected base64 data URL string or object with data property.');
+                throw new Error('Invalid image data format. Expected base64 data URL string.');
             }
 
             const filePath = `assets/${targetFolder}/${fileName}`;
