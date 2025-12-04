@@ -220,6 +220,48 @@ async function uploadProductImages() {
 }
 
 /**
+ * Upload logo image
+ */
+async function uploadLogoImage() {
+    const fileInput = document.getElementById('logoImageFile');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        showNotification('Please select an image file', 'warning');
+        return;
+    }
+
+    // Show loading
+    const uploadBtn = event.target;
+    const originalText = uploadBtn.innerHTML;
+    uploadBtn.disabled = true;
+    uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+
+    try {
+        const uploadedFiles = await uploadImagesToAPI([file], 'images');
+        
+        if (uploadedFiles && uploadedFiles.length > 0) {
+            const imageUrl = uploadedFiles[0].url;
+            document.getElementById('siteLogoUrl').value = imageUrl;
+            
+            // Show preview
+            const preview = document.getElementById('logoPreview');
+            preview.innerHTML = `<img src="${imageUrl}" alt="Logo Preview" style="max-height: 100px; border-radius: 8px;">`;
+            
+            showNotification('Logo uploaded successfully', 'success');
+            
+            // Clear file input
+            fileInput.value = '';
+        }
+    } catch (error) {
+        showNotification('Error uploading logo: ' + error.message, 'error');
+    } finally {
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = originalText;
+    }
+}
+
+/**
  * Upload hero image
  */
 async function uploadHeroImage() {
@@ -298,7 +340,7 @@ function setupImagePreviewListeners() {
  * Setup drag and drop for file inputs
  */
 function setupDragAndDrop() {
-    const fileInputs = ['productImageFiles', 'heroImageFile'];
+    const fileInputs = ['productImageFiles', 'heroImageFile', 'logoImageFile'];
     
     fileInputs.forEach(inputId => {
         const input = document.getElementById(inputId);
@@ -528,8 +570,8 @@ function openProductModal(productId = null) {
     form.reset();
     document.getElementById('productImagesContainer').innerHTML = '';
     
-    // Add initial image field
-    addProductImageField();
+    // Don't add initial empty field - user can upload or manually add URL
+    // addProductImageField();
 
     if (productId) {
         title.textContent = 'Edit Product';
@@ -551,12 +593,17 @@ function addProductImageField(imageUrl = '') {
     imageFieldDiv.className = 'product-image-field';
     imageFieldDiv.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start;';
     imageFieldDiv.innerHTML = `
-        <input type="text" class="product-image-url" placeholder="assets/images/product-X.webp" value="${imageUrl}" style="flex: 1;">
+        <input type="text" class="product-image-url" placeholder="https://... or assets/images/product.webp" value="${imageUrl}" style="flex: 1;">
         <button type="button" class="btn btn-danger" onclick="removeProductImageField(this)" style="padding: 8px 15px;">
             <i class="fas fa-trash"></i>
         </button>
     `;
     container.appendChild(imageFieldDiv);
+    
+    // If no URL provided, don't add an empty field initially
+    if (!imageUrl && container.children.length === 1) {
+        // This is the first empty field, keep it for manual URL entry
+    }
 }
 
 // Remove product image field
@@ -616,7 +663,7 @@ document.getElementById('productForm')?.addEventListener('submit', async (e) => 
     
     // Validate that at least one image is provided
     if (allImages.length === 0) {
-        showNotification('Please provide at least one image URL', 'error');
+        showNotification('Please upload at least one image or add an image URL', 'error');
         return;
     }
     
@@ -792,9 +839,9 @@ document.getElementById('heroForm')?.addEventListener('submit', async (e) => {
         
         const imageUrl = document.getElementById('heroImage').value.trim();
         
-        // Validate that URL is provided
+        // Validate that URL is provided (either uploaded or manually entered)
         if (!imageUrl) {
-            showNotification('Please provide an image URL', 'error');
+            showNotification('Please upload an image or provide an image URL', 'error');
             submitBtn.disabled = false;
             submitBtn.textContent = originalBtnText;
             return;
