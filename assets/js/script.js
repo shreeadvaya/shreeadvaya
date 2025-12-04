@@ -81,11 +81,17 @@ async function loadProducts() {
                     <h3>${product.name}</h3>
                     ${product.description ? `<p class="product-description">${product.description}</p>` : ''}
                     <p class="product-price">₹${product.price}</p>
-                    <button class="btn btn-primary product-inquire-btn" onclick="openWhatsApp('${product.name}')">
+                    <button class="btn btn-primary product-inquire-btn" onclick="event.stopPropagation(); openWhatsApp('${product.name}')">
                         <i class="fab fa-whatsapp"></i> Inquire Now
                     </button>
                 </div>
             `;
+            
+            // Add click handler to open modal (but not on button click)
+            card.addEventListener('click', () => {
+                openProductModal(product);
+            });
+            
             productsGrid.appendChild(card);
         });
         
@@ -637,6 +643,119 @@ function openWhatsApp(productName = "") {
   )}`;
   window.open(whatsappUrl, "_blank");
 }
+
+// Open Product Details Modal
+function openProductModal(product) {
+  // Create modal if it doesn't exist
+  let modal = document.getElementById('productModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'productModal';
+    modal.className = 'product-modal';
+    document.body.appendChild(modal);
+  }
+  
+  // Get all images
+  const images = product.images || (product.image ? [product.image] : ['assets/images/product-1.webp']);
+  
+  // Create thumbnails HTML
+  const thumbnailsHTML = images.length > 1 ? `
+    <div class="product-modal-thumbnails">
+      ${images.map((img, index) => `
+        <div class="product-modal-thumbnail ${index === 0 ? 'active' : ''}" onclick="changeModalImage(${index})">
+          <img src="${img}" alt="${product.name}" loading="lazy">
+        </div>
+      `).join('')}
+    </div>
+  ` : '';
+  
+  // Get category display name
+  const categoryNames = {
+    'silk': 'Silk Saree',
+    'cotton': 'Cotton Saree',
+    'designer': 'Designer Saree',
+    'bridal': 'Bridal Saree'
+  };
+  const categoryDisplay = categoryNames[product.category] || product.category || 'Saree';
+  
+  // Populate modal
+  modal.innerHTML = `
+    <div class="product-modal-content">
+      <button class="product-modal-close" onclick="closeProductModal()">&times;</button>
+      <div class="product-modal-body">
+        <div class="product-modal-images">
+          <div class="product-modal-main-image" id="modalMainImage">
+            <img src="${images[0]}" alt="${product.name}" loading="lazy">
+          </div>
+          ${thumbnailsHTML}
+        </div>
+        <div class="product-modal-details">
+          <span class="product-modal-category">${categoryDisplay}</span>
+          <h2 class="product-modal-title">${product.name}</h2>
+          <div class="product-modal-price">₹${product.price}</div>
+          <p class="product-modal-description">
+            ${product.description || 'Beautiful saree with exquisite design and premium quality fabric. Perfect for special occasions and celebrations.'}
+          </p>
+          <div class="product-modal-actions">
+            <button class="btn btn-primary" onclick="openWhatsApp('${product.name}')">
+              <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
+            </button>
+            <button class="btn btn-secondary" onclick="closeProductModal()">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  // Store images globally for thumbnail navigation
+  window.currentModalImages = images;
+  window.currentModalProduct = product;
+  
+  // Show modal
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+// Close Product Modal
+function closeProductModal() {
+  const modal = document.getElementById('productModal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+// Change modal main image when clicking thumbnail
+function changeModalImage(index) {
+  const mainImage = document.querySelector('#modalMainImage img');
+  const thumbnails = document.querySelectorAll('.product-modal-thumbnail');
+  
+  if (mainImage && window.currentModalImages && window.currentModalImages[index]) {
+    mainImage.src = window.currentModalImages[index];
+    
+    // Update active thumbnail
+    thumbnails.forEach((thumb, i) => {
+      thumb.classList.toggle('active', i === index);
+    });
+  }
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', (e) => {
+  const modal = document.getElementById('productModal');
+  if (modal && e.target === modal) {
+    closeProductModal();
+  }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeProductModal();
+  }
+});
 
 // Enhanced Navbar background on scroll
 window.addEventListener("scroll", () => {
