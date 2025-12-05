@@ -136,43 +136,6 @@ export default async function handler(req, res) {
             }
         }
 
-        // Process Gallery
-        if (body.gallery) {
-            const gallery = await getFileFromGitHub(GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO, 'data/gallery.json');
-            
-            if (body.gallery.update) {
-                body.gallery.update.forEach(update => {
-                    const index = gallery.findIndex(g => g.id === update.id);
-                    if (index !== -1) {
-                        gallery[index] = { ...gallery[index], ...update, updatedAt: new Date().toISOString() };
-                    }
-                });
-            }
-            
-            if (body.gallery.create) {
-                body.gallery.create.forEach(item => {
-                    const newItem = {
-                        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-                        ...item,
-                        createdAt: new Date().toISOString()
-                    };
-                    gallery.push(newItem);
-                });
-            }
-            
-            if (body.gallery.delete && body.gallery.delete.length > 0) {
-                const deleteIds = body.gallery.delete.filter(id => !id.startsWith('temp_'));
-                const filtered = gallery.filter(g => !deleteIds.includes(g.id));
-                filesToUpdate['data/gallery.json'] = filtered;
-            } else if (body.gallery.create || body.gallery.update) {
-                filesToUpdate['data/gallery.json'] = gallery;
-            }
-            
-            if (filesToUpdate['data/gallery.json']) {
-                results.gallery = { success: true, count: filesToUpdate['data/gallery.json'].length };
-            }
-        }
-
         // Process Hero Images
         if (body.hero) {
             const heroes = await getFileFromGitHub(GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO, 'data/hero.json');

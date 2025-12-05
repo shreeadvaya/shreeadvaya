@@ -5,7 +5,6 @@ const STORAGE_KEY = 'admin_token';
 // Batch Save System - Track all changes locally
 const pendingChanges = {
     products: { create: [], update: [], delete: [] },
-    gallery: { create: [], update: [], delete: [] },
     hero: { create: [], update: [], delete: [] },
     content: { update: null }
 };
@@ -13,7 +12,6 @@ const pendingChanges = {
 // Original data cache
 const originalData = {
     products: [],
-    gallery: [],
     hero: [],
     content: {}
 };
@@ -136,7 +134,258 @@ document.querySelectorAll('.nav-tab').forEach(tab => {
     });
 });
 
-// Image upload functionality removed - using URL-based images only
+// Image Upload Functionality
+
+/**
+ * Upload images to GitHub via API using FormData
+ */
+async function uploadImagesToAPI(files, folder = 'images') {
+    try {
+        const token = localStorage.getItem(STORAGE_KEY);
+        if (!token) {
+            showNotification('Not authenticated. Please login again.', 'error');
+            return null;
+        }
+
+        // Create FormData with files
+        const formData = new FormData();
+        for (const file of files) {
+            formData.append('images', file);
+        }
+        formData.append('folder', folder);
+
+        // Upload to API
+        const response = await fetch(`${API_BASE}/upload`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Upload failed');
+        }
+
+        const result = await response.json();
+        return result.files; // Array of { filename, path, url, size }
+    } catch (error) {
+        console.error('Upload error:', error);
+        showNotification('Upload failed: ' + error.message, 'error');
+        return null;
+    }
+}
+
+/**
+ * Upload product images
+ */
+async function uploadProductImages() {
+    const fileInput = document.getElementById('productImageFiles');
+    const files = fileInput.files;
+    
+    if (!files || files.length === 0) {
+        showNotification('Please select at least one image file', 'warning');
+        return;
+    }
+
+    // Show loading
+    const uploadBtn = event.target;
+    const originalText = uploadBtn.innerHTML;
+    uploadBtn.disabled = true;
+    uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+
+    try {
+        const uploadedFiles = await uploadImagesToAPI(Array.from(files), 'images');
+        
+        if (uploadedFiles && uploadedFiles.length > 0) {
+            // Add uploaded image URLs to the container
+            const container = document.getElementById('productImagesContainer');
+            
+            uploadedFiles.forEach(file => {
+                addProductImageField(file.url);
+            });
+            
+            showNotification(`Successfully uploaded ${uploadedFiles.length} image(s)`, 'success');
+            
+            // Clear file input
+            fileInput.value = '';
+        }
+    } catch (error) {
+        showNotification('Error uploading images: ' + error.message, 'error');
+    } finally {
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = originalText;
+    }
+}
+
+/**
+ * Upload logo image
+ */
+async function uploadLogoImage() {
+    const fileInput = document.getElementById('logoImageFile');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        showNotification('Please select an image file', 'warning');
+        return;
+    }
+
+    // Show loading
+    const uploadBtn = event.target;
+    const originalText = uploadBtn.innerHTML;
+    uploadBtn.disabled = true;
+    uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+
+    try {
+        const uploadedFiles = await uploadImagesToAPI([file], 'images');
+        
+        if (uploadedFiles && uploadedFiles.length > 0) {
+            const imageUrl = uploadedFiles[0].url;
+            document.getElementById('siteLogoUrl').value = imageUrl;
+            
+            // Show preview
+            const preview = document.getElementById('logoPreview');
+            preview.innerHTML = `<img src="${imageUrl}" alt="Logo Preview" style="max-height: 100px; border-radius: 8px;">`;
+            
+            showNotification('Logo uploaded successfully', 'success');
+            
+            // Clear file input
+            fileInput.value = '';
+        }
+    } catch (error) {
+        showNotification('Error uploading logo: ' + error.message, 'error');
+    } finally {
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = originalText;
+    }
+}
+
+/**
+ * Upload hero image
+ */
+async function uploadHeroImage() {
+    const fileInput = document.getElementById('heroImageFile');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        showNotification('Please select an image file', 'warning');
+        return;
+    }
+
+    // Show loading
+    const uploadBtn = event.target;
+    const originalText = uploadBtn.innerHTML;
+    uploadBtn.disabled = true;
+    uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+
+    try {
+        const uploadedFiles = await uploadImagesToAPI([file], 'images');
+        
+        if (uploadedFiles && uploadedFiles.length > 0) {
+            const imageUrl = uploadedFiles[0].url;
+            document.getElementById('heroImage').value = imageUrl;
+            
+            // Show preview
+            const preview = document.getElementById('heroImagePreview');
+            preview.innerHTML = `<img src="${imageUrl}" alt="Preview" style="max-width: 100%; max-height: 300px; border-radius: 8px;">`;
+            
+            showNotification('Image uploaded successfully', 'success');
+            
+            // Clear file input
+            fileInput.value = '';
+        }
+    } catch (error) {
+        showNotification('Error uploading image: ' + error.message, 'error');
+    } finally {
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = originalText;
+    }
+}
+
+/**
+ * Setup image preview on URL input change
+ */
+function setupImagePreviewListeners() {
+    // Hero image preview
+    const heroImageInput = document.getElementById('heroImage');
+    if (heroImageInput) {
+        heroImageInput.addEventListener('input', (e) => {
+            const url = e.target.value.trim();
+            const preview = document.getElementById('heroImagePreview');
+            if (url && (url.startsWith('http') || url.startsWith('assets/'))) {
+                preview.innerHTML = `<img src="${url}" alt="Preview" style="max-width: 100%; max-height: 300px; border-radius: 8px;" onerror="this.parentElement.innerHTML='<p style=\\'color: #e74c3c;\\'>Invalid image URL</p>'">`;
+            } else {
+                preview.innerHTML = '';
+            }
+        });
+    }
+
+    // Logo preview
+    const logoInput = document.getElementById('siteLogoUrl');
+    if (logoInput) {
+        logoInput.addEventListener('input', (e) => {
+            const url = e.target.value.trim();
+            const preview = document.getElementById('logoPreview');
+            if (url && (url.startsWith('http') || url.startsWith('assets/'))) {
+                preview.innerHTML = `<img src="${url}" alt="Logo Preview" style="max-height: 100px; border-radius: 8px;" onerror="this.parentElement.innerHTML='<p style=\\'color: #e74c3c;\\'>Invalid image URL</p>'">`;
+            } else {
+                preview.innerHTML = '';
+            }
+        });
+    }
+}
+
+/**
+ * Setup drag and drop for file inputs
+ */
+function setupDragAndDrop() {
+    const fileInputs = ['productImageFiles', 'heroImageFile', 'logoImageFile'];
+    
+    fileInputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+        
+        const container = input.parentElement;
+        
+        // Prevent default drag behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            container.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        // Highlight drop area
+        ['dragenter', 'dragover'].forEach(eventName => {
+            container.addEventListener(eventName, () => {
+                container.style.background = '#fff3cd';
+                container.style.borderColor = '#ffc107';
+            }, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            container.addEventListener(eventName, () => {
+                container.style.background = '#f8f9fa';
+                container.style.borderColor = '#d4af37';
+            }, false);
+        });
+        
+        // Handle dropped files
+        container.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            input.files = files;
+            
+            // Show file count
+            if (files.length > 0) {
+                showNotification(`${files.length} file(s) selected`, 'info');
+            }
+        }, false);
+    });
+}
 
 // API Functions
 async function apiCall(endpoint, method = 'GET', data = null) {
@@ -226,7 +475,6 @@ async function loadData() {
     try {
         await Promise.all([
             loadProducts(),
-            loadGallery(),
             loadHeroImages(),
             loadContent()
         ]);
@@ -322,8 +570,8 @@ function openProductModal(productId = null) {
     form.reset();
     document.getElementById('productImagesContainer').innerHTML = '';
     
-    // Add initial image field
-    addProductImageField();
+    // Don't add initial empty field - user can upload or manually add URL
+    // addProductImageField();
 
     if (productId) {
         title.textContent = 'Edit Product';
@@ -345,12 +593,17 @@ function addProductImageField(imageUrl = '') {
     imageFieldDiv.className = 'product-image-field';
     imageFieldDiv.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start;';
     imageFieldDiv.innerHTML = `
-        <input type="text" class="product-image-url" placeholder="assets/images/product-X.webp" value="${imageUrl}" style="flex: 1;">
+        <input type="text" class="product-image-url" placeholder="https://... or assets/images/product.webp" value="${imageUrl}" style="flex: 1;">
         <button type="button" class="btn btn-danger" onclick="removeProductImageField(this)" style="padding: 8px 15px;">
             <i class="fas fa-trash"></i>
         </button>
     `;
     container.appendChild(imageFieldDiv);
+    
+    // If no URL provided, don't add an empty field initially
+    if (!imageUrl && container.children.length === 1) {
+        // This is the first empty field, keep it for manual URL entry
+    }
 }
 
 // Remove product image field
@@ -410,7 +663,7 @@ document.getElementById('productForm')?.addEventListener('submit', async (e) => 
     
     // Validate that at least one image is provided
     if (allImages.length === 0) {
-        showNotification('Please provide at least one image URL', 'error');
+        showNotification('Please upload at least one image or add an image URL', 'error');
         return;
     }
     
@@ -477,180 +730,6 @@ async function deleteProduct(productId) {
 
 function editProduct(productId) {
     openProductModal(productId);
-}
-
-// Gallery Management
-async function loadGallery() {
-    try {
-        const gallery = await apiCall('/gallery');
-        originalData.gallery = JSON.parse(JSON.stringify(gallery)); // Deep copy
-        
-        const displayGallery = getDisplayGallery();
-        const container = document.getElementById('galleryList');
-        container.innerHTML = '';
-
-        if (displayGallery.length === 0) {
-            container.innerHTML = '<p>No gallery images found. Add your first image!</p>';
-            return;
-        }
-
-        displayGallery.forEach(item => {
-            const card = createGalleryCard(item);
-            container.appendChild(card);
-        });
-    } catch (error) {
-        document.getElementById('galleryList').innerHTML = 
-            '<p class="error">Error loading gallery. Make sure API is configured.</p>';
-    }
-}
-
-function getDisplayGallery() {
-    let gallery = JSON.parse(JSON.stringify(originalData.gallery));
-    
-    pendingChanges.gallery.update.forEach(update => {
-        const index = gallery.findIndex(g => g.id === update.id);
-        if (index !== -1) {
-            gallery[index] = { ...gallery[index], ...update };
-        }
-    });
-    
-    gallery.push(...pendingChanges.gallery.create);
-    gallery = gallery.filter(g => !pendingChanges.gallery.delete.includes(g.id));
-    
-    return gallery;
-}
-
-function createGalleryCard(item) {
-    const card = document.createElement('div');
-    card.className = 'item-card';
-    card.innerHTML = `
-        <img src="${item.image}" alt="${item.alt}" onerror="this.src='assets/images/new-1.webp'">
-        <div class="item-card-body">
-            <div class="item-card-title">${item.alt}</div>
-            <div class="item-card-actions">
-                <button class="btn btn-danger" onclick="deleteGalleryItem('${item.id}')">
-                    <i class="fas fa-trash"></i> Delete
-                </button>
-            </div>
-        </div>
-    `;
-    return card;
-}
-
-function openGalleryModal(itemId = null) {
-    const modal = document.getElementById('galleryModal');
-    const form = document.getElementById('galleryForm');
-    const title = document.getElementById('galleryModalTitle');
-
-    form.reset();
-
-    if (itemId) {
-        title.textContent = 'Edit Gallery Image';
-        document.getElementById('galleryId').value = itemId;
-        // Load gallery data
-        loadGalleryData(itemId);
-    } else {
-        title.textContent = 'Add Gallery Image';
-        document.getElementById('galleryId').value = '';
-    }
-
-    modal.classList.add('active');
-}
-
-async function loadGalleryData(itemId) {
-    try {
-        const displayGallery = getDisplayGallery();
-        const item = displayGallery.find(g => g.id === itemId);
-        
-        if (!item) {
-            showNotification('Gallery item not found', 'error');
-            return;
-        }
-        
-        document.getElementById('galleryImage').value = item.image;
-        document.getElementById('galleryAlt').value = item.alt || '';
-    } catch (error) {
-        showNotification('Error loading gallery item', 'error');
-    }
-}
-
-document.getElementById('galleryForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const itemId = document.getElementById('galleryId').value;
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.textContent;
-    
-    try {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Saving gallery image...';
-        
-        const imageUrl = document.getElementById('galleryImage').value.trim();
-        
-        // Validate that URL is provided
-        if (!imageUrl) {
-            showNotification('Please provide an image URL', 'error');
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalBtnText;
-            return;
-        }
-        
-        const finalImageUrl = imageUrl;
-        
-        const galleryData = {
-            image: finalImageUrl,
-            alt: document.getElementById('galleryAlt').value
-        };
-
-        if (itemId) {
-            pendingChanges.gallery.create = pendingChanges.gallery.create.filter(g => g.id !== itemId);
-            const existingUpdateIndex = pendingChanges.gallery.update.findIndex(g => g.id === itemId);
-            if (existingUpdateIndex !== -1) {
-                pendingChanges.gallery.update[existingUpdateIndex] = { ...galleryData, id: itemId };
-            } else {
-                pendingChanges.gallery.update.push({ ...galleryData, id: itemId });
-            }
-            showNotification('Gallery changes saved locally. Click "Save All Changes" to commit.', 'info');
-        } else {
-            const newId = 'temp_' + Date.now();
-            pendingChanges.gallery.create.push({ ...galleryData, id: newId });
-            showNotification('Gallery image added locally. Click "Save All Changes" to commit.', 'info');
-        }
-        
-        closeModal('galleryModal');
-        loadGallery();
-        updatePendingCount();
-    } catch (error) {
-        showNotification('Error saving gallery image: ' + error.message, 'error');
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
-    }
-});
-
-async function deleteGalleryItem(itemId) {
-    console.log('[DEBUG] deleteGalleryItem called with ID:', itemId);
-    
-    if (!confirm('Are you sure you want to delete this image?')) {
-        console.log('[DEBUG] User cancelled deletion');
-        return;
-    }
-
-    try {
-        pendingChanges.gallery.create = pendingChanges.gallery.create.filter(g => g.id !== itemId);
-        pendingChanges.gallery.update = pendingChanges.gallery.update.filter(g => g.id !== itemId);
-        
-        if (!pendingChanges.gallery.delete.includes(itemId) && !itemId.startsWith('temp_')) {
-            pendingChanges.gallery.delete.push(itemId);
-        }
-        
-        showNotification('Gallery image marked for deletion. Click "Save All Changes" to commit.', 'info');
-        loadGallery();
-        updatePendingCount();
-    } catch (error) {
-        console.error('[DEBUG] Error deleting gallery item:', error);
-        showNotification('Error deleting gallery image: ' + error.message, 'error');
-    }
 }
 
 // Hero Images Management
@@ -760,9 +839,9 @@ document.getElementById('heroForm')?.addEventListener('submit', async (e) => {
         
         const imageUrl = document.getElementById('heroImage').value.trim();
         
-        // Validate that URL is provided
+        // Validate that URL is provided (either uploaded or manually entered)
         if (!imageUrl) {
-            showNotification('Please provide an image URL', 'error');
+            showNotification('Please upload an image or provide an image URL', 'error');
             submitBtn.disabled = false;
             submitBtn.textContent = originalBtnText;
             return;
@@ -1077,13 +1156,16 @@ function setupEventListeners() {
     document.getElementById('saveAllBtn')?.addEventListener('click', saveAllChanges);
     // Discard All Changes button
     document.getElementById('discardAllBtn')?.addEventListener('click', discardAllChanges);
+    
+    // Setup image preview and drag-and-drop
+    setupImagePreviewListeners();
+    setupDragAndDrop();
 }
 
 // Update pending changes count
 function updatePendingCount() {
     let count = 0;
     count += pendingChanges.products.create.length + pendingChanges.products.update.length + pendingChanges.products.delete.length;
-    count += pendingChanges.gallery.create.length + pendingChanges.gallery.update.length + pendingChanges.gallery.delete.length;
     count += pendingChanges.hero.create.length + pendingChanges.hero.update.length + pendingChanges.hero.delete.length;
     if (pendingChanges.content.update) count += 1;
     
@@ -1110,7 +1192,6 @@ async function discardAllChanges() {
     try {
         // Clear all pending changes
         pendingChanges.products = { create: [], update: [], delete: [] };
-        pendingChanges.gallery = { create: [], update: [], delete: [] };
         pendingChanges.hero = { create: [], update: [], delete: [] };
         pendingChanges.content.update = null;
         
@@ -1153,20 +1234,6 @@ async function saveAllChanges() {
             };
         }
         
-        // Gallery
-        if (pendingChanges.gallery.create.length > 0 || 
-            pendingChanges.gallery.update.length > 0 || 
-            pendingChanges.gallery.delete.length > 0) {
-            batchData.gallery = {
-                create: pendingChanges.gallery.create.map(item => {
-                    const { id, ...itemData } = item; // Remove temp ID
-                    return itemData;
-                }),
-                update: pendingChanges.gallery.update,
-                delete: pendingChanges.gallery.delete.filter(id => !id.startsWith('temp_'))
-            };
-        }
-        
         // Hero Images
         if (pendingChanges.hero.create.length > 0 || 
             pendingChanges.hero.update.length > 0 || 
@@ -1193,7 +1260,6 @@ async function saveAllChanges() {
         
         // Clear pending changes
         pendingChanges.products = { create: [], update: [], delete: [] };
-        pendingChanges.gallery = { create: [], update: [], delete: [] };
         pendingChanges.hero = { create: [], update: [], delete: [] };
         pendingChanges.content.update = null;
         

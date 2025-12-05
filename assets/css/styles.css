@@ -495,14 +495,16 @@ h6 {
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, opacity 0.6s ease;
+    transition: transform 0.3s ease, opacity 0.6s ease, box-shadow 0.3s ease;
     opacity: 1;
     width: 100%;
     max-width: 300px;
+    cursor: pointer;
 }
 
 .product-card:hover {
     transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3);
 }
 
 .product-image {
@@ -658,6 +660,7 @@ h6 {
 
 .product-info {
     padding: 1.5rem;
+    text-align: center;
 }
 
 .product-info h3 {
@@ -671,6 +674,7 @@ h6 {
     color: #666;
     line-height: 1.5;
     margin: 0.5rem 0;
+    text-align: center;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -683,6 +687,7 @@ h6 {
     font-weight: 600;
     color: #d4af37;
     margin-bottom: 1rem;
+    text-align: center;
 }
 
 .product-inquire-btn {
@@ -712,45 +717,243 @@ h6 {
     font-size: 1.2rem;
 }
 
-/* Gallery Section */
-.gallery {
-    padding: 100px 0;
-    background: white;
+/* Product Details Modal */
+.product-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 10000;
+    overflow-y: auto;
+    animation: fadeIn 0.3s ease;
 }
 
-.gallery-grid {
+.product-modal.active {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+    align-items: center;
     justify-content: center;
-    align-items: flex-start;
+    padding: 20px;
 }
 
-.gallery-item {
+.product-modal-content {
+    background: white;
+    border-radius: 20px;
+    max-width: 1000px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
     position: relative;
-    height: 300px;
-    width: 300px;
-    flex: 0 0 300px;
-    overflow: hidden;
-    border-radius: 15px;
+    animation: slideUp 0.4s ease;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.product-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #d4af37;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.5rem;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: white;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
 }
 
-.gallery-item:hover {
-    transform: scale(1.05);
+.product-modal-close:hover {
+    background: #b8960f;
+    transform: rotate(90deg) scale(1.1);
 }
 
-.gallery-item img {
+.product-modal-body {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.product-modal-images {
+    position: relative;
+    width: 100%;
+}
+
+.product-modal-main-image {
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+    position: relative;
+}
+
+.product-modal-main-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
-    transition: transform 0.3s ease;
 }
 
-.gallery-item:hover img {
-    transform: scale(1.1);
+.product-modal-thumbnails {
+    display: flex;
+    gap: 15px;
+    padding: 20px;
+    background: #f8f9fa;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.product-modal-thumbnail {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-modal-thumbnail:hover {
+    border-color: #d4af37;
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.product-modal-thumbnail.active {
+    border-color: #d4af37;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+.product-modal-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-modal-details {
+    padding: 40px;
+    text-align: center;
+}
+
+.product-modal-category {
+    display: inline-block;
+    background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+    color: white;
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 25px;
+}
+
+.product-modal-title {
+    font-size: 3rem;
+    color: #2c1810;
+    margin-bottom: 25px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.product-modal-price {
+    font-size: 2.5rem;
+    color: #d4af37;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.product-modal-description {
+    font-size: 1.15rem;
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 35px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.product-modal-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 35px;
+}
+
+.product-modal-actions .btn {
+    padding: 18px 40px;
+    font-size: 1.15rem;
+    border-radius: 30px;
+    min-width: 200px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .product-modal-main-image {
+        height: 400px;
+    }
+    
+    .product-modal-details {
+        padding: 25px;
+    }
+    
+    .product-modal-title {
+        font-size: 2rem;
+    }
+    
+    .product-modal-price {
+        font-size: 1.8rem;
+    }
+    
+    .product-modal-description {
+        font-size: 1rem;
+    }
+    
+    .product-modal-actions {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .product-modal-actions .btn {
+        width: 100%;
+        min-width: unset;
+    }
+    
+    .product-modal-thumbnails {
+        padding: 15px;
+        gap: 10px;
+    }
+    
+    .product-modal-thumbnail {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .product-modal-close {
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
+    }
 }
 
 /* Contact Section - Perfectly Symmetrical */
@@ -1277,16 +1480,6 @@ h6 {
     .product-card {
         width: 280px;
         flex: 0 0 280px;
-    }
-
-    .gallery-grid {
-        gap: 0.75rem;
-    }
-    
-    .gallery-item {
-        width: 250px;
-        flex: 0 0 250px;
-        height: 250px;
     }
 
     .product-categories {

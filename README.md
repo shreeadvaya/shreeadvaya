@@ -10,10 +10,9 @@ ShreeAdvaya is a responsive static website designed to showcase a curated collec
 
 - **Hero Slideshow**: Full-screen HD background image slideshow with smooth fade transitions
 - **Product Showcase**: Filterable product categories (Silk, Cotton, Designer, Bridal) with dynamic product management
-- **Interactive Gallery**: Image gallery with lightbox functionality for detailed viewing
 - **WhatsApp Integration**: Direct messaging for instant business inquiries and orders
 - **Contact Form**: Quick inquiry form with validation
-- **Admin Panel**: Backend-less content management system for editing products, gallery, hero images, and website content
+- **Admin Panel**: Backend-less content management system for editing products, hero images, and website content
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 - **Smooth Animations**: Scroll-triggered reveals and elegant hover effects
 - **Dynamic Content**: All content loaded from JSON files via API endpoints
@@ -36,7 +35,6 @@ ShreeAdvaya/
 ├── README.md               # This file
 ├── data/                   # JSON data files
 │   ├── products.json       # Product catalog
-│   ├── gallery.json        # Gallery images
 │   ├── hero.json           # Hero slideshow images
 │   └── content.json        # Website content (hero, features, social, contact)
 ├── api/                    # Vercel serverless functions
@@ -44,7 +42,6 @@ ShreeAdvaya/
 │   │   ├── login.js        # Login handler
 │   │   └── verify.js       # Token verification
 │   ├── products.js         # Product CRUD operations
-│   ├── gallery.js          # Gallery CRUD operations
 │   ├── hero.js             # Hero images CRUD operations
 │   ├── content.js          # Content management
 │   └── batch.js            # Batch save operations
@@ -104,7 +101,6 @@ Set these in your Vercel project settings:
 2. Enter your admin password
 3. Manage your content:
    - **Products**: Add, edit, delete products
-   - **Gallery**: Manage gallery images
    - **Hero Images**: Manage slideshow images
    - **Content**: Edit hero text, features, social links, contact info
 
@@ -112,7 +108,7 @@ Set these in your Vercel project settings:
 
 - **Batch Save**: Make multiple changes and save all at once in a single Git commit
 - **Dynamic Content Management**: Edit hero text, tagline, features, and social media links
-- **Image Management**: Add/remove images for products, gallery, and hero slideshow
+- **Image Management**: Add/remove images for products and hero slideshow
 - **Content Editing**: Update about section, contact information, and social links
 - **Token-based Authentication**: Secure access with 1-hour token expiration
 
@@ -186,7 +182,6 @@ vercel env add ADMIN_PASSWORD
 ### Adding New Features
 
 - **Products**: Edit `data/products.json` or use admin panel
-- **Gallery**: Edit `data/gallery.json` or use admin panel
 - **Hero Images**: Edit `data/hero.json` or use admin panel
 - **Content**: Edit `data/content.json` or use admin panel
 
@@ -198,11 +193,6 @@ All API endpoints are serverless functions in the `/api` directory:
 - `POST /api/products` - Create product (requires auth)
 - `PUT /api/products?id={id}` - Update product (requires auth)
 - `DELETE /api/products?id={id}` - Delete product (requires auth)
-
-- `GET /api/gallery` - Get all gallery images
-- `POST /api/gallery` - Add gallery image (requires auth)
-- `PUT /api/gallery?id={id}` - Update gallery image (requires auth)
-- `DELETE /api/gallery?id={id}` - Delete gallery image (requires auth)
 
 - `GET /api/hero` - Get all hero images
 - `POST /api/hero` - Add hero image (requires auth)
@@ -223,7 +213,7 @@ The `assets/` folder contains all website assets organized by type:
 
 - **css/**: Stylesheets for main site and admin panel
 - **js/**: JavaScript files for functionality
-- **images/**: Logo, favicon, hero images, product images, gallery images
+- **images/**: Logo, favicon, hero images, product images
 
 All images are optimized in WebP format for faster loading.
 

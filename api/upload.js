@@ -1,6 +1,12 @@
 // API route: /api/upload
 // Handles file uploads and saves them to GitHub repository
-// Simple base64 approach - no dependencies needed
+// Using multipart form data (no base64 bloat)
+
+export const config = {
+    api: {
+        bodyParser: false, // Disable default body parser to handle multipart
+    },
+};
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -32,67 +38,46 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Parse request body
-        let body = {};
-        try {
-            body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-        } catch (e) {
-            return res.status(400).json({ error: 'Invalid JSON body' });
-        }
-
-        const { images: imageData, folder } = body;
-        let images = [];
+        // Parse multipart form data
+        const { files, folder } = await parseMultipartForm(req);
         
-        if (!imageData || !Array.isArray(imageData) || imageData.length === 0) {
-            return res.status(400).json({ error: 'No images provided. Expected array of base64 data URLs.' });
+        if (!files || files.length === 0) {
+            return res.status(400).json({ error: 'No images provided' });
         }
 
         const targetFolder = folder || 'images';
         const uploadedFiles = [];
 
-        // Process each image
-        for (const data of imageData) {
-            let fileBuffer;
+        // Process each file
+        for (const file of files) {
+            const { buffer, filename, mimetype } = file;
+            
+            // Get extension from mimetype or filename
             let extension = 'jpg';
-            let fileName;
-
-            // Handle base64 data URL (data:image/png;base64,...)
-            if (typeof data === 'string' && data.startsWith('data:')) {
-                try {
-                    // Flexible regex to handle various image types
-                    const matches = data.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,(.+)$/);
-                    if (!matches || matches.length < 3) {
-                        throw new Error('Invalid base64 data URL format');
-                    }
-                    
-                    extension = matches[1] === 'jpeg' ? 'jpg' : matches[1].toLowerCase();
-                    if (extension === 'svg+xml') extension = 'svg';
-                    
-                    // Validate extension
-                    const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico', 'tiff', 'tif', 'heic', 'heif', 'avif'];
-                    if (!validExtensions.includes(extension)) {
-                        extension = 'jpg'; // Default fallback
-                    }
-                    
-                    const base64Data = matches[2];
-                    if (!base64Data || base64Data.length < 10) {
-                        throw new Error('Base64 data is empty or too short');
-                    }
-                    
-                    fileBuffer = Buffer.from(base64Data, 'base64');
-                    fileName = `image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${extension}`;
-                } catch (error) {
-                    console.error('Base64 parsing error:', error.message);
-                    throw new Error(`Invalid base64 data URL: ${error.message}`);
+            if (mimetype) {
+                const mimeMap = {
+                    'image/jpeg': 'jpg',
+                    'image/jpg': 'jpg',
+                    'image/png': 'png',
+                    'image/gif': 'gif',
+                    'image/webp': 'webp',
+                    'image/svg+xml': 'svg',
+                    'image/bmp': 'bmp',
+                    'image/x-icon': 'ico',
+                };
+                extension = mimeMap[mimetype] || extension;
+            } else if (filename) {
+                const parts = filename.split('.');
+                if (parts.length > 1) {
+                    extension = parts[parts.length - 1].toLowerCase();
                 }
-            } else {
-                throw new Error('Invalid image data format. Expected base64 data URL string.');
             }
 
+            const fileName = `image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${extension}`;
             const filePath = `assets/${targetFolder}/${fileName}`;
             
-            // Convert file buffer to base64 for GitHub API
-            const fileContent = fileBuffer.toString('base64');
+            // Convert buffer to base64 for GitHub API
+            const fileContent = buffer.toString('base64');
             
             // Check if file already exists
             let sha = null;
@@ -127,7 +112,7 @@ export default async function handler(req, res) {
                         'X-GitHub-Api-Version': '2022-11-28'
                     },
                     body: JSON.stringify({
-                        message: `Upload ${fileName} via admin panel - ${new Date().toISOString()}`,
+                        message: `Upload ${fileName} via admin panel`,
                         content: fileContent,
                         sha: sha
                     })
@@ -143,14 +128,13 @@ export default async function handler(req, res) {
             const uploadResult = await uploadResponse.json();
             
             // Generate the raw file URL
-            // GitHub raw URL format: https://raw.githubusercontent.com/owner/repo/branch/path
             const rawUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/${filePath}`;
             
             uploadedFiles.push({
                 filename: fileName,
                 path: filePath,
                 url: rawUrl,
-                size: fileBuffer.length
+                size: buffer.length
             });
         }
 
@@ -164,6 +148,134 @@ export default async function handler(req, res) {
         console.error('Upload API Error:', error);
         return res.status(500).json({ error: error.message || 'Failed to upload files' });
     }
+}
+
+// Parse multipart form data manually (no dependencies needed)
+async function parseMultipartForm(req) {
+    return new Promise((resolve, reject) => {
+        const contentType = req.headers['content-type'] || '';
+        
+        if (!contentType.includes('multipart/form-data')) {
+            return reject(new Error('Content-Type must be multipart/form-data'));
+        }
+
+        // Extract boundary
+        const boundary = contentType.split('boundary=')[1];
+        if (!boundary) {
+            return reject(new Error('No boundary found in Content-Type'));
+        }
+
+        const chunks = [];
+        let totalLength = 0;
+
+        req.on('data', chunk => {
+            chunks.push(chunk);
+            totalLength += chunk.length;
+        });
+
+        req.on('end', () => {
+            try {
+                const buffer = Buffer.concat(chunks, totalLength);
+                const parts = parseMultipart(buffer, boundary);
+                
+                const files = [];
+                let folder = 'images';
+
+                parts.forEach(part => {
+                    if (part.name === 'folder') {
+                        folder = part.data.toString('utf-8');
+                    } else if (part.name === 'images' && part.filename) {
+                        files.push({
+                            buffer: part.data,
+                            filename: part.filename,
+                            mimetype: part.contentType
+                        });
+                    }
+                });
+
+                resolve({ files, folder });
+            } catch (error) {
+                reject(error);
+            }
+        });
+
+        req.on('error', reject);
+    });
+}
+
+// Parse multipart buffer into parts
+function parseMultipart(buffer, boundary) {
+    const parts = [];
+    const boundaryBuffer = Buffer.from(`--${boundary}`);
+    const endBoundaryBuffer = Buffer.from(`--${boundary}--`);
+    
+    let position = 0;
+    
+    while (position < buffer.length) {
+        // Find next boundary
+        const boundaryIndex = buffer.indexOf(boundaryBuffer, position);
+        if (boundaryIndex === -1) break;
+        
+        position = boundaryIndex + boundaryBuffer.length;
+        
+        // Skip CRLF after boundary
+        if (buffer[position] === 0x0D && buffer[position + 1] === 0x0A) {
+            position += 2;
+        }
+        
+        // Check if this is the end boundary
+        if (buffer.slice(position - 2, position).toString() === '--') {
+            break;
+        }
+        
+        // Find headers end (double CRLF)
+        const headersEnd = buffer.indexOf(Buffer.from('\r\n\r\n'), position);
+        if (headersEnd === -1) break;
+        
+        const headers = buffer.slice(position, headersEnd).toString('utf-8');
+        position = headersEnd + 4;
+        
+        // Parse headers
+        const part = parsePartHeaders(headers);
+        
+        // Find next boundary to get data
+        const nextBoundary = buffer.indexOf(boundaryBuffer, position);
+        if (nextBoundary === -1) break;
+        
+        // Extract data (remove trailing CRLF)
+        let dataEnd = nextBoundary;
+        if (buffer[dataEnd - 2] === 0x0D && buffer[dataEnd - 1] === 0x0A) {
+            dataEnd -= 2;
+        }
+        
+        part.data = buffer.slice(position, dataEnd);
+        parts.push(part);
+        
+        position = nextBoundary;
+    }
+    
+    return parts;
+}
+
+// Parse part headers
+function parsePartHeaders(headers) {
+    const part = {};
+    const lines = headers.split('\r\n');
+    
+    lines.forEach(line => {
+        if (line.toLowerCase().startsWith('content-disposition:')) {
+            // Extract name and filename
+            const nameMatch = line.match(/name="([^"]+)"/);
+            const filenameMatch = line.match(/filename="([^"]+)"/);
+            
+            if (nameMatch) part.name = nameMatch[1];
+            if (filenameMatch) part.filename = filenameMatch[1];
+        } else if (line.toLowerCase().startsWith('content-type:')) {
+            part.contentType = line.split(':')[1].trim();
+        }
+    });
+    
+    return part;
 }
 
 async function verifyToken(token) {

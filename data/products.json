@@ -10,7 +10,7 @@
     ],
     "alt": "This is description",
     "createdAt": "2025-11-24T16:47:09.054Z",
-    "updatedAt": "2025-12-04T13:14:11.872Z"
+    "updatedAt": "2025-12-04T19:12:33.471Z"
   },
   {
     "id": "1764854457773pujelzhth",
@@ -23,5 +23,18 @@
     ],
     "alt": "",
     "createdAt": "2025-12-04T13:20:57.773Z"
+  },
+  {
+    "id": "1764876862425f3mtsnkg6",
+    "name": "Test",
+    "category": "silk",
+    "price": "9000",
+    "description": "Giri",
+    "images": [
+      "https://raw.githubusercontent.com/GiridharSalana/shree-advaya/main/assets/images/image-1764876832377-hdmngcmj9.jpg",
+      "https://raw.githubusercontent.com/GiridharSalana/shree-advaya/main/assets/images/image-1764876833521-gldi2ziq9.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2025-12-04T19:34:22.425Z"
   }
 ]
