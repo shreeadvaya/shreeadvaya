@@ -32,10 +32,11 @@
     "price": "11995",
     "description": "",
     "images": [
-      "https://raw.githubusercontent.com/GiridharSalana/shree-advaya/main/assets/images/image-1765793401356-718y9dzrt.jpg"
+      "https://raw.githubusercontent.com/GiridharSalana/shree-advaya/main/assets/images/image-1765793401356-718y9dzrt.jpg",
+      "https://raw.githubusercontent.com/GiridharSalana/shree-advaya/main/assets/images/image-1765793780618-nevncxscs.jpg"
     ],
     "alt": "",
     "createdAt": "2025-12-04T19:34:22.425Z",
-    "updatedAt": "2025-12-15T10:10:14.735Z"
+    "updatedAt": "2025-12-15T10:16:26.679Z"
   }
 ]
