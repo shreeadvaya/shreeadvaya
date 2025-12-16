@@ -59,9 +59,6 @@
                     <a href="#products" class="nav-tab active" data-tab="products">
                         <i class="fas fa-box"></i> Products
                     </a>
-                    <a href="#categories" class="nav-tab" data-tab="categories">
-                        <i class="fas fa-tags"></i> Categories
-                    </a>
                     <a href="#hero" class="nav-tab" data-tab="hero">
                         <i class="fas fa-image"></i> Hero Images
                     </a>
@@ -89,22 +86,6 @@
                     </div>
                 </div>
 
-                <!-- Categories Tab -->
-                <div id="categoriesTab" class="tab-content">
-                    <div class="section-header">
-                        <h2>Manage Product Categories</h2>
-                        <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">Add, edit, or remove product categories. These will appear as filter buttons on your website.</p>
-                    </div>
-                    <div id="categoriesList" class="items-grid">
-                        <!-- Categories will be loaded here -->
-                    </div>
-                    <div class="add-button-container">
-                        <button class="btn btn-primary" onclick="openCategoryModal()">
-                            <i class="fas fa-plus"></i> Add Category
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Hero Images Tab -->
                 <div id="heroTab" class="tab-content">
                     <div class="section-header">
@@ -125,6 +106,23 @@
                     <div class="section-header">
                         <h2>Edit Website Content</h2>
                     </div>
+                    
+                    <!-- Categories Management Section -->
+                    <div style="margin-bottom: 40px; padding: 25px; background: #f8f9fa; border-radius: 10px; border: 2px solid #d4af37;">
+                        <h3 style="margin-bottom: 15px; color: #2c1810; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">
+                            <i class="fas fa-tags"></i> Product Categories
+                        </h3>
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">
+                            Add, edit, or remove product categories. These will appear as filter buttons on your website.
+                        </p>
+                        <div id="categoriesList" class="items-grid" style="margin-bottom: 15px;">
+                            <!-- Categories will be loaded here -->
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="openCategoryModal()">
+                            <i class="fas fa-plus"></i> Add Category
+                        </button>
+                    </div>
+                    
                     <form id="contentForm" class="content-form">
                         <h3 style="margin-bottom: 20px; color: #2c1810; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">Logo</h3>
                         <div class="form-group">
