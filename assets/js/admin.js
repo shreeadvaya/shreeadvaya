@@ -163,9 +163,26 @@ async function uploadImagesToAPI(files, folder = 'images') {
             body: formData
         });
 
+        console.log('Upload response status:', response.status);
+        console.log('Upload response content-type:', response.headers.get('content-type'));
+
         if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.error || 'Upload failed');
+            let errorMessage = 'Upload failed';
+            try {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const error = await response.json();
+                    errorMessage = error.error || errorMessage;
+                } else {
+                    const text = await response.text();
+                    console.error('Upload error response:', text);
+                    errorMessage = text || `Upload failed with status ${response.status}`;
+                }
+            } catch (e) {
+                console.error('Error parsing response:', e);
+                errorMessage = `Upload failed with status ${response.status}`;
+            }
+            throw new Error(errorMessage);
         }
 
         const result = await response.json();
