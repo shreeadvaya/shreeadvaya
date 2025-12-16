@@ -19,11 +19,13 @@
     "price": "5000",
     "description": "",
     "images": [
-      "https://i.postimg.cc/J0sGC5zb/IMG-2373-HEIC-(1).avif"
+      "https://i.postimg.cc/J0sGC5zb/IMG-2373-HEIC-(1).avif",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1765886004307-0smd2metk.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1765886005457-hk1wclfbj.jpg"
     ],
     "alt": "",
     "createdAt": "2025-12-04T13:20:57.773Z",
-    "updatedAt": "2025-12-10T16:53:06.044Z"
+    "updatedAt": "2025-12-16T11:53:44.352Z"
   },
   {
     "id": "1764876862425f3mtsnkg6",
