@@ -824,11 +824,11 @@ function createCategoryCard(category) {
                 <div style="color: #666; font-size: 0.9rem; margin: 5px 0;">ID: ${category.id}</div>
                 <div style="color: #666; font-size: 0.9rem;">Order: ${category.order || 'N/A'}</div>
             </div>
-            <div class="item-card-actions" style="display: flex; gap: 10px;">
-                <button class="btn btn-primary" onclick="editCategory('${category.id}')" style="flex: 1; min-height: 36px; display: flex; align-items: center; justify-content: center;">
+            <div class="item-card-actions">
+                <button class="btn btn-primary" onclick="editCategory('${category.id}')">
                     <i class="fas fa-edit"></i> Edit
                 </button>
-                <button class="btn btn-danger" onclick="deleteCategory('${category.id}')" style="flex: 1; min-height: 36px; display: flex; align-items: center; justify-content: center;">
+                <button class="btn btn-danger" onclick="deleteCategory('${category.id}')">
                     <i class="fas fa-trash"></i> Delete
                 </button>
             </div>
