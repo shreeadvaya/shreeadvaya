@@ -828,7 +828,7 @@ function createCategoryCard(category) {
                 <button class="btn btn-primary" onclick="editCategory('${category.id}')">
                     <i class="fas fa-edit"></i> Edit
                 </button>
-                <button class="btn btn-danger" onclick="deleteCategory('${category.id}')">
+                <button class="btn btn-primary" onclick="deleteCategory('${category.id}')">
                     <i class="fas fa-trash"></i> Delete
                 </button>
             </div>
