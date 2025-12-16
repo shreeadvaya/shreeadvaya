@@ -59,6 +59,9 @@
                     <a href="#products" class="nav-tab active" data-tab="products">
                         <i class="fas fa-box"></i> Products
                     </a>
+                    <a href="#categories" class="nav-tab" data-tab="categories">
+                        <i class="fas fa-tags"></i> Categories
+                    </a>
                     <a href="#hero" class="nav-tab" data-tab="hero">
                         <i class="fas fa-image"></i> Hero Images
                     </a>
@@ -82,6 +85,22 @@
                     <div class="add-button-container">
                         <button class="btn btn-primary" onclick="openProductModal()">
                             <i class="fas fa-plus"></i> Add Product
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Categories Tab -->
+                <div id="categoriesTab" class="tab-content">
+                    <div class="section-header">
+                        <h2>Manage Product Categories</h2>
+                        <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">Add, edit, or remove product categories. These will appear as filter buttons on your website.</p>
+                    </div>
+                    <div id="categoriesList" class="items-grid">
+                        <!-- Categories will be loaded here -->
+                    </div>
+                    <div class="add-button-container">
+                        <button class="btn btn-primary" onclick="openCategoryModal()">
+                            <i class="fas fa-plus"></i> Add Category
                         </button>
                     </div>
                 </div>
@@ -222,10 +241,7 @@
                 <div class="form-group">
                     <label>Category *</label>
                     <select id="productCategory" required>
-                        <option value="silk">Silk Sarees</option>
-                        <option value="cotton">Cotton Sarees</option>
-                        <option value="designer">Designer Sarees</option>
-                        <option value="bridal">Bridal Sarees</option>
+                        <!-- Categories will be loaded dynamically -->
                     </select>
                 </div>
                 <div class="form-group">
@@ -274,6 +290,31 @@
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('productModal')">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('categoryModal')">&times;</span>
+            <h2 id="categoryModalTitle">Add Category</h2>
+            <form id="categoryForm">
+                <input type="hidden" id="categoryId">
+                <div class="form-group">
+                    <label>Category Name *</label>
+                    <input type="text" id="categoryName" required placeholder="e.g., Silk Sarees, Cotton Sarees">
+                    <small>This will appear on the website filter buttons</small>
+                </div>
+                <div class="form-group">
+                    <label>Display Order</label>
+                    <input type="number" id="categoryOrder" min="1" placeholder="1">
+                    <small>Lower numbers appear first (optional)</small>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('categoryModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Category</button>
                 </div>
             </form>
         </div>

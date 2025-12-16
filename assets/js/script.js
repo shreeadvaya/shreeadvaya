@@ -5,6 +5,7 @@ const API_BASE = '/api';
 async function loadDynamicContent() {
     try {
         await Promise.all([
+            loadCategories(),
             loadProducts(),
             loadHeroImages(),
             loadContent()
@@ -12,6 +13,99 @@ async function loadDynamicContent() {
     } catch (error) {
         console.error('Error loading dynamic content:', error);
     }
+}
+
+// Load Categories
+async function loadCategories() {
+    try {
+        const response = await fetch(`${API_BASE}/categories`);
+        if (!response.ok) throw new Error('Failed to load categories');
+        const categories = await response.json();
+        
+        const categoriesContainer = document.getElementById('productCategories');
+        if (!categoriesContainer) return;
+        
+        // Clear existing category buttons except "All"
+        categoriesContainer.innerHTML = '';
+        
+        // Add "All" button first
+        const allBtn = document.createElement('button');
+        allBtn.className = 'category-btn active';
+        allBtn.setAttribute('data-category', 'all');
+        allBtn.textContent = 'All';
+        categoriesContainer.appendChild(allBtn);
+        
+        // Add dynamic category buttons
+        if (categories.length > 0) {
+            // Sort by order
+            categories.sort((a, b) => (a.order || 0) - (b.order || 0));
+            
+            categories.forEach(category => {
+                const btn = document.createElement('button');
+                btn.className = 'category-btn';
+                btn.setAttribute('data-category', category.id);
+                btn.textContent = category.name;
+                categoriesContainer.appendChild(btn);
+            });
+        }
+        
+        // Reinitialize category button event listeners
+        initCategoryButtons();
+    } catch (error) {
+        console.error('Error loading categories:', error);
+        // If categories fail to load, keep the "All" button
+        const categoriesContainer = document.getElementById('productCategories');
+        if (categoriesContainer) {
+            categoriesContainer.innerHTML = '<button class="category-btn active" data-category="all">All</button>';
+        }
+    }
+}
+
+// Initialize category button event listeners
+function initCategoryButtons() {
+    const categoryBtns = document.querySelectorAll(".category-btn");
+    const productCards = document.querySelectorAll(".product-card");
+    
+    categoryBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            // Remove active class from all buttons
+            categoryBtns.forEach((b) => b.classList.remove("active"));
+            // Add active class to clicked button
+            btn.classList.add("active");
+
+            const category = btn.getAttribute("data-category");
+
+            if (productCards && productCards.length > 0) {
+                // First, hide all cards instantly without animation
+                productCards.forEach((card) => {
+                    card.style.display = "none";
+                    card.style.opacity = "0";
+                    card.style.transform = "translateY(0)";
+                    card.style.transition = "none";
+                });
+                
+                // Then show matching cards with animation
+                const visibleCards = Array.from(productCards).filter(card => 
+                    category === "all" || card.getAttribute("data-category") === category
+                );
+                
+                visibleCards.forEach((card, index) => {
+                    card.style.display = "block";
+                    card.style.opacity = "0";
+                    card.style.transform = "translateY(20px)";
+                    
+                    // Use requestAnimationFrame for smoother animation
+                    requestAnimationFrame(() => {
+                        setTimeout(() => {
+                            card.style.transition = "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
+                            card.style.opacity = "1";
+                            card.style.transform = "translateY(0)";
+                        }, index * 50);
+                    });
+                });
+            }
+        });
+    });
 }
 
 // Load Products
@@ -669,14 +763,16 @@ function openProductModal(product) {
     </div>
   ` : '';
   
-  // Get category display name
-  const categoryNames = {
-    'silk': 'Silk Saree',
-    'cotton': 'Cotton Saree',
-    'designer': 'Designer Saree',
-    'bridal': 'Bridal Saree'
-  };
-  const categoryDisplay = categoryNames[product.category] || product.category || 'Saree';
+  // Get category display name from loaded categories
+  let categoryDisplay = product.category || 'Saree';
+  
+  // Try to find the category name from the loaded categories
+  const categoryBtns = document.querySelectorAll('.category-btn');
+  categoryBtns.forEach(btn => {
+    if (btn.getAttribute('data-category') === product.category) {
+      categoryDisplay = btn.textContent;
+    }
+  });
   
   // Populate modal
   modal.innerHTML = `

@@ -1,0 +1,27 @@
+[
+  {
+    "id": "silk",
+    "name": "Silk Sarees",
+    "order": 1,
+    "createdAt": "2025-12-16T00:00:00.000Z"
+  },
+  {
+    "id": "cotton",
+    "name": "Cotton Sarees",
+    "order": 2,
+    "createdAt": "2025-12-16T00:00:00.000Z"
+  },
+  {
+    "id": "designer",
+    "name": "Designer Sarees",
+    "order": 3,
+    "createdAt": "2025-12-16T00:00:00.000Z"
+  },
+  {
+    "id": "bridal",
+    "name": "Bridal Sarees",
+    "order": 4,
+    "createdAt": "2025-12-16T00:00:00.000Z"
+  }
+]
+
