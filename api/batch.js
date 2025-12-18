@@ -180,6 +180,46 @@ export default async function handler(req, res) {
             results.content = { success: true };
         }
 
+        // Process Categories
+        if (body.categories) {
+            const categories = await getFileFromGitHub(GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO, 'data/categories.json');
+            
+            if (body.categories.update) {
+                body.categories.update.forEach(update => {
+                    const index = categories.findIndex(c => c.id === update.id);
+                    if (index !== -1) {
+                        categories[index] = { ...categories[index], ...update, updatedAt: new Date().toISOString() };
+                    }
+                });
+            }
+            
+            if (body.categories.create) {
+                body.categories.create.forEach(item => {
+                    // Generate unique ID from name
+                    const categoryId = item.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+                    const newCategory = {
+                        id: categoryId,
+                        name: item.name,
+                        order: item.order || categories.length + 1,
+                        createdAt: new Date().toISOString()
+                    };
+                    categories.push(newCategory);
+                });
+            }
+            
+            if (body.categories.delete && body.categories.delete.length > 0) {
+                const deleteIds = body.categories.delete.filter(id => !id.startsWith('temp_'));
+                const filtered = categories.filter(c => !deleteIds.includes(c.id));
+                filesToUpdate['data/categories.json'] = filtered;
+            } else if (body.categories.create || body.categories.update) {
+                filesToUpdate['data/categories.json'] = categories;
+            }
+            
+            if (filesToUpdate['data/categories.json']) {
+                results.categories = { success: true, count: filesToUpdate['data/categories.json'].length };
+            }
+        }
+
         // Save all files in a single commit using GitHub Git Data API
         if (Object.keys(filesToUpdate).length === 0) {
             return res.status(200).json({ 

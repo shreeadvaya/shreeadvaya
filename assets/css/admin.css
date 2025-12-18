@@ -354,6 +354,19 @@ body {
     justify-content: center;
 }
 
+/* Specific styling for categories list to always center */
+#categoriesList.items-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#categoriesList .item-card {
+    width: 280px;
+    flex-shrink: 0;
+}
+
 .item-card {
     position: relative;
     background: white;

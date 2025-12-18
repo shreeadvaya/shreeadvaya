@@ -103,12 +103,11 @@
             <h2 class="section-title">Our Collection</h2>
             <p class="section-subtitle">Explore our carefully curated range of premium sarees</p>
 
-            <div class="product-categories">
-                <button class="category-btn active" data-category="all">All</button>
-                <button class="category-btn" data-category="silk">Silk Sarees</button>
-                <button class="category-btn" data-category="cotton">Cotton Sarees</button>
-                <button class="category-btn" data-category="designer">Designer Sarees</button>
-                <button class="category-btn" data-category="bridal">Bridal Sarees</button>
+            <div class="product-categories" id="productCategories">
+                <!-- Category dropdown will be loaded dynamically -->
+                <select id="categoryDropdown" class="category-dropdown">
+                    <option value="all" selected>All</option>
+                </select>
             </div>
 
             <div class="products-grid" id="productsGrid">
