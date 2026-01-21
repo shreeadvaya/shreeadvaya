@@ -1,8 +1,8 @@
 {
   "logo": "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768928537780-9svn78dae.jpg",
   "hero": {
-    "title": "Elegance Redefined",
-    "subtitle": "Shree Advaya Studio is the expression of uniqueness, Tradition , heritage, and thoughtful craftsmanship—born from a long-standing friendship and a shared vision.\n\nSanmathi and Sadhana, neighbours for years and trusted companions, transformed their deep appreciation for fine sarees into a purposeful partnership. What began as a bond rooted in familiarity and trust evolved into a refined venture dedicated to celebrating timeless Indian drapes.\n\nEach partner brings a distinct strength to the studio—one with a discerning eye for design, aesthetics, and curation, the other with an innate understanding of quality, detail, and customer sensibility. Together, their complementary skills create a harmonious balance, shaping a brand that reflects sophistication, authenticity, and excellence.\n\nAt Shree Advaya Studio, every saree is carefully selected to reflect understated luxury, superior craftsmanship, and enduring beauty. Our collections seamlessly blend tradition with contemporary grace, designed for women who appreciate elegance that transcends trends.\n\nMore than a brand, Shree Advaya Studio is a story of trust, passion, and refined taste—woven into every thread we offer."
+    "title": "DEFINING UNIQUENESS",
+    "subtitle": "Shree Advaya Studio is the expression of uniqueness, Tradition , heritage, and thoughtful craftsmanship—born from a long-standing friendship and a shared vision.\n\nSanmathi and Sadhana, neighbours for years and trusted companions, transformed their deep appreciation for fine sarees into a purposeful partnership. What began as a bond rooted in familiarity and trust evolved into a refined venture dedicated to celebrating timeless Indian drapes.\n\nEach partner brings a distinct strength to the studio—one with a discerning eye for design, aesthetics, and curation, the other with an innate understanding of quality, detail, and customer sensibility. Together, their complementary skills create a harmonious balance, shaping a brand that reflects sophistication, authenticity, and excellence.\n\nMore than a brand, Shree Advaya Studio is a story of trust, passion, and refined taste—woven into every thread we offer."
   },
   "features": [
     {
@@ -12,18 +12,18 @@
     },
     {
       "icon": "fas fa-palette",
-      "title": "Unique and Trending Designs",
-      "description": "Exclusive patterns and traditional motifs"
+      "title": "Pre-booking for bulk orders",
+      "description": "Gifting and budget sarees on pre-booking"
+    },
+    {
+      "icon": "fas fa-gem",
+      "title": "Unstitched dress materials",
+      "description": "Handpicked finest materials"
     },
     {
       "icon": "fas fa-shipping-fast",
-      "title": "Fast Delivery",
-      "description": "Secure and timely delivery across India"
-    },
-    {
-      "icon": "fas fa-certificate",
-      "title": "Authentic Collection",
-      "description": "100% genuine and certified sarees"
+      "title": "PAN India and Worldwide Shipping",
+      "description": "Secure and timely delivery"
     }
   ],
   "social": {
@@ -33,7 +33,7 @@
     "youtube": "",
     "pinterest": ""
   },
-  "about": "ShreeAdvaya represents the perfect fusion of traditional Indian craftsmanship and contemporary design. We curate the finest collection of sarees, each piece telling a story of heritage, elegance, and timeless beauty. Our commitment to quality and authenticity ensures that every saree in our collection is a masterpiece, carefully selected to celebrate the rich cultural heritage of India while meeting modern fashion sensibilities.",
+  "about": "Celebrating the timeless elegance of Indian sarees with modern sophistication.\nAt Shree Advaya Studio, every saree is carefully selected to reflect understated luxury, superior craftsmanship, and enduring beauty. Our collections seamlessly blend tradition with contemporary grace, designed for women who appreciate elegance that transcends trends.",
   "email": "hello.shreeadvaya@gmail.com",
   "phone": "+91 9535188488",
   "whatsapp": "919535188488"
