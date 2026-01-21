@@ -75,6 +75,42 @@
     ],
     "alt": "Sold Out",
     "createdAt": "2026-01-21T08:05:42.583Z",
-    "updatedAt": "2026-01-21T08:08:03.068Z"
+    "updatedAt": "2026-01-21T08:27:02.200Z"
+  },
+  {
+    "id": "1768984022200owgbiatjn",
+    "name": "Mysore Silk Crepe",
+    "category": "silk",
+    "price": "12500",
+    "description": "Fabric: Pure Crepe Mysore Silk\nFeel: Soft, fluid, and elegant\nStyle: Classic, refined, and timeless\nOccasion: Weddings | Festive | Formal events",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768982979115-zbf8vlgtf.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-21T08:27:02.201Z"
+  },
+  {
+    "id": "1768984022201n17woct91",
+    "name": "Mysore Silk Crepe",
+    "category": "silk",
+    "price": "12500",
+    "description": "Fabric: Pure Crepe Mysore Silk\nFeel: Soft, fluid, and elegant\nStyle: Classic, refined, and timeless\nOccasion: Weddings | Festive | Formal events",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768983009540-ao5dgv21z.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-21T08:27:02.201Z"
+  },
+  {
+    "id": "1768984022201ngtkfuebd",
+    "name": "Mysore Silk Crepe",
+    "category": "silk",
+    "price": "12500",
+    "description": "SOLD OUT\nFabric: Pure Crepe Mysore Silk\nFeel: Soft, fluid, and elegant\nStyle: Classic, refined, and timeless\nOccasion: Weddings | Festive | Formal events",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768983063733-s4vtmggat.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-21T08:27:02.201Z"
   }
 ]
