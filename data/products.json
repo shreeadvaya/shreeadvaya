@@ -50,5 +50,30 @@
     ],
     "alt": "",
     "createdAt": "2026-01-21T07:54:49.944Z"
+  },
+  {
+    "id": "1768982742583zlktd55a0",
+    "name": "Banarasi Silk",
+    "category": "designer",
+    "price": "11995",
+    "description": "Fabric: Pure Crepe Banarasi Silk\nFeel: Soft, fluid, and luxurious\nStyle: Regal, elegant, and timeless\nOccasion: Weddings | Festive | Special occasions",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768982488686-s4y6e5pws.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768982489284-0orrxbleu.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-21T08:05:42.583Z"
+  },
+  {
+    "id": "1768982742583jflesmk0l",
+    "name": "Mysore Silk Crepe",
+    "category": "silk",
+    "price": "12500",
+    "description": "Fabric: Pure Crepe Mysore Silk\nFeel: Soft, fluid, and elegant\nStyle: Classic, refined, and timeless\nOccasion: Weddings | Festive | Formal events",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768982694094-zjh3j4nh7.jpg"
+    ],
+    "alt": "Sold Out",
+    "createdAt": "2026-01-21T08:05:42.583Z"
   }
 ]
