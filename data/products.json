@@ -150,5 +150,17 @@
     ],
     "alt": "",
     "createdAt": "2026-01-21T13:06:46.568Z"
+  },
+  {
+    "id": "1769152412160pbte7bequ",
+    "name": "Kancheepuram Silk Sarees",
+    "category": "silk",
+    "price": "4500",
+    "description": "Fabric: Pure Kanchivaram Silk\nFeel: Rich, structured, and luxurious\nStyle: Regal, traditional, and timeless\nOccasion: Weddings | Festive | Grand occasions",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769152401489-3uz5ung69.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-23T07:13:32.160Z"
   }
 ]
