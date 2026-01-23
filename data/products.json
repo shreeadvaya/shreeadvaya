@@ -37,18 +37,203 @@
     ],
     "alt": "",
     "createdAt": "2025-12-04T19:34:22.425Z",
-    "updatedAt": "2025-12-15T11:06:20.597Z"
+    "updatedAt": "2026-01-21T07:57:40.655Z"
   },
   {
-    "id": "176590198942676ls8tbe0",
-    "name": "Test",
-    "category": "test",
-    "price": "2000",
+    "id": "1768982089944zxu4vvj28",
+    "name": "Kancheepuram Silk Sarees",
+    "category": "silk",
+    "price": "7500",
     "description": "",
     "images": [
-      "https://raw.githubusercontent.com/GiridharSalana/shree-advaya/main/assets/images/image-1765901982941-0lpqw94v6.jpg"
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768981590129-36eb0gf71.jpg"
     ],
     "alt": "",
-    "createdAt": "2025-12-16T16:19:49.426Z"
+    "createdAt": "2026-01-21T07:54:49.944Z",
+    "updatedAt": "2026-01-23T07:19:19.670Z"
+  },
+  {
+    "id": "1768982742583zlktd55a0",
+    "name": "Banarasi Silk",
+    "category": "designer",
+    "price": "11995",
+    "description": "Fabric: Pure Crepe Banarasi Silk\nFeel: Soft, fluid, and luxurious\nStyle: Regal, elegant, and timeless\nOccasion: Weddings | Festive | Special occasions",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768982488686-s4y6e5pws.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768982489284-0orrxbleu.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-21T08:05:42.583Z"
+  },
+  {
+    "id": "1768982742583jflesmk0l",
+    "name": "Mysore Silk Crepe",
+    "category": "silk",
+    "price": "12500",
+    "description": "SOLD OUT \nFabric: Pure Crepe Mysore Silk\nFeel: Soft, fluid, and elegant\nStyle: Classic, refined, and timeless\nOccasion: Weddings | Festive | Formal events",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768982694094-zjh3j4nh7.jpg"
+    ],
+    "alt": "Sold Out",
+    "createdAt": "2026-01-21T08:05:42.583Z",
+    "updatedAt": "2026-01-21T08:27:02.200Z"
+  },
+  {
+    "id": "1768984022200owgbiatjn",
+    "name": "Mysore Silk Crepe",
+    "category": "silk",
+    "price": "12500",
+    "description": "Fabric: Pure Crepe Mysore Silk\nFeel: Soft, fluid, and elegant\nStyle: Classic, refined, and timeless\nOccasion: Weddings | Festive | Formal events",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768982979115-zbf8vlgtf.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-21T08:27:02.201Z"
+  },
+  {
+    "id": "1768984022201n17woct91",
+    "name": "Mysore Silk Crepe",
+    "category": "silk",
+    "price": "12500",
+    "description": "Fabric: Pure Crepe Mysore Silk\nFeel: Soft, fluid, and elegant\nStyle: Classic, refined, and timeless\nOccasion: Weddings | Festive | Formal events",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768983009540-ao5dgv21z.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-21T08:27:02.201Z"
+  },
+  {
+    "id": "1768984022201ngtkfuebd",
+    "name": "Mysore Silk Crepe",
+    "category": "silk",
+    "price": "12500",
+    "description": "SOLD OUT\nFabric: Pure Crepe Mysore Silk\nFeel: Soft, fluid, and elegant\nStyle: Classic, refined, and timeless\nOccasion: Weddings | Festive | Formal events",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768983063733-s4vtmggat.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-21T08:27:02.201Z"
+  },
+  {
+    "id": "1768985807911h4e60x7dd",
+    "name": "Kancheepuram Silk Sarees",
+    "category": "silk",
+    "price": "8500",
+    "description": "Fabric: Pure Kanchivaram Silk\nFeel: Rich, structured, and luxurious\nStyle: Regal, traditional, and timeless\nOccasion: Weddings | Festive | Grand occasions",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768985798816-p3nb4kcv9.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-21T08:56:47.913Z",
+    "updatedAt": "2026-01-23T07:19:19.670Z"
+  },
+  {
+    "id": "176900080656830av4yqwa",
+    "name": "Mysore Silk Crepe",
+    "category": "silk",
+    "price": "12500",
+    "description": "Fabric: Pure Crepe Mysore Silk\nFeel: Soft, fluid, and elegant\nStyle: Classic, refined, and timeless\nOccasion: Weddings | Festive | Formal events",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769000760013-mc88xcue5.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769000760674-ef8idz1xf.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-21T13:06:46.568Z"
+  },
+  {
+    "id": "17690008065687by9o2kzd",
+    "name": "Mysore Silk Crepe",
+    "category": "silk",
+    "price": "12500",
+    "description": "Fabric: Pure Crepe Mysore Silk\nFeel: Soft, fluid, and elegant\nStyle: Classic, refined, and timeless\nOccasion: Weddings | Festive | Formal events",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769000794821-csyxcky5k.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-21T13:06:46.568Z"
+  },
+  {
+    "id": "1769152412160pbte7bequ",
+    "name": "Kancheepuram Silk Sarees",
+    "category": "silk",
+    "price": "4500",
+    "description": "Fabric: Pure Kanchivaram Silk\nFeel: Rich, structured, and luxurious\nStyle: Regal, traditional, and timeless\nOccasion: Weddings | Festive | Grand occasions",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769152401489-3uz5ung69.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-23T07:13:32.160Z"
+  },
+  {
+    "id": "176915275967036pepbopa",
+    "name": "Kancheepuram Silk Sarees",
+    "category": "silk",
+    "price": "4500",
+    "description": "Fabric: Pure Kanchivaram Silk\nFeel: Rich, structured, and luxurious\nStyle: Regal, traditional, and timeless\nOccasion: Weddings | Festive | Grand occasions",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769152537840-zct9ty3rb.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-23T07:19:19.670Z"
+  },
+  {
+    "id": "1769152759670vb12takv0",
+    "name": "Kancheepuram Silk Sarees",
+    "category": "silk",
+    "price": "4500",
+    "description": "Fabric: Pure Kanchivaram Silk\nFeel: Rich, structured, and luxurious\nStyle: Regal, traditional, and timeless\nOccasion: Weddings | Festive | Grand occasions",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769152567733-54h5gis60.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-23T07:19:19.670Z"
+  },
+  {
+    "id": "1769152759670mhoolxdr6",
+    "name": "Kancheepuram Silk Sarees",
+    "category": "silk",
+    "price": "7500",
+    "description": "Fabric: Pure Kanchivaram Silk\nFeel: Rich, structured, and luxurious\nStyle: Regal, traditional, and timeless\nOccasion: Weddings | Festive | Grand occasions",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769152643186-dffpwmk5r.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-23T07:19:19.670Z"
+  },
+  {
+    "id": "1769152759670xvjwsl44q",
+    "name": "Kancheepuram Silk Sarees",
+    "category": "silk",
+    "price": "7500",
+    "description": "Fabric: Pure Kanchivaram Silk\nFeel: Rich, structured, and luxurious\nStyle: Regal, traditional, and timeless\nOccasion: Weddings | Festive | Grand occasions",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769152671872-npn0h9s9f.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-23T07:19:19.670Z"
+  },
+  {
+    "id": "176915275967073zzob0tl",
+    "name": "Kancheepuram Silk Sarees",
+    "category": "silk",
+    "price": "7500",
+    "description": "Fabric: Pure Kanchivaram Silk\nFeel: Rich, structured, and luxurious\nStyle: Regal, traditional, and timeless\nOccasion: Weddings | Festive | Grand occasions",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769152725035-qn0g8u20s.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-23T07:19:19.670Z"
+  },
+  {
+    "id": "1769152824063hy418nfyp",
+    "name": "Kancheepuram Silk Sarees",
+    "category": "silk",
+    "price": "7500",
+    "description": "Fabric: Pure Kanchivaram Silk\nFeel: Rich, structured, and luxurious\nStyle: Regal, traditional, and timeless\nOccasion: Weddings | Festive | Grand occasions",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769152817996-hnkg2j8i0.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-23T07:20:24.063Z"
   }
 ]
