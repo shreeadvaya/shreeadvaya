@@ -5,6 +5,7 @@ const STORAGE_KEY = 'admin_token';
 // Batch Save System - Track all changes locally
 const pendingChanges = {
     products: { create: [], update: [], delete: [] },
+    categories: { create: [], update: [], delete: [] },
     hero: { create: [], update: [], delete: [] },
     content: { update: null }
 };
@@ -12,6 +13,7 @@ const pendingChanges = {
 // Original data cache
 const originalData = {
     products: [],
+    categories: [],
     hero: [],
     content: {}
 };
@@ -492,6 +494,7 @@ async function loadData() {
     try {
         await Promise.all([
             loadProducts(),
+            loadCategories(),
             loadHeroImages(),
             loadContent()
         ]);
@@ -747,6 +750,225 @@ async function deleteProduct(productId) {
 
 function editProduct(productId) {
     openProductModal(productId);
+}
+
+// Categories Management
+async function loadCategories() {
+    try {
+        const categories = await apiCall('/categories');
+        originalData.categories = JSON.parse(JSON.stringify(categories)); // Deep copy
+        
+        // Merge with pending changes
+        const displayCategories = getDisplayCategories();
+        const container = document.getElementById('categoriesList');
+        
+        if (container) {
+            container.innerHTML = '';
+
+            if (displayCategories.length === 0) {
+                container.innerHTML = '<p>No categories found. Add your first category!</p>';
+                return;
+            }
+
+            displayCategories.forEach(category => {
+                const card = createCategoryCard(category);
+                container.appendChild(card);
+            });
+        }
+        
+        // Also update the product form dropdown
+        updateProductCategoryDropdown(displayCategories);
+    } catch (error) {
+        const container = document.getElementById('categoriesList');
+        if (container) {
+            container.innerHTML = '<p class="error">Error loading categories. Make sure API is configured.</p>';
+        }
+    }
+}
+
+// Get categories with pending changes applied
+function getDisplayCategories() {
+    let categories = JSON.parse(JSON.stringify(originalData.categories));
+    
+    // Apply updates
+    pendingChanges.categories.update.forEach(update => {
+        const index = categories.findIndex(c => c.id === update.id);
+        if (index !== -1) {
+            categories[index] = { ...categories[index], ...update };
+        }
+    });
+    
+    // Add new items
+    categories.push(...pendingChanges.categories.create);
+    
+    // Remove deleted items
+    categories = categories.filter(c => !pendingChanges.categories.delete.includes(c.id));
+    
+    // Sort by order
+    categories.sort((a, b) => (a.order || 0) - (b.order || 0));
+    
+    return categories;
+}
+
+function createCategoryCard(category) {
+    const card = document.createElement('div');
+    card.className = 'item-card';
+    card.style.cssText = 'padding: 20px; text-align: center;';
+    card.innerHTML = `
+        <div class="item-card-body">
+            <div style="font-size: 2rem; margin-bottom: 10px; color: #d4af37;">
+                <i class="fas fa-tag"></i>
+            </div>
+            <div class="item-card-title">${category.name}</div>
+            <div class="item-card-info">
+                <div style="color: #666; font-size: 0.9rem; margin: 5px 0;">ID: ${category.id}</div>
+                <div style="color: #666; font-size: 0.9rem;">Order: ${category.order || 'N/A'}</div>
+            </div>
+            <div class="item-card-actions">
+                <button class="btn btn-primary" onclick="editCategory('${category.id}')">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="btn btn-primary" onclick="deleteCategory('${category.id}')">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    `;
+    return card;
+}
+
+function openCategoryModal(categoryId = null) {
+    const modal = document.getElementById('categoryModal');
+    const form = document.getElementById('categoryForm');
+    const title = document.getElementById('categoryModalTitle');
+
+    form.reset();
+
+    if (categoryId) {
+        title.textContent = 'Edit Category';
+        loadCategoryData(categoryId);
+    } else {
+        title.textContent = 'Add Category';
+        document.getElementById('categoryId').value = '';
+    }
+
+    modal.classList.add('active');
+}
+
+async function loadCategoryData(categoryId) {
+    try {
+        const displayCategories = getDisplayCategories();
+        const category = displayCategories.find(c => c.id === categoryId);
+        
+        if (!category) {
+            showNotification('Category not found', 'error');
+            return;
+        }
+        
+        document.getElementById('categoryId').value = category.id;
+        document.getElementById('categoryName').value = category.name;
+        document.getElementById('categoryOrder').value = category.order || '';
+    } catch (error) {
+        showNotification('Error loading category', 'error');
+    }
+}
+
+document.getElementById('categoryForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const categoryId = document.getElementById('categoryId').value;
+    const categoryName = document.getElementById('categoryName').value.trim();
+    const categoryOrder = document.getElementById('categoryOrder').value;
+    
+    if (!categoryName) {
+        showNotification('Category name is required', 'error');
+        return;
+    }
+    
+    try {
+        const categoryData = {
+            name: categoryName,
+            order: categoryOrder ? parseInt(categoryOrder) : undefined
+        };
+
+        if (categoryId) {
+            // Update existing category
+            pendingChanges.categories.create = pendingChanges.categories.create.filter(c => c.id !== categoryId);
+            
+            const existingUpdateIndex = pendingChanges.categories.update.findIndex(c => c.id === categoryId);
+            if (existingUpdateIndex !== -1) {
+                pendingChanges.categories.update[existingUpdateIndex] = { ...categoryData, id: categoryId };
+            } else {
+                pendingChanges.categories.update.push({ ...categoryData, id: categoryId });
+            }
+            
+            showNotification('Category changes saved locally. Click "Save All Changes" to commit.', 'info');
+        } else {
+            // Add new category with temporary ID
+            const tempId = 'temp_' + Date.now();
+            pendingChanges.categories.create.push({ ...categoryData, id: tempId });
+            showNotification('Category added locally. Click "Save All Changes" to commit.', 'info');
+        }
+        
+        closeModal('categoryModal');
+        loadCategories();
+        updatePendingCount();
+    } catch (error) {
+        showNotification('Error saving category: ' + error.message, 'error');
+    }
+});
+
+async function deleteCategory(categoryId) {
+    if (!confirm('Are you sure you want to delete this category? Products using this category will need to be updated.')) return;
+
+    try {
+        // Remove from create queue if it's a new item
+        pendingChanges.categories.create = pendingChanges.categories.create.filter(c => c.id !== categoryId);
+        
+        // Remove from update queue
+        pendingChanges.categories.update = pendingChanges.categories.update.filter(c => c.id !== categoryId);
+        
+        // Add to delete queue (if not already there)
+        if (!pendingChanges.categories.delete.includes(categoryId) && !categoryId.startsWith('temp_')) {
+            pendingChanges.categories.delete.push(categoryId);
+        }
+        
+        showNotification('Category marked for deletion. Click "Save All Changes" to commit.', 'info');
+        loadCategories();
+        updatePendingCount();
+    } catch (error) {
+        showNotification('Error deleting category', 'error');
+    }
+}
+
+function editCategory(categoryId) {
+    openCategoryModal(categoryId);
+}
+
+// Update product category dropdown with current categories
+function updateProductCategoryDropdown(categories) {
+    const dropdown = document.getElementById('productCategory');
+    if (!dropdown) return;
+    
+    const currentValue = dropdown.value;
+    dropdown.innerHTML = '';
+    
+    if (categories.length === 0) {
+        dropdown.innerHTML = '<option value="">No categories available</option>';
+        return;
+    }
+    
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.textContent = category.name;
+        dropdown.appendChild(option);
+    });
+    
+    // Restore previous selection if it still exists
+    if (currentValue && categories.find(c => c.id === currentValue)) {
+        dropdown.value = currentValue;
+    }
 }
 
 // Hero Images Management
@@ -1183,6 +1405,7 @@ function setupEventListeners() {
 function updatePendingCount() {
     let count = 0;
     count += pendingChanges.products.create.length + pendingChanges.products.update.length + pendingChanges.products.delete.length;
+    count += pendingChanges.categories.create.length + pendingChanges.categories.update.length + pendingChanges.categories.delete.length;
     count += pendingChanges.hero.create.length + pendingChanges.hero.update.length + pendingChanges.hero.delete.length;
     if (pendingChanges.content.update) count += 1;
     
@@ -1209,6 +1432,7 @@ async function discardAllChanges() {
     try {
         // Clear all pending changes
         pendingChanges.products = { create: [], update: [], delete: [] };
+        pendingChanges.categories = { create: [], update: [], delete: [] };
         pendingChanges.hero = { create: [], update: [], delete: [] };
         pendingChanges.content.update = null;
         
@@ -1251,6 +1475,20 @@ async function saveAllChanges() {
             };
         }
         
+        // Categories
+        if (pendingChanges.categories.create.length > 0 || 
+            pendingChanges.categories.update.length > 0 || 
+            pendingChanges.categories.delete.length > 0) {
+            batchData.categories = {
+                create: pendingChanges.categories.create.map(item => {
+                    const { id, ...itemData } = item; // Remove temp ID
+                    return itemData;
+                }),
+                update: pendingChanges.categories.update,
+                delete: pendingChanges.categories.delete.filter(id => !id.startsWith('temp_'))
+            };
+        }
+        
         // Hero Images
         if (pendingChanges.hero.create.length > 0 || 
             pendingChanges.hero.update.length > 0 || 
@@ -1277,6 +1515,7 @@ async function saveAllChanges() {
         
         // Clear pending changes
         pendingChanges.products = { create: [], update: [], delete: [] };
+        pendingChanges.categories = { create: [], update: [], delete: [] };
         pendingChanges.hero = { create: [], update: [], delete: [] };
         pendingChanges.content.update = null;
         
