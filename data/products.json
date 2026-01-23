@@ -3,37 +3,37 @@
     "id": "1764002829054kimdzdyyh",
     "name": "Kancheepuram Silk Sarees",
     "category": "silk",
-    "price": "5000",
-    "description": "",
+    "price": "4500",
+    "description": "Fabric: Pure Kanchivaram Silk\nFeel: Rich, structured, and luxurious\nStyle: Regal, traditional, and timeless\nOccasion: Weddings | Festive | Grand occasions",
     "images": [
       "https://i.postimg.cc/76LFKBKV/test.png"
     ],
     "alt": "This is description",
     "createdAt": "2025-11-24T16:47:09.054Z",
-    "updatedAt": "2025-12-04T19:12:33.471Z"
+    "updatedAt": "2026-01-23T07:19:19.670Z"
   },
   {
     "id": "1764854457773pujelzhth",
     "name": "Kancheepuram Silk Sarees",
     "category": "silk",
-    "price": "5000",
-    "description": "",
+    "price": "4500",
+    "description": "Fabric: Pure Kanchivaram Silk\nFeel: Rich, structured, and luxurious\nStyle: Regal, traditional, and timeless\nOccasion: Weddings | Festive | Grand occasions",
     "images": [
-      "https://i.postimg.cc/J0sGC5zb/IMG-2373-HEIC-(1).avif"
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1765886690319-0lpvtwvns.jpg"
     ],
     "alt": "",
     "createdAt": "2025-12-04T13:20:57.773Z",
-    "updatedAt": "2025-12-10T16:53:06.044Z"
+    "updatedAt": "2026-01-23T07:19:19.670Z"
   },
   {
     "id": "1764876862425f3mtsnkg6",
     "name": "Banarasi Silk",
     "category": "designer",
     "price": "11995",
-    "description": "",
+    "description": "Fabric: Pure Crepe Banarasi Silk\nFeel: Soft, fluid, and luxurious\nStyle: Regal, elegant, and timeless\nOccasion: Weddings | Festive | Special occasions",
     "images": [
-      "https://raw.githubusercontent.com/GiridharSalana/shree-advaya/main/assets/images/image-1765793401356-718y9dzrt.jpg",
-      "https://raw.githubusercontent.com/GiridharSalana/shree-advaya/main/assets/images/image-1765795681563-2so7h6oq4.jpg"
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768981962631-dqx2oh3xk.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768981963190-19sgp4yzz.jpg"
     ],
     "alt": "",
     "createdAt": "2025-12-04T19:34:22.425Z",
