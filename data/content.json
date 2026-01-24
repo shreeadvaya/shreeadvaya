@@ -1,4 +1,5 @@
 {
+  "siteName": "श्री अdvaya Studio",
   "logo": "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768928537780-9svn78dae.jpg",
   "hero": {
     "title": "DEFINING UNIQUENESS",
@@ -41,5 +42,23 @@
   "about": "At Shree Advaya Studio, every saree is carefully selected to reflect understated luxury, superior craftsmanship, and enduring beauty. Our collections seamlessly blend tradition with contemporary grace, designed for women who appreciate elegance that transcends trends.",
   "email": "hello.shreeadvaya@gmail.com",
   "phone": "+91 9535188488",
-  "whatsapp": "919535188488"
+  "whatsapp": "919535188488",
+  "policies": {
+    "disclaimer": {
+      "title": "Disclaimer",
+      "content": "Edit"
+    },
+    "shipping": {
+      "title": "Shipping & Delivery",
+      "content": "Edit"
+    },
+    "returns": {
+      "title": "Return & Exchange Policy",
+      "content": "Edit"
+    },
+    "refund": {
+      "title": "Refund Policy",
+      "content": "Edit"
+    }
+  }
 }

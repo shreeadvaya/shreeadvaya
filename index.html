@@ -23,7 +23,7 @@
         <div class="nav-container">
             <div class="nav-logo">
                 <img id="siteLogo" src="assets/images/logo.svg" alt="ShreeAdvaya Logo" class="logo-image">
-                <h2>ShreeAdvaya</h2>
+                <h2 id="siteNameNav">ShreeAdvaya</h2>
             </div>
             <ul class="nav-menu">
                 <li><a href="#home" class="nav-link">Home</a></li>
@@ -103,10 +103,14 @@
             <h2 class="section-title">Our Collection</h2>
             <p class="section-subtitle">Explore our carefully curated range of premium sarees</p>
 
-            <div class="product-categories" id="productCategories">
-                <!-- Category dropdown will be loaded dynamically -->
-                <select id="categoryDropdown" class="category-dropdown">
-                    <option value="all" selected>All</option>
+            <div class="product-filters" id="productFilters">
+                <!-- Collection filter -->
+                <select id="collectionDropdown" class="category-dropdown">
+                    <option value="all" selected>All Collections</option>
+                </select>
+                <!-- Sub-category filter -->
+                <select id="subcategoryDropdown" class="category-dropdown">
+                    <option value="all" selected>All Types</option>
                 </select>
             </div>
 
@@ -173,12 +177,9 @@
                             <input type="tel" placeholder="Your Phone *" required>
                         </div>
                         <div class="form-group">
-                            <select required>
-                                <option value="">Select Saree Type *</option>
-                                <option value="silk">Silk Sarees</option>
-                                <option value="cotton">Cotton Sarees</option>
-                                <option value="designer">Designer Sarees</option>
-                                <option value="bridal">Bridal Sarees</option>
+                            <select id="inquiryProductType" required>
+                                <option value="">Select Product Type *</option>
+                                <!-- Options will be loaded dynamically from collections -->
                             </select>
                         </div>
                         <div class="form-group">
@@ -197,7 +198,7 @@
         <div class="container">
             <div class="footer-top">
                 <div class="footer-brand">
-                    <h3>ShreeAdvaya</h3>
+                    <h3 id="siteNameFooter">ShreeAdvaya</h3>
                     <p>Celebrating the timeless elegance of Indian sarees with modern sophistication.</p>
                     <div class="social-links" id="socialLinks">
                         <a href="#" class="social-link" id="socialFacebook" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
@@ -222,24 +223,20 @@
                 </div>
 
                 <div class="footer-section">
-                    <h4>Categories</h4>
-                    <ul>
-                        <li><a href="#products">Silk Sarees</a></li>
-                        <li><a href="#products">Cotton Sarees</a></li>
-                        <li><a href="#products">Designer Sarees</a></li>
-                        <li><a href="#products">Bridal Sarees</a></li>
-                        <li><a href="#products">Party Wear</a></li>
+                    <h4>Collections</h4>
+                    <ul id="footerCollections">
+                        <li><a href="#products">Sarees</a></li>
+                        <li><a href="#products">Unstitched Salwar Materials</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-section">
-                    <h4>Customer Service</h4>
+                    <h4>Studio Policies</h4>
                     <ul>
-                        <li><a href="#contact">Support</a></li>
-                        <li><a href="#contact">Shipping Info</a></li>
-                        <li><a href="#contact">Return Policy</a></li>
-                        <li><a href="#contact">Size Guide</a></li>
-                        <li><a href="#contact">FAQs</a></li>
+                        <li><a href="#" onclick="openPolicyModal('disclaimer'); return false;">Disclaimer</a></li>
+                        <li><a href="#" onclick="openPolicyModal('shipping'); return false;">Shipping & Delivery</a></li>
+                        <li><a href="#" onclick="openPolicyModal('returns'); return false;">Return & Exchange Policy</a></li>
+                        <li><a href="#" onclick="openPolicyModal('refund'); return false;">Refund Policy</a></li>
                     </ul>
                 </div>
 
@@ -248,18 +245,27 @@
                     <ul class="contact-list">
                         <li id="footerPhone"><i class="fas fa-phone"></i></li>
                         <li id="footerEmail"><i class="fas fa-envelope"></i></li>
-                        <li><i class="fas fa-map-marker-alt"></i> Mumbai, Maharashtra</li>
-                        <li><i class="fas fa-clock"></i> Mon - Sat: 10AM - 8PM</li>
                     </ul>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p class="designed-text">Designed with <i class="fas fa-heart"></i> by <a href="https://giridharsalana.vercel.app" target="_blank" rel="noopener noreferrer" class="designer-link">Giridhar Salana</a></p>
-                <p class="copyright-text">&copy; 2024 ShreeAdvaya. All rights reserved.</p>
+                <p class="designed-text">🧑‍💻 Developed by <a href="https://giridharsalana.vercel.app" target="_blank" rel="noopener noreferrer" class="designer-link">GiridharSalana</a></p>
+                <p class="copyright-text">&copy; <span id="currentYear"></span> <span id="siteNameCopyright">ShreeAdvaya</span>. All rights reserved.</p>
             </div>
         </div>
     </footer>
+
+    <!-- Policy Modal -->
+    <div id="policyModal" class="policy-modal">
+        <div class="policy-modal-content">
+            <span class="policy-close" onclick="closePolicyModal()">&times;</span>
+            <h2 id="policyModalTitle">Policy</h2>
+            <div id="policyModalContent" class="policy-text">
+                <!-- Policy content will be loaded here -->
+            </div>
+        </div>
+    </div>
 
     <script src="assets/js/script.js"></script>
     <script>

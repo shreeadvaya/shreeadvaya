@@ -1,0 +1,58 @@
+[
+  {
+    "id": "sarees",
+    "name": "Sarees",
+    "order": 1,
+    "subcategories": [
+      {
+        "id": "kancheepuram-silk",
+        "name": "Kancheepuram Silk Sarees",
+        "order": 1
+      },
+      {
+        "id": "mysore-silk",
+        "name": "Mysore Silk Sarees",
+        "order": 2
+      },
+      {
+        "id": "cotton",
+        "name": "Cotton",
+        "order": 3
+      },
+      {
+        "id": "linen",
+        "name": "Linen",
+        "order": 4
+      },
+      {
+        "id": "banarasi",
+        "name": "Banarasi",
+        "order": 5
+      },
+      {
+        "id": "chiffon",
+        "name": "Chiffon",
+        "order": 6
+      }
+    ],
+    "createdAt": "2026-01-23T00:00:00.000Z"
+  },
+  {
+    "id": "unstitched-salwar",
+    "name": "Unstitched Salwar Materials",
+    "order": 2,
+    "subcategories": [
+      {
+        "id": "salwar-linen",
+        "name": "Linen",
+        "order": 1
+      },
+      {
+        "id": "salwar-cotton",
+        "name": "Cotton",
+        "order": 2
+      }
+    ],
+    "createdAt": "2026-01-23T00:00:00.000Z"
+  }
+]

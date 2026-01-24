@@ -1,10 +1,14 @@
 // API Base URL
 const API_BASE = '/api';
 
+// Global collections data for filtering
+let collectionsData = [];
+
 // Load all dynamic content
 async function loadDynamicContent() {
     try {
         await Promise.all([
+            loadCollections(),
             loadCategories(),
             loadProducts(),
             loadHeroImages(),
@@ -13,6 +17,210 @@ async function loadDynamicContent() {
     } catch (error) {
         console.error('Error loading dynamic content:', error);
     }
+}
+
+// Load Collections with sub-categories
+async function loadCollections() {
+    try {
+        const response = await fetch(`${API_BASE}/collections`);
+        if (!response.ok) throw new Error('Failed to load collections');
+        collectionsData = await response.json();
+        
+        const collectionDropdown = document.getElementById('collectionDropdown');
+        const subcategoryDropdown = document.getElementById('subcategoryDropdown');
+        
+        if (!collectionDropdown) return;
+        
+        // Clear and add "All" option
+        collectionDropdown.innerHTML = '<option value="all" selected>All Collections</option>';
+        
+        // Sort by order
+        collectionsData.sort((a, b) => (a.order || 0) - (b.order || 0));
+        
+        // Add collection options
+        collectionsData.forEach(collection => {
+            const option = document.createElement('option');
+            option.value = collection.id;
+            option.textContent = collection.name;
+            collectionDropdown.appendChild(option);
+        });
+        
+        // Update footer collections
+        updateFooterCollections();
+        
+        // Update inquiry form dropdown
+        updateInquiryDropdown();
+        
+        // Initialize dropdown events
+        initCollectionDropdowns();
+    } catch (error) {
+        console.error('Error loading collections:', error);
+    }
+}
+
+// Update footer collections list
+function updateFooterCollections() {
+    const footerCollections = document.getElementById('footerCollections');
+    if (!footerCollections || !collectionsData.length) return;
+    
+    footerCollections.innerHTML = '';
+    
+    collectionsData
+        .sort((a, b) => (a.order || 0) - (b.order || 0))
+        .forEach(collection => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="#products">${collection.name}</a>`;
+            footerCollections.appendChild(li);
+        });
+}
+
+// Update inquiry form product type dropdown
+function updateInquiryDropdown() {
+    const dropdown = document.getElementById('inquiryProductType');
+    if (!dropdown || !collectionsData.length) return;
+    
+    dropdown.innerHTML = '<option value="">Select Product Type *</option>';
+    
+    collectionsData
+        .sort((a, b) => (a.order || 0) - (b.order || 0))
+        .forEach(collection => {
+            // Add collection as optgroup
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = collection.name;
+            
+            if (collection.subcategories && collection.subcategories.length > 0) {
+                collection.subcategories
+                    .sort((a, b) => (a.order || 0) - (b.order || 0))
+                    .forEach(sub => {
+                        const option = document.createElement('option');
+                        option.value = sub.id;
+                        option.textContent = sub.name;
+                        optgroup.appendChild(option);
+                    });
+            }
+            
+            dropdown.appendChild(optgroup);
+        });
+}
+
+// Initialize collection dropdown event listeners
+function initCollectionDropdowns() {
+    const collectionDropdown = document.getElementById('collectionDropdown');
+    const subcategoryDropdown = document.getElementById('subcategoryDropdown');
+    
+    if (!collectionDropdown || !subcategoryDropdown) return;
+    
+    // When collection changes, update subcategory options
+    collectionDropdown.addEventListener('change', (e) => {
+        const collectionId = e.target.value;
+        updateSubcategoryDropdown(collectionId);
+        filterProducts();
+    });
+    
+    // When subcategory changes, filter products
+    subcategoryDropdown.addEventListener('change', () => {
+        filterProducts();
+    });
+}
+
+// Update subcategory dropdown based on selected collection
+function updateSubcategoryDropdown(collectionId) {
+    const subcategoryDropdown = document.getElementById('subcategoryDropdown');
+    if (!subcategoryDropdown) return;
+    
+    subcategoryDropdown.innerHTML = '<option value="all" selected>All Types</option>';
+    
+    if (collectionId === 'all') {
+        // Show all subcategories from all collections
+        collectionsData.forEach(collection => {
+            if (collection.subcategories && collection.subcategories.length > 0) {
+                collection.subcategories
+                    .sort((a, b) => (a.order || 0) - (b.order || 0))
+                    .forEach(sub => {
+                        const option = document.createElement('option');
+                        option.value = sub.id;
+                        option.textContent = `${sub.name}`;
+                        subcategoryDropdown.appendChild(option);
+                    });
+            }
+        });
+    } else {
+        // Show subcategories for selected collection only
+        const collection = collectionsData.find(c => c.id === collectionId);
+        if (collection && collection.subcategories) {
+            collection.subcategories
+                .sort((a, b) => (a.order || 0) - (b.order || 0))
+                .forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub.id;
+                    option.textContent = sub.name;
+                    subcategoryDropdown.appendChild(option);
+                });
+        }
+    }
+}
+
+// Filter products based on collection and subcategory
+function filterProducts() {
+    const collectionDropdown = document.getElementById('collectionDropdown');
+    const subcategoryDropdown = document.getElementById('subcategoryDropdown');
+    const productCards = document.querySelectorAll('.product-card');
+    
+    if (!collectionDropdown || !subcategoryDropdown || !productCards.length) return;
+    
+    const collectionId = collectionDropdown.value;
+    const subcategoryId = subcategoryDropdown.value;
+    
+    // Get all valid subcategory IDs for the selected collection
+    let validSubcategories = [];
+    if (collectionId === 'all') {
+        collectionsData.forEach(c => {
+            if (c.subcategories) {
+                validSubcategories = validSubcategories.concat(c.subcategories.map(s => s.id));
+            }
+        });
+    } else {
+        const collection = collectionsData.find(c => c.id === collectionId);
+        if (collection && collection.subcategories) {
+            validSubcategories = collection.subcategories.map(s => s.id);
+        }
+    }
+    
+    // Hide all cards first
+    productCards.forEach(card => {
+        card.style.display = 'none';
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'none';
+    });
+    
+    // Filter and show matching cards
+    const visibleCards = Array.from(productCards).filter(card => {
+        const cardCategory = card.getAttribute('data-category');
+        
+        // If "all" is selected for both, show all
+        if (collectionId === 'all' && subcategoryId === 'all') return true;
+        
+        // If specific subcategory is selected
+        if (subcategoryId !== 'all') {
+            return cardCategory === subcategoryId;
+        }
+        
+        // If only collection is selected, show all subcategories of that collection
+        return validSubcategories.includes(cardCategory);
+    });
+    
+    // Animate visible cards
+    visibleCards.forEach((card, index) => {
+        card.style.display = 'block';
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 50);
+        });
+    });
 }
 
 // Load Categories
@@ -244,6 +452,7 @@ async function loadContent() {
         
         // Default values
         const defaults = {
+            siteName: 'ShreeAdvaya',
             logo: 'assets/images/logo.svg',
             hero: {
                 title: 'Elegance Redefined',
@@ -265,8 +474,30 @@ async function loadContent() {
             whatsapp: '919876543210',
             email: 'info@shreeadvaya.com',
             phone: '+91 98765 43210',
-            about: 'ShreeAdvaya represents the perfect fusion of traditional Indian craftsmanship and contemporary design. We curate the finest collection of sarees, each piece telling a story of heritage, elegance, and timeless beauty. Our commitment to quality and authenticity ensures that every saree in our collection is a masterpiece, carefully selected to celebrate the rich cultural heritage of India while meeting modern fashion sensibilities.'
+            about: 'ShreeAdvaya represents the perfect fusion of traditional Indian craftsmanship and contemporary design. We curate the finest collection of sarees, each piece telling a story of heritage, elegance, and timeless beauty. Our commitment to quality and authenticity ensures that every saree in our collection is a masterpiece, carefully selected to celebrate the rich cultural heritage of India while meeting modern fashion sensibilities.',
+            policies: {
+                disclaimer: { title: 'Disclaimer', content: '' },
+                shipping: { title: 'Shipping & Delivery', content: '' },
+                returns: { title: 'Return & Exchange Policy', content: '' },
+                refund: { title: 'Refund Policy', content: '' }
+            }
         };
+        
+        // Store policies globally for modal access
+        window.siteContent = content;
+        
+        // Update site name
+        const siteName = content.siteName || defaults.siteName;
+        const siteNameNav = document.getElementById('siteNameNav');
+        const siteNameFooter = document.getElementById('siteNameFooter');
+        const siteNameCopyright = document.getElementById('siteNameCopyright');
+        if (siteNameNav) siteNameNav.textContent = siteName;
+        if (siteNameFooter) siteNameFooter.textContent = siteName;
+        if (siteNameCopyright) siteNameCopyright.textContent = siteName;
+        
+        // Auto-update copyright year
+        const currentYearEl = document.getElementById('currentYear');
+        if (currentYearEl) currentYearEl.textContent = new Date().getFullYear();
         
         // Update logo
         const logo = content.logo || defaults.logo;
@@ -1107,21 +1338,7 @@ function initScrollAnimations() {
   });
 }
 
-// Smooth parallax effect for hero section
-window.addEventListener("scroll", () => {
-  const scrolled = window.pageYOffset;
-  const heroContent = document.querySelector(".hero-content");
-  const heroImage = document.querySelector(".hero-image");
-
-  if (heroContent && scrolled < 800) {
-    heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
-    heroContent.style.opacity = 1 - scrolled * 0.001;
-  }
-
-  if (heroImage && scrolled < 800) {
-    heroImage.style.transform = `translateY(${scrolled * 0.2}px)`;
-  }
-});
+// Parallax effect removed - hero content stays static on scroll
 
 
 // Keyboard navigation support
@@ -1202,4 +1419,67 @@ window.addEventListener("load", () => {
             }, index * 100);
         });
     }
+});
+
+// Policy Modal Functions
+function openPolicyModal(policyType) {
+    const modal = document.getElementById('policyModal');
+    const title = document.getElementById('policyModalTitle');
+    const contentDiv = document.getElementById('policyModalContent');
+    
+    if (!modal || !title || !contentDiv) return;
+    
+    // Get policy content from stored site content
+    const policies = window.siteContent?.policies || {};
+    const policy = policies[policyType];
+    
+    if (policy) {
+        title.textContent = policy.title || policyType;
+        // Convert markdown-like formatting to HTML
+        let content = policy.content || 'Content coming soon.';
+        content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        content = content.replace(/\n\n/g, '</p><p>');
+        content = content.replace(/\n- /g, '</p><ul><li>');
+        content = content.replace(/\n/g, '<br>');
+        contentDiv.innerHTML = `<p>${content}</p>`;
+    } else {
+        title.textContent = policyType.charAt(0).toUpperCase() + policyType.slice(1);
+        contentDiv.innerHTML = '<p>Content coming soon.</p>';
+    }
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePolicyModal() {
+    const modal = document.getElementById('policyModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Close policy modal on outside click
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('policyModal');
+    if (e.target === modal) {
+        closePolicyModal();
+    }
+});
+
+// Close policy modal on escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closePolicyModal();
+    }
+});
+
+// Mobile dropdown toggle
+document.querySelectorAll('.nav-dropdown .dropdown-toggle').forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+            e.preventDefault();
+            toggle.closest('.nav-dropdown').classList.toggle('active');
+        }
+    });
 });

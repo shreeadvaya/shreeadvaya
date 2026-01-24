@@ -495,6 +495,7 @@ async function loadData() {
         await Promise.all([
             loadProducts(),
             loadCategories(),
+            loadCollections(),
             loadHeroImages(),
             loadContent()
         ]);
@@ -971,6 +972,255 @@ function updateProductCategoryDropdown(categories) {
     }
 }
 
+// Update product category dropdown with collections and subcategories
+function updateProductCategoryFromCollections(collections) {
+    const dropdown = document.getElementById('productCategory');
+    if (!dropdown) return;
+    
+    const currentValue = dropdown.value;
+    dropdown.innerHTML = '';
+    
+    if (!collections || collections.length === 0) {
+        dropdown.innerHTML = '<option value="">No collections available</option>';
+        return;
+    }
+    
+    // Sort collections by order
+    collections.sort((a, b) => (a.order || 0) - (b.order || 0));
+    
+    collections.forEach(collection => {
+        // Add collection as optgroup
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = collection.name;
+        
+        if (collection.subcategories && collection.subcategories.length > 0) {
+            collection.subcategories
+                .sort((a, b) => (a.order || 0) - (b.order || 0))
+                .forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub.id;
+                    option.textContent = sub.name;
+                    optgroup.appendChild(option);
+                });
+        }
+        
+        dropdown.appendChild(optgroup);
+    });
+    
+    // Restore previous selection if it still exists
+    if (currentValue) {
+        dropdown.value = currentValue;
+    }
+}
+
+// Collections Management
+async function loadCollections() {
+    try {
+        const collections = await apiCall('/collections');
+        originalData.collections = JSON.parse(JSON.stringify(collections)); // Deep copy
+        
+        const container = document.getElementById('collectionsList');
+        if (!container) return;
+        
+        container.innerHTML = '';
+
+        if (collections.length === 0) {
+            container.innerHTML = '<p>No collections found. Add your first collection!</p>';
+            return;
+        }
+
+        collections.sort((a, b) => (a.order || 0) - (b.order || 0));
+        
+        collections.forEach(collection => {
+            const card = createCollectionCard(collection);
+            container.appendChild(card);
+        });
+        
+        // Update the product form dropdown with collections
+        updateProductCategoryFromCollections(collections);
+    } catch (error) {
+        console.error('Error loading collections:', error);
+        const container = document.getElementById('collectionsList');
+        if (container) {
+            container.innerHTML = '<p class="error">Error loading collections.</p>';
+        }
+    }
+}
+
+function createCollectionCard(collection) {
+    const div = document.createElement('div');
+    div.className = 'item-card collection-card';
+    div.style.cssText = 'background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 15px;';
+    
+    const subcategoriesHtml = collection.subcategories && collection.subcategories.length > 0
+        ? collection.subcategories
+            .sort((a, b) => (a.order || 0) - (b.order || 0))
+            .map(sub => `<span style="background: #f0f0f0; padding: 4px 10px; border-radius: 15px; font-size: 0.85rem; margin: 3px;">${sub.name}</span>`)
+            .join('')
+        : '<span style="color: #999; font-size: 0.9rem;">No sub-categories</span>';
+    
+    div.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+            <div>
+                <h3 style="margin: 0 0 5px 0; color: #2c1810;">${collection.name}</h3>
+                <small style="color: #666;">Order: ${collection.order || 'Not set'}</small>
+            </div>
+            <div class="item-actions" style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary" onclick="editCollection('${collection.id}')" style="padding: 6px 12px; font-size: 0.85rem;">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger" onclick="deleteCollection('${collection.id}')" style="padding: 6px 12px; font-size: 0.85rem;">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+            ${subcategoriesHtml}
+        </div>
+    `;
+    return div;
+}
+
+function openCollectionModal(collectionId = null) {
+    const modal = document.getElementById('collectionModal');
+    const title = document.getElementById('collectionModalTitle');
+    const form = document.getElementById('collectionForm');
+    
+    form.reset();
+    document.getElementById('collectionId').value = '';
+    document.getElementById('subcategoriesForm').innerHTML = '';
+    
+    if (collectionId) {
+        title.textContent = 'Edit Collection';
+        loadCollectionData(collectionId);
+    } else {
+        title.textContent = 'Add Collection';
+        // Add one empty subcategory field
+        addSubcategoryField();
+    }
+    
+    modal.classList.add('active');
+}
+
+async function loadCollectionData(collectionId) {
+    try {
+        const collection = originalData.collections.find(c => c.id === collectionId);
+        
+        if (!collection) {
+            showNotification('Collection not found', 'error');
+            return;
+        }
+        
+        document.getElementById('collectionId').value = collection.id;
+        document.getElementById('collectionName').value = collection.name;
+        document.getElementById('collectionOrder').value = collection.order || '';
+        
+        // Render subcategories
+        const subcategoriesContainer = document.getElementById('subcategoriesForm');
+        subcategoriesContainer.innerHTML = '';
+        
+        if (collection.subcategories && collection.subcategories.length > 0) {
+            collection.subcategories.forEach(sub => {
+                addSubcategoryField(sub.name, sub.order);
+            });
+        } else {
+            addSubcategoryField();
+        }
+    } catch (error) {
+        showNotification('Error loading collection', 'error');
+    }
+}
+
+function addSubcategoryField(name = '', order = '') {
+    const container = document.getElementById('subcategoriesForm');
+    const index = container.children.length;
+    
+    const div = document.createElement('div');
+    div.className = 'subcategory-item';
+    div.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px; align-items: center;';
+    div.innerHTML = `
+        <input type="text" class="subcategory-name" value="${name}" placeholder="Sub-category name (e.g., Kancheepuram Silk)" style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+        <input type="number" class="subcategory-order" value="${order}" placeholder="#" style="width: 60px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" min="1">
+        <button type="button" class="btn btn-danger" onclick="this.parentElement.remove()" style="padding: 8px 12px;">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    container.appendChild(div);
+}
+
+function getSubcategoriesFromForm() {
+    const items = document.querySelectorAll('#subcategoriesForm .subcategory-item');
+    const subcategories = [];
+    
+    items.forEach((item, index) => {
+        const name = item.querySelector('.subcategory-name').value.trim();
+        const order = item.querySelector('.subcategory-order').value;
+        
+        if (name) {
+            subcategories.push({
+                id: name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+                name: name,
+                order: order ? parseInt(order) : index + 1
+            });
+        }
+    });
+    
+    return subcategories;
+}
+
+document.getElementById('collectionForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const collectionId = document.getElementById('collectionId').value;
+    const collectionName = document.getElementById('collectionName').value.trim();
+    const collectionOrder = document.getElementById('collectionOrder').value;
+    const subcategories = getSubcategoriesFromForm();
+    
+    if (!collectionName) {
+        showNotification('Collection name is required', 'error');
+        return;
+    }
+    
+    try {
+        const collectionData = {
+            name: collectionName,
+            order: collectionOrder ? parseInt(collectionOrder) : undefined,
+            subcategories: subcategories
+        };
+
+        if (collectionId) {
+            // Update existing collection
+            await apiCall(`/collections?id=${collectionId}`, 'PUT', collectionData);
+            showNotification('Collection updated successfully!', 'success');
+        } else {
+            // Add new collection
+            await apiCall('/collections', 'POST', collectionData);
+            showNotification('Collection added successfully!', 'success');
+        }
+        
+        closeModal('collectionModal');
+        loadCollections();
+    } catch (error) {
+        showNotification('Error saving collection: ' + error.message, 'error');
+    }
+});
+
+async function deleteCollection(collectionId) {
+    if (!confirm('Are you sure you want to delete this collection and all its sub-categories?')) return;
+
+    try {
+        await apiCall(`/collections?id=${collectionId}`, 'DELETE');
+        showNotification('Collection deleted successfully!', 'success');
+        loadCollections();
+    } catch (error) {
+        showNotification('Error deleting collection: ' + error.message, 'error');
+    }
+}
+
+function editCollection(collectionId) {
+    openCollectionModal(collectionId);
+}
+
 // Hero Images Management
 async function loadHeroImages() {
     try {
@@ -1146,6 +1396,12 @@ async function loadContent() {
         // Show pending changes if any, otherwise show original
         const displayContent = pendingChanges.content.update || originalData.content;
         
+        // Site Name
+        if (displayContent.siteName) {
+            const siteNameInput = document.getElementById('siteName');
+            if (siteNameInput) siteNameInput.value = displayContent.siteName;
+        }
+        
         // Logo
         if (displayContent.logo) {
             document.getElementById('siteLogoUrl').value = displayContent.logo;
@@ -1183,6 +1439,27 @@ async function loadContent() {
         if (displayContent.email) document.getElementById('contactEmail').value = displayContent.email;
         if (displayContent.phone) document.getElementById('contactPhone').value = displayContent.phone;
         if (displayContent.whatsapp) document.getElementById('whatsappNumber').value = displayContent.whatsapp;
+        
+        // Policies
+        if (displayContent.policies) {
+            const policyDisclaimer = document.getElementById('policyDisclaimer');
+            const policyShipping = document.getElementById('policyShipping');
+            const policyReturns = document.getElementById('policyReturns');
+            const policyRefund = document.getElementById('policyRefund');
+            
+            if (policyDisclaimer && displayContent.policies.disclaimer) {
+                policyDisclaimer.value = displayContent.policies.disclaimer.content || '';
+            }
+            if (policyShipping && displayContent.policies.shipping) {
+                policyShipping.value = displayContent.policies.shipping.content || '';
+            }
+            if (policyReturns && displayContent.policies.returns) {
+                policyReturns.value = displayContent.policies.returns.content || '';
+            }
+            if (policyRefund && displayContent.policies.refund) {
+                policyRefund.value = displayContent.policies.refund.content || '';
+            }
+        }
     } catch (error) {
         console.error('Error loading content:', error);
     }
@@ -1260,6 +1537,7 @@ document.getElementById('contentForm')?.addEventListener('submit', async (e) => 
         const finalLogoUrl = document.getElementById('siteLogoUrl').value.trim() || 'assets/images/logo.svg';
         
         const contentData = {
+            siteName: document.getElementById('siteName')?.value.trim() || 'ShreeAdvaya',
             logo: finalLogoUrl || 'assets/images/logo.svg', // Default fallback
             hero: {
                 title: document.getElementById('heroTitle').value.trim(),
@@ -1276,7 +1554,25 @@ document.getElementById('contentForm')?.addEventListener('submit', async (e) => 
             about: document.getElementById('aboutText').value.trim(),
             email: document.getElementById('contactEmail').value.trim(),
             phone: document.getElementById('contactPhone').value.trim(),
-            whatsapp: document.getElementById('whatsappNumber').value.trim()
+            whatsapp: document.getElementById('whatsappNumber').value.trim(),
+            policies: {
+                disclaimer: {
+                    title: 'Disclaimer',
+                    content: document.getElementById('policyDisclaimer')?.value.trim() || ''
+                },
+                shipping: {
+                    title: 'Shipping & Delivery',
+                    content: document.getElementById('policyShipping')?.value.trim() || ''
+                },
+                returns: {
+                    title: 'Return & Exchange Policy',
+                    content: document.getElementById('policyReturns')?.value.trim() || ''
+                },
+                refund: {
+                    title: 'Refund Policy',
+                    content: document.getElementById('policyRefund')?.value.trim() || ''
+                }
+            }
         };
 
         pendingChanges.content.update = contentData;

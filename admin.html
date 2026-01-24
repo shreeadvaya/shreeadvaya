@@ -59,6 +59,9 @@
                     <a href="#products" class="nav-tab active" data-tab="products">
                         <i class="fas fa-box"></i> Products
                     </a>
+                    <a href="#collections" class="nav-tab" data-tab="collections">
+                        <i class="fas fa-layer-group"></i> Collections
+                    </a>
                     <a href="#hero" class="nav-tab" data-tab="hero">
                         <i class="fas fa-image"></i> Hero Images
                     </a>
@@ -86,6 +89,22 @@
                     </div>
                 </div>
 
+                <!-- Collections Tab -->
+                <div id="collectionsTab" class="tab-content">
+                    <div class="section-header">
+                        <h2>Manage Collections</h2>
+                        <p style="color: #666; margin-top: 5px;">Organize products into collections and sub-categories (e.g., Sarees → Kancheepuram Silk)</p>
+                    </div>
+                    <div id="collectionsList" class="collections-grid">
+                        <!-- Collections will be loaded here -->
+                    </div>
+                    <div class="add-button-container">
+                        <button class="btn btn-primary" onclick="openCollectionModal()">
+                            <i class="fas fa-plus"></i> Add Collection
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Hero Images Tab -->
                 <div id="heroTab" class="tab-content">
                     <div class="section-header">
@@ -108,7 +127,14 @@
                     </div>
                     
                     <form id="contentForm" class="content-form">
-                        <h3 style="margin-bottom: 20px; color: #2c1810; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">Logo</h3>
+                        <h3 style="margin-bottom: 20px; color: #2c1810; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">Site Name</h3>
+                        <div class="form-group">
+                            <label>Site Name (as per logo script)</label>
+                            <input type="text" id="siteName" placeholder="ShreeAdvaya">
+                            <small>This name appears in the navigation and footer</small>
+                        </div>
+
+                        <h3 style="margin: 30px 0 20px 0; color: #2c1810; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">Logo</h3>
                         <div class="form-group">
                             <label>Logo Image</label>
                             
@@ -192,24 +218,39 @@
                             <label>WhatsApp Number</label>
                             <input type="tel" id="whatsappNumber" placeholder="919876543210">
                         </div>
+
+                        <h3 style="margin: 30px 0 20px 0; color: #2c1810; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">
+                            <i class="fas fa-file-alt"></i> Studio Policies
+                        </h3>
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">
+                            Edit your store policies. These will appear in the Policies dropdown menu and footer.
+                        </p>
+                        
+                        <div class="form-group">
+                            <label>Disclaimer</label>
+                            <textarea id="policyDisclaimer" rows="6" placeholder="Your disclaimer text..."></textarea>
+                            <small>Use **bold** for emphasis. Separate paragraphs with blank lines.</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Shipping & Delivery</label>
+                            <textarea id="policyShipping" rows="6" placeholder="Your shipping policy..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Return & Exchange Policy</label>
+                            <textarea id="policyReturns" rows="6" placeholder="Your return policy..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Refund Policy</label>
+                            <textarea id="policyRefund" rows="6" placeholder="Your refund policy..."></textarea>
+                        </div>
+
                         <button type="submit" class="btn btn-primary">Save Content</button>
                     </form>
                     
-                    <!-- Categories Management Section -->
-                    <div class="content-form" style="margin-top: 40px; padding: 25px; background: #f8f9fa; border-radius: 10px; border: 2px solid #d4af37;">
-                        <h3 style="margin-bottom: 15px; color: #2c1810; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">
-                            <i class="fas fa-tags"></i> Product Categories
-                        </h3>
-                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">
-                            Add, edit, or remove product categories. These will appear as filter buttons on your website.
-                        </p>
-                        <div id="categoriesList" class="items-grid" style="margin-bottom: 15px;">
-                            <!-- Categories will be loaded here -->
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="openCategoryModal()">
-                            <i class="fas fa-plus"></i> Add Category
-                        </button>
-                    </div>
+                    <!-- Old Categories section removed - use Collections tab instead -->
                 </div>
                 
                 <!-- Save All Changes Button -->
@@ -313,6 +354,42 @@
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('categoryModal')">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Collection Modal -->
+    <div id="collectionModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('collectionModal')">&times;</span>
+            <h2 id="collectionModalTitle">Add Collection</h2>
+            <form id="collectionForm">
+                <input type="hidden" id="collectionId">
+                <div class="form-group">
+                    <label>Collection Name *</label>
+                    <input type="text" id="collectionName" required placeholder="e.g., Sarees, Unstitched Salwar Materials">
+                    <small>This is the main category that will contain sub-categories</small>
+                </div>
+                <div class="form-group">
+                    <label>Display Order</label>
+                    <input type="number" id="collectionOrder" min="1" placeholder="1">
+                    <small>Lower numbers appear first</small>
+                </div>
+                
+                <h3 style="margin: 20px 0 15px 0; color: #2c1810; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">
+                    <i class="fas fa-tags"></i> Sub-Categories
+                </h3>
+                <div id="subcategoriesForm">
+                    <!-- Sub-categories will be added here -->
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="addSubcategoryField()" style="margin-bottom: 20px;">
+                    <i class="fas fa-plus"></i> Add Sub-Category
+                </button>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('collectionModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Collection</button>
                 </div>
             </form>
         </div>

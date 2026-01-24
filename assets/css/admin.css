@@ -346,25 +346,31 @@ body {
     padding: 30px 0;
 }
 
-/* Items Grid */
+/* Items Grid - Centered like products */
 .items-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 280px));
-    gap: 20px;
-    justify-content: center;
-}
-
-/* Specific styling for categories list to always center */
-#categoriesList.items-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: flex-start;
+    gap: 20px;
 }
 
-#categoriesList .item-card {
+.items-grid .item-card {
     width: 280px;
     flex-shrink: 0;
+}
+
+/* Collections grid styling */
+.collections-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.collections-grid .collection-card {
+    flex: 0 1 calc(50% - 10px);
+    min-width: 300px;
+    max-width: 500px;
 }
 
 .item-card {
@@ -658,7 +664,17 @@ body {
     }
 
     .items-grid {
-        grid-template-columns: 1fr;
+        justify-content: center;
+    }
+
+    .items-grid .item-card {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .collections-grid .collection-card {
+        flex: 0 1 100%;
+        max-width: 100%;
     }
 
     .admin-content {
