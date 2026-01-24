@@ -1,5 +1,5 @@
 {
-  "siteName": "ShreeAdvaya",
+  "siteName": "श्री अdvaya Studio",
   "logo": "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768928537780-9svn78dae.jpg",
   "hero": {
     "title": "DEFINING UNIQUENESS",
@@ -46,19 +46,19 @@
   "policies": {
     "disclaimer": {
       "title": "Disclaimer",
-      "content": "The information provided on this website is for general informational purposes only. While we strive to keep the information up to date and accurate, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability, or availability of the products or related graphics contained on the website.\n\nProduct colors may vary slightly from the images shown due to photography lighting and screen settings. We recommend contacting us for detailed information before making a purchase."
+      "content": "<Placeholder>"
     },
     "shipping": {
       "title": "Shipping & Delivery",
-      "content": "We offer PAN India and worldwide shipping.\n\n**Domestic Shipping (India):**\n- Standard delivery: 5-7 business days\n- Express delivery: 2-3 business days\n- Free shipping on orders above ₹5000\n\n**International Shipping:**\n- Delivery time: 10-15 business days\n- Shipping charges calculated at checkout based on destination\n\nAll orders are carefully packed to ensure your saree reaches you in perfect condition. Tracking information will be shared via WhatsApp/Email once your order is dispatched."
+      "content": "<Placeholder>"
     },
     "returns": {
       "title": "Return & Exchange Policy",
-      "content": "We want you to be completely satisfied with your purchase.\n\n**Returns:**\n- Returns accepted within 7 days of delivery\n- Product must be unused, unwashed, and in original packaging\n- Tags must be intact\n\n**Exchanges:**\n- Exchanges available for size/color within 7 days\n- Subject to product availability\n\n**Non-Returnable Items:**\n- Customized or altered products\n- Products purchased during sale\n\nTo initiate a return or exchange, please contact us via WhatsApp with your order details and photos of the product."
+      "content": "<Placeholder>"
     },
     "refund": {
       "title": "Refund Policy",
-      "content": "Once we receive and inspect the returned item, we will process your refund.\n\n**Refund Timeline:**\n- Refund initiated within 3-5 business days after inspection\n- Amount credited to original payment method within 7-10 business days\n\n**Refund Amount:**\n- Full product amount refunded for eligible returns\n- Original shipping charges are non-refundable\n- Return shipping costs borne by customer unless product is defective\n\nFor any queries regarding refunds, please contact us via WhatsApp or email."
+      "content": "<Placeholder>"
     }
   }
 }
