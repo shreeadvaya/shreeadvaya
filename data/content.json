@@ -46,19 +46,19 @@
   "policies": {
     "disclaimer": {
       "title": "Disclaimer",
-      "content": "<Placeholder>"
+      "content": "Edit"
     },
     "shipping": {
       "title": "Shipping & Delivery",
-      "content": "<Placeholder>"
+      "content": "Edit"
     },
     "returns": {
       "title": "Return & Exchange Policy",
-      "content": "<Placeholder>"
+      "content": "Edit"
     },
     "refund": {
       "title": "Refund Policy",
-      "content": "<Placeholder>"
+      "content": "Edit"
     }
   }
 }
