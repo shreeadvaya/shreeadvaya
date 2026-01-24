@@ -23,8 +23,8 @@ export default async function handler(req, res) {
 
     const { method, query } = req;
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-    const GITHUB_OWNER = process.env.VERCEL_GIT_REPO_OWNER || process.env.GITHUB_OWNER || 'GiridharSalana';
-    const GITHUB_REPO = process.env.VERCEL_GIT_REPO_SLUG || process.env.GITHUB_REPO || 'shree-advaya';
+    const GITHUB_OWNER = process.env.VERCEL_GIT_REPO_OWNER || process.env.GITHUB_OWNER || 'shreeadvaya';
+    const GITHUB_REPO = process.env.VERCEL_GIT_REPO_SLUG || process.env.GITHUB_REPO || 'shreeadvaya';
     const DATA_FILE = 'data/collections.json';
 
     if (!GITHUB_TOKEN) {

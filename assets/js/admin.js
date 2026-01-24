@@ -777,8 +777,8 @@ async function loadCategories() {
             });
         }
         
-        // Also update the product form dropdown
-        updateProductCategoryDropdown(displayCategories);
+        // NOTE: Product category dropdown is now populated from Collections, not Categories
+        // See loadCollections() -> updateProductCategoryFromCollections()
     } catch (error) {
         const container = document.getElementById('categoriesList');
         if (container) {

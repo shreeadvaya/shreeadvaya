@@ -9,7 +9,6 @@ async function loadDynamicContent() {
     try {
         await Promise.all([
             loadCollections(),
-            loadCategories(),
             loadProducts(),
             loadHeroImages(),
             loadContent()
@@ -223,91 +222,8 @@ function filterProducts() {
     });
 }
 
-// Load Categories
-async function loadCategories() {
-    try {
-        const response = await fetch(`${API_BASE}/categories`);
-        if (!response.ok) throw new Error('Failed to load categories');
-        const categories = await response.json();
-        
-        const dropdown = document.getElementById('categoryDropdown');
-        if (!dropdown) return;
-        
-        // Clear existing options except "All"
-        dropdown.innerHTML = '';
-        
-        // Add "All" option first
-        const allOption = document.createElement('option');
-        allOption.value = 'all';
-        allOption.textContent = 'All';
-        allOption.selected = true;
-        dropdown.appendChild(allOption);
-        
-        // Add dynamic category options
-        if (categories.length > 0) {
-            // Sort by order
-            categories.sort((a, b) => (a.order || 0) - (b.order || 0));
-            
-            categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category.id;
-                option.textContent = category.name;
-                dropdown.appendChild(option);
-            });
-        }
-        
-        // Initialize dropdown event listener
-        initCategoryDropdown();
-    } catch (error) {
-        console.error('Error loading categories:', error);
-        // If categories fail to load, keep the "All" option
-        const dropdown = document.getElementById('categoryDropdown');
-        if (dropdown) {
-            dropdown.innerHTML = '<option value="all" selected>All</option>';
-        }
-    }
-}
-
-// Initialize category dropdown event listener
-function initCategoryDropdown() {
-    const dropdown = document.getElementById('categoryDropdown');
-    if (!dropdown) return;
-    
-    dropdown.addEventListener('change', (e) => {
-        const category = e.target.value;
-        const productCards = document.querySelectorAll(".product-card");
-
-        if (productCards && productCards.length > 0) {
-            // First, hide all cards instantly without animation
-            productCards.forEach((card) => {
-                card.style.display = "none";
-                card.style.opacity = "0";
-                card.style.transform = "translateY(0)";
-                card.style.transition = "none";
-            });
-            
-            // Then show matching cards with animation
-            const visibleCards = Array.from(productCards).filter(card => 
-                category === "all" || card.getAttribute("data-category") === category
-            );
-            
-            visibleCards.forEach((card, index) => {
-                card.style.display = "block";
-                card.style.opacity = "0";
-                card.style.transform = "translateY(20px)";
-                
-                // Use requestAnimationFrame for smoother animation
-                requestAnimationFrame(() => {
-                    setTimeout(() => {
-                        card.style.transition = "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
-                        card.style.opacity = "1";
-                        card.style.transform = "translateY(0)";
-                    }, index * 50);
-                });
-            });
-        }
-    });
-}
+// NOTE: Old loadCategories() function removed - now using Collections with sub-categories
+// See loadCollections() for the new category/collection system
 
 // Load Products
 async function loadProducts() {

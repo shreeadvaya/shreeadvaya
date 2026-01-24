@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
@@ -24,8 +24,8 @@ export default async function handler(req, res) {
     const { method, query } = req;
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
     // Use Vercel's built-in env vars if available, otherwise fallback to custom env vars or defaults
-    const GITHUB_OWNER = process.env.VERCEL_GIT_REPO_OWNER || process.env.GITHUB_OWNER || 'Giridharsalana';
-    const GITHUB_REPO = process.env.VERCEL_GIT_REPO_SLUG || process.env.GITHUB_REPO || 'Shree-Advaya';
+    const GITHUB_OWNER = process.env.VERCEL_GIT_REPO_OWNER || process.env.GITHUB_OWNER || 'shreeadvaya';
+    const GITHUB_REPO = process.env.VERCEL_GIT_REPO_SLUG || process.env.GITHUB_REPO || 'shreeadvaya';
     const DATA_FILE = 'data/products.json';
 
     if (!GITHUB_TOKEN) {
@@ -37,6 +37,17 @@ export default async function handler(req, res) {
             // Get all products
             const products = await getFileFromGitHub(GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO, DATA_FILE);
             return res.status(200).json(products);
+        }
+
+        // For POST, PUT, DELETE - require authentication
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        
+        const token = authHeader.replace('Bearer ', '');
+        if (!token || !(await verifyToken(token))) {
+            return res.status(401).json({ error: 'Unauthorized. Please login.' });
         }
 
         if (method === 'POST') {
