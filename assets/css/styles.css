@@ -331,7 +331,6 @@ h6 {
     font-weight: 700;
     letter-spacing: -2px;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    animation: fadeInUp 1s ease-out;
 }
 
 .hero-subtitle {
@@ -343,7 +342,6 @@ h6 {
     margin-left: auto;
     margin-right: auto;
     text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.4);
-    animation: fadeInUp 1s ease-out 0.2s backwards;
     font-weight: 400;
 }
 
@@ -352,7 +350,6 @@ h6 {
     gap: 1.5rem;
     justify-content: center;
     flex-wrap: wrap;
-    animation: fadeInUp 1s ease-out 0.4s backwards;
 }
 
 /* About Section - Perfectly Centered */
