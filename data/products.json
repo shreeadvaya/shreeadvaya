@@ -223,5 +223,17 @@
     ],
     "alt": "",
     "createdAt": "2026-01-23T07:20:24.063Z"
+  },
+  {
+    "id": "17692621655521a8y5jeig",
+    "name": "Linen",
+    "category": "salwar-linen",
+    "price": "1400",
+    "description": "DM",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769262158957-k7r9k54bi.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-24T13:42:45.558Z"
   }
 ]
