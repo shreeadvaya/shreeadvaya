@@ -308,5 +308,17 @@
     ],
     "alt": "",
     "createdAt": "2026-01-27T06:25:36.599Z"
+  },
+  {
+    "id": "1769495190290yxjfvzwcw",
+    "name": "Materials",
+    "category": "salwar-linen",
+    "price": "1400",
+    "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769495176523-8huxdm2pd.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-27T06:26:30.291Z"
   }
 ]
