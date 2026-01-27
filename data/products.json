@@ -15,7 +15,7 @@
   {
     "id": "1764876862425f3mtsnkg6",
     "name": "Banarasi Silk",
-    "category": "banarasi",
+    "category": "banarasi-silk",
     "price": "11995",
     "description": "Fabric: Pure Crepe Banarasi Silk\nFeel: Soft, fluid, and luxurious\nStyle: Regal, elegant, and timeless\nOccasion: Weddings | Festive | Special occasions",
     "images": [
@@ -24,7 +24,7 @@
     ],
     "alt": "",
     "createdAt": "2025-12-04T19:34:22.425Z",
-    "updatedAt": "2026-01-21T07:57:40.655Z"
+    "updatedAt": "2026-01-27T06:21:22.629Z"
   },
   {
     "id": "1768982089944zxu4vvj28",
@@ -226,14 +226,15 @@
   },
   {
     "id": "17692621655521a8y5jeig",
-    "name": "Linen",
+    "name": "Materials",
     "category": "salwar-linen",
     "price": "1400",
-    "description": "DM",
+    "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight",
     "images": [
       "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769262158957-k7r9k54bi.jpg"
     ],
     "alt": "",
-    "createdAt": "2026-01-24T13:42:45.558Z"
+    "createdAt": "2026-01-24T13:42:45.558Z",
+    "updatedAt": "2026-01-27T06:21:22.629Z"
   }
 ]
