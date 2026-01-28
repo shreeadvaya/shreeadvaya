@@ -572,5 +572,29 @@
     ],
     "alt": "",
     "createdAt": "2026-01-28T13:49:16.199Z"
+  },
+  {
+    "id": "17696083332170f05gicz3",
+    "name": "Maheshwari Cotton",
+    "category": "cotton",
+    "price": "1450",
+    "description": "Fabric: Maheshwari Cotton\nFeel: Lightweight, soft, and breathable\nWash Care : Dry Clean / Hand wash gently in cold water & Dry in shade",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769608272798-9u5rb1y9m.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-28T13:52:13.217Z"
+  },
+  {
+    "id": "1769608333217xsunmpz9s",
+    "name": "Maheshwari Cotton",
+    "category": "cotton",
+    "price": "1450",
+    "description": "Fabric: Maheshwari Cotton\nFeel: Lightweight, soft, and breathable\nWash Care : Dry Clean / Hand wash gently in cold water & Dry in shade",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769608307010-89fygx2sm.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-28T13:52:13.217Z"
   }
 ]
