@@ -474,5 +474,53 @@
     ],
     "alt": "",
     "createdAt": "2026-01-28T09:23:47.337Z"
+  },
+  {
+    "id": "176960766675347j44f8nk",
+    "name": "Cotton Sarees",
+    "category": "cotton",
+    "price": "1170",
+    "description": "Fabric: Pure Handloom Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769607519241-vnyonvtgc.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-28T13:41:06.763Z"
+  },
+  {
+    "id": "1769607666763j84nqje3z",
+    "name": "Cotton Sarees",
+    "category": "cotton",
+    "price": "1170",
+    "description": "SOLD OUT\nFabric: Pure Handloom Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769607534151-cot58cha6.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-28T13:41:06.763Z"
+  },
+  {
+    "id": "176960766676306ncu1cx0",
+    "name": "Cotton Sarees",
+    "category": "cotton",
+    "price": "1170",
+    "description": "Fabric: Pure Handloom Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769607603395-yd4tlj2tg.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-28T13:41:06.763Z"
+  },
+  {
+    "id": "1769607666763rz8eypb6v",
+    "name": "Cotton Sarees",
+    "category": "cotton",
+    "price": "1170",
+    "description": "Fabric: Pure Khadi Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769607625343-trr85bjfv.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-28T13:41:06.763Z"
   }
 ]
