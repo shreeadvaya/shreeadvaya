@@ -429,14 +429,15 @@
   {
     "id": "1769590988163yjhta3tth",
     "name": "Dress Materials",
-    "category": "salwar-cotton",
+    "category": "cotton",
     "price": "1550",
     "description": "Fabric: Pure Cotton with Kota dupatta\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
       "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769590975027-s6qgh03vs.jpg"
     ],
     "alt": "",
-    "createdAt": "2026-01-28T09:03:08.163Z"
+    "createdAt": "2026-01-28T09:03:08.163Z",
+    "updatedAt": "2026-01-28T09:41:21.664Z"
   },
   {
     "id": "1769591567508mtliwdpaz",
