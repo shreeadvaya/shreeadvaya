@@ -521,6 +521,43 @@
       "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769607625343-trr85bjfv.jpg"
     ],
     "alt": "",
-    "createdAt": "2026-01-28T13:41:06.763Z"
+    "createdAt": "2026-01-28T13:41:06.763Z",
+    "updatedAt": "2026-01-28T13:46:16.646Z"
+  },
+  {
+    "id": "1769607976646y941v06u0",
+    "name": "Cotton Sarees",
+    "category": "cotton",
+    "price": "990",
+    "description": "Fabric: Mulmul Cotton\nFeel: Ultra-soft, lightweight, and breathable\nWash Care : Dry Clean/Soft hand wash separately using mild detergent",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769607677333-sry1wdxma.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-28T13:46:16.646Z"
+  },
+  {
+    "id": "1769607976646knnbsaini",
+    "name": "Cotton Sarees",
+    "category": "cotton",
+    "price": "990",
+    "description": "Fabric: Mulmul Cotton\nFeel: Ultra-soft, lightweight, and breathable\nWash Care : Dry Clean/Soft hand wash separately using mild detergent",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769607739337-njojumwks.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-28T13:46:16.646Z"
+  },
+  {
+    "id": "1769607976646e9xqfulgq",
+    "name": "Cotton Sarees",
+    "category": "cotton",
+    "price": "1170",
+    "description": "Fabric: Ikkat Cotton\nFeel: Ultra-soft, lightweight, and breathable\nWash Care : Dry Clean/Soft hand wash separately using mild detergent",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769607811307-f5nh2obfu.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-28T13:46:16.646Z"
   }
 ]
