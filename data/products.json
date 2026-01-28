@@ -449,5 +449,17 @@
     ],
     "alt": "",
     "createdAt": "2026-01-28T09:12:47.509Z"
+  },
+  {
+    "id": "1769592013211kri7hh8bw",
+    "name": "Dress Materials",
+    "category": "chanderi",
+    "price": "2575",
+    "description": "Fabric: Chanderi Silk with cotton bottom\nFeel: Soft, breathable, and comfortable\nWash Care : Dry Clean",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769591717901-1qbs0yobk.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-28T09:20:13.211Z"
   }
 ]
