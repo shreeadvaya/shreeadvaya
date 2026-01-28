@@ -343,14 +343,15 @@
   {
     "id": "1769590658745oy9mod3oj",
     "name": "Dress Materials",
-    "category": "cotton",
-    "price": "1550",
+    "category": "salwar-cotton",
+    "price": "1225",
     "description": "Fabric: Pure Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
       "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769590380855-fdzv408hj.jpg"
     ],
     "alt": "",
-    "createdAt": "2026-01-28T08:57:38.746Z"
+    "createdAt": "2026-01-28T08:57:38.746Z",
+    "updatedAt": "2026-01-28T08:59:40.069Z"
   },
   {
     "id": "1769590658746y6fi3xwmp",
@@ -359,10 +360,22 @@
     "price": "1225",
     "description": "Fabric: Pure Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
-      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769590551362-bx3o90a84.jpg",
-      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769590578231-eow198f17.jpg"
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769590551362-bx3o90a84.jpg"
     ],
     "alt": "",
-    "createdAt": "2026-01-28T08:57:38.746Z"
+    "createdAt": "2026-01-28T08:57:38.746Z",
+    "updatedAt": "2026-01-28T08:59:40.069Z"
+  },
+  {
+    "id": "1769590780069khv4apbzv",
+    "name": "Dress Materials",
+    "category": "salwar-cotton",
+    "price": "1225",
+    "description": "Fabric: Pure Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769590735432-oznk2czcw.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-28T08:59:40.076Z"
   }
 ]
