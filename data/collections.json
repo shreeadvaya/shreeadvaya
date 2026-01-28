@@ -57,9 +57,14 @@
         "id": "chanderi",
         "name": "Chanderi",
         "order": 3
+      },
+      {
+        "id": "modal-silk",
+        "name": "Modal silk",
+        "order": 4
       }
     ],
     "createdAt": "2026-01-23T00:00:00.000Z",
-    "updatedAt": "2026-01-28T09:14:21.519Z"
+    "updatedAt": "2026-01-28T09:21:51.859Z"
   }
 ]
