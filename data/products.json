@@ -461,5 +461,17 @@
     ],
     "alt": "",
     "createdAt": "2026-01-28T09:20:13.211Z"
+  },
+  {
+    "id": "1769592227324x6kl9p8th",
+    "name": "Dress Materials",
+    "category": "modal-silk",
+    "price": "3990",
+    "description": "Fabric: Modal Silk\nFeel: Soft, smooth, and fluid\nWash Care : Dry Clean/ Hand wash gently in cold water & Dry in shade",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769592219223-rozodc8gl.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-28T09:23:47.337Z"
   }
 ]
