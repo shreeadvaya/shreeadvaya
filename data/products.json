@@ -330,7 +330,7 @@
   {
     "id": "1769495190290yxjfvzwcw",
     "name": "Dress Materials",
-    "category": "cotton",
+    "category": "linen",
     "price": "1450",
     "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
     "images": [
@@ -338,6 +338,6 @@
     ],
     "alt": "",
     "createdAt": "2026-01-27T06:26:30.291Z",
-    "updatedAt": "2026-01-28T07:45:15.944Z"
+    "updatedAt": "2026-01-28T07:45:24.903Z"
   }
 ]
