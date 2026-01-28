@@ -644,5 +644,17 @@
     ],
     "alt": "",
     "createdAt": "2026-01-28T14:06:36.054Z"
+  },
+  {
+    "id": "1769609417202ukt5ozaai",
+    "name": "Kota sarees",
+    "category": "cotton",
+    "price": "1820",
+    "description": "Fabric : Kota sarees\nFeel: Lightweight, soft, and breathable\nWash Care : Dry Clean / Hand wash gently in cold water & Dry in shade",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769609215238-66o0gljzn.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-28T14:10:17.202Z"
   }
 ]
