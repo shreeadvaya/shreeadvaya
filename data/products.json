@@ -437,5 +437,17 @@
     ],
     "alt": "",
     "createdAt": "2026-01-28T09:03:08.163Z"
+  },
+  {
+    "id": "1769591567508mtliwdpaz",
+    "name": "Dress Materials",
+    "category": "salwar-linen",
+    "price": "1550",
+    "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769591537946-58uxqnasl.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-28T09:12:47.509Z"
   }
 ]
