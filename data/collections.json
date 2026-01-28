@@ -33,10 +33,15 @@
         "id": "chiffon",
         "name": "Chiffon",
         "order": 6
+      },
+      {
+        "id": "semi-silk",
+        "name": "Semi Silk",
+        "order": 7
       }
     ],
     "createdAt": "2026-01-23T00:00:00.000Z",
-    "updatedAt": "2026-01-27T06:10:45.250Z"
+    "updatedAt": "2026-01-28T14:03:03.759Z"
   },
   {
     "id": "unstitched-salwar",
