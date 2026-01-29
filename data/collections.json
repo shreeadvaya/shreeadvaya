@@ -43,10 +43,15 @@
         "id": "modal-silk",
         "name": "Modal silk",
         "order": 8
+      },
+      {
+        "id": "silk-cotton",
+        "name": "Silk Cotton",
+        "order": 9
       }
     ],
     "createdAt": "2026-01-23T00:00:00.000Z",
-    "updatedAt": "2026-01-28T14:10:06.570Z"
+    "updatedAt": "2026-01-29T06:51:21.205Z"
   },
   {
     "id": "unstitched-salwar",
