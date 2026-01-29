@@ -695,5 +695,17 @@
     ],
     "alt": "",
     "createdAt": "2026-01-28T14:14:29.392Z"
+  },
+  {
+    "id": "1769664944770bvwwf5uli",
+    "name": "Kancheepuram Silk Sarees",
+    "category": "kancheepuram-silk-sarees",
+    "price": "4570",
+    "description": "Fabric: Pure Kancheepuram Silk\nFeel: Rich, structured, and luxurious\nWash Care : Dry Clean only",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769664937890-cwblirxt3.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-01-29T05:35:44.771Z"
   }
 ]
