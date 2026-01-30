@@ -691,14 +691,26 @@ async function loadProductData(productId) {
         let categoryValue = product.category;
         
         // If category is a simple ID (no colon), try to find a matching composite ID
+        // Prefer "sarees" collection for backward compatibility
         if (categoryValue && !categoryValue.includes(':')) {
-            // Look through dropdown options to find a match
             const options = categoryDropdown.querySelectorAll('option');
+            let fallbackMatch = null;
+            
             for (const option of options) {
                 if (option.value.endsWith(':' + categoryValue)) {
-                    categoryValue = option.value;
-                    break;
+                    // Prefer sarees collection for old products
+                    if (option.value.startsWith('sarees:')) {
+                        categoryValue = option.value;
+                        break;
+                    } else if (!fallbackMatch) {
+                        fallbackMatch = option.value;
+                    }
                 }
+            }
+            
+            // Use fallback if no sarees match found
+            if (!categoryValue.includes(':') && fallbackMatch) {
+                categoryValue = fallbackMatch;
             }
         }
         categoryDropdown.value = categoryValue;
