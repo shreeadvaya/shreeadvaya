@@ -649,7 +649,24 @@ async function loadProductData(productId) {
         
         document.getElementById('productId').value = product.id;
         document.getElementById('productName').value = product.name;
-        document.getElementById('productCategory').value = product.category;
+        
+        // Handle category - try direct match first, then try to find composite ID for old simple categories
+        const categoryDropdown = document.getElementById('productCategory');
+        let categoryValue = product.category;
+        
+        // If category is a simple ID (no colon), try to find a matching composite ID
+        if (categoryValue && !categoryValue.includes(':')) {
+            // Look through dropdown options to find a match
+            const options = categoryDropdown.querySelectorAll('option');
+            for (const option of options) {
+                if (option.value.endsWith(':' + categoryValue)) {
+                    categoryValue = option.value;
+                    break;
+                }
+            }
+        }
+        categoryDropdown.value = categoryValue;
+        
         document.getElementById('productPrice').value = product.price;
         document.getElementById('productDescription').value = product.description || '';
         document.getElementById('productAlt').value = product.alt || '';
@@ -1020,6 +1037,9 @@ async function loadCollections() {
         const collections = await apiCall('/collections');
         originalData.collections = JSON.parse(JSON.stringify(collections)); // Deep copy
         
+        // Always update the product form dropdown with collections
+        updateProductCategoryFromCollections(collections);
+        
         const container = document.getElementById('collectionsList');
         if (!container) return;
         
@@ -1036,9 +1056,6 @@ async function loadCollections() {
             const card = createCollectionCard(collection);
             container.appendChild(card);
         });
-        
-        // Update the product form dropdown with collections
-        updateProductCategoryFromCollections(collections);
     } catch (error) {
         console.error('Error loading collections:', error);
         const container = document.getElementById('collectionsList');
