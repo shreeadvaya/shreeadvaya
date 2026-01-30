@@ -38,6 +38,17 @@ export default async function handler(req, res) {
             return res.status(200).json(collections);
         }
 
+        // For POST, PUT, DELETE - require authentication
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        
+        const token = authHeader.replace('Bearer ', '');
+        if (!token || !(await verifyToken(token))) {
+            return res.status(401).json({ error: 'Unauthorized. Please login.' });
+        }
+
         if (method === 'POST') {
             // Add new collection
             const collections = await getFileFromGitHub(GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO, DATA_FILE);
@@ -180,4 +191,19 @@ async function saveFileToGitHub(token, owner, repo, path, data) {
     }
 
     return await response.json();
+}
+
+// Token verification helper
+async function verifyToken(token) {
+    if (!token) return false;
+    
+    try {
+        const tokenTimestamp = parseInt(token.slice(-8), 36);
+        const currentTime = Date.now();
+        const oneHour = 60 * 60 * 1000;
+        
+        return (currentTime - tokenTimestamp) <= oneHour;
+    } catch (error) {
+        return false;
+    }
 }
