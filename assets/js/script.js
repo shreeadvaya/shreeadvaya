@@ -128,6 +128,14 @@ function initCollectionDropdowns() {
             filterProducts();
         });
     }
+    
+    // Search input - filter as user types
+    const searchInput = document.getElementById('productSearchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            filterProducts();
+        });
+    }
 }
 
 // Update subcategory dropdown based on selected collection
@@ -169,11 +177,12 @@ function updateSubcategoryDropdown(collectionId) {
     }
 }
 
-// Filter products based on collection, subcategory, and price
+// Filter products based on collection, subcategory, price, and search
 function filterProducts() {
     const collectionDropdown = document.getElementById('collectionDropdown');
     const subcategoryDropdown = document.getElementById('subcategoryDropdown');
     const priceDropdown = document.getElementById('priceDropdown');
+    const searchInput = document.getElementById('productSearchInput');
     const productCards = document.querySelectorAll('.product-card');
     
     if (!collectionDropdown || !subcategoryDropdown || !productCards.length) return;
@@ -181,6 +190,7 @@ function filterProducts() {
     const collectionId = collectionDropdown.value;
     const subcategoryId = subcategoryDropdown.value; // Now composite: collectionId:subcategoryId
     const priceRange = priceDropdown ? priceDropdown.value : 'all';
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
     
     // Parse price range (format: "min-max" or "min-" for no max)
     let minPrice = 0;
@@ -222,6 +232,13 @@ function filterProducts() {
     const visibleCards = Array.from(productCards).filter(card => {
         const cardCategory = card.getAttribute('data-category');
         const cardPrice = parseFloat(card.getAttribute('data-price')) || 0;
+        const cardName = card.getAttribute('data-name') || '';
+        const cardText = card.textContent.toLowerCase();
+        
+        // Search filter check
+        if (searchTerm && !cardName.toLowerCase().includes(searchTerm) && !cardText.includes(searchTerm)) {
+            return false;
+        }
         
         // Price filter check
         if (cardPrice < minPrice || cardPrice > maxPrice) return false;
@@ -304,6 +321,7 @@ async function loadProducts() {
             card.className = 'product-card';
             card.setAttribute('data-category', product.category);
             card.setAttribute('data-price', product.price || 0);
+            card.setAttribute('data-name', product.name || '');
             
             // Support both single image (backward compatibility) and multiple images
             const images = product.images || (product.image ? [product.image] : ['assets/images/product-1.webp']);

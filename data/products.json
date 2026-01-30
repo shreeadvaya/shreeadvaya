@@ -239,7 +239,7 @@
   {
     "id": "17692621655521a8y5jeig",
     "name": "Dress Materials",
-    "category": "linen",
+    "category": "unstitched-salwar:linen",
     "price": "1550",
     "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
     "images": [
@@ -252,7 +252,7 @@
   {
     "id": "17694949384209aziaazs7",
     "name": "Dress Materials",
-    "category": "linen",
+    "category": "unstitched-salwar:linen",
     "price": "1550",
     "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
     "images": [
@@ -815,7 +815,7 @@
   {
     "id": "1769795990213ggllitzcx",
     "name": "tes",
-    "category": "linen",
+    "category": "sarees:linen",
     "price": "250",
     "description": "",
     "images": [
