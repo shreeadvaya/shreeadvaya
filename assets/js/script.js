@@ -231,36 +231,11 @@ function filterProducts() {
         
         // If specific subcategory is selected (composite ID: collectionId:subcategoryId)
         if (subcategoryId !== 'all') {
-            // Exact match for composite category
-            if (cardCategory === subcategoryId) return true;
-            
-            // Backward compatibility: match old simple category IDs only for sarees collection
-            const [selectedCollection, subId] = subcategoryId.split(':');
-            if (!cardCategory.includes(':') && selectedCollection === 'sarees' && cardCategory === subId) {
-                return true;
-            }
-            return false;
+            return cardCategory === subcategoryId;
         }
         
         // If only collection is selected, show all subcategories of that collection
-        // Check if card's category matches any valid composite category
-        if (validCategories.includes(cardCategory)) return true;
-        
-        // Backward compatibility: old products with simple IDs default to "sarees" collection
-        // Only show them if "sarees" or "all" is selected
-        if (!cardCategory.includes(':')) {
-            if (collectionId === 'sarees') {
-                // Check if the simple category matches any sarees subcategory
-                const sareesCollection = collectionsData.find(c => c.id === 'sarees');
-                if (sareesCollection && sareesCollection.subcategories) {
-                    return sareesCollection.subcategories.some(s => s.id === cardCategory);
-                }
-            }
-            return false; // Don't show old products under other collections
-        }
-        
-        // For composite IDs, check if collection matches
-        return validCategories.some(vc => vc.split(':')[1] === cardCategory && vc.startsWith(collectionId + ':'));
+        return validCategories.includes(cardCategory);
     });
     
     // Show/hide "no products" message
