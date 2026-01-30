@@ -492,10 +492,13 @@ async function apiCall(endpoint, method = 'GET', data = null) {
 // Load all data
 async function loadData() {
     try {
+        // Load collections first (needed for product category display)
+        await loadCollections();
+        
+        // Load remaining data in parallel
         await Promise.all([
             loadProducts(),
             loadCategories(),
-            loadCollections(),
             loadHeroImages(),
             loadContent()
         ]);
@@ -551,11 +554,44 @@ function getDisplayProducts() {
     return products;
 }
 
+// Get readable category name from category ID
+function getCategoryDisplayName(categoryId) {
+    if (!categoryId) return 'Uncategorized';
+    
+    // Handle composite ID (collectionId:subcategoryId)
+    if (categoryId.includes(':')) {
+        const [collectionId, subId] = categoryId.split(':');
+        const collection = originalData.collections?.find(c => c.id === collectionId);
+        if (collection) {
+            const subcategory = collection.subcategories?.find(s => s.id === subId);
+            if (subcategory) {
+                return `${collection.name} > ${subcategory.name}`;
+            }
+        }
+    }
+    
+    // Handle simple ID - search in all collections
+    if (originalData.collections) {
+        for (const collection of originalData.collections) {
+            if (collection.subcategories) {
+                const subcategory = collection.subcategories.find(s => s.id === categoryId);
+                if (subcategory) {
+                    return `${collection.name} > ${subcategory.name}`;
+                }
+            }
+        }
+    }
+    
+    // Fallback: format the slug
+    return categoryId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
+
 function createProductCard(product) {
     // Support both single image (backward compatibility) and multiple images
     const images = product.images || (product.image ? [product.image] : ['assets/images/product-1.webp']);
     const primaryImage = images[0];
     const imageCount = images.length;
+    const categoryDisplay = getCategoryDisplayName(product.category);
     
     const card = document.createElement('div');
     card.className = 'item-card';
@@ -567,7 +603,7 @@ function createProductCard(product) {
         <div class="item-card-body">
             <div class="item-card-title">${product.name}</div>
             <div class="item-card-info">
-                <div>Category: ${product.category}</div>
+                <div>Category: ${categoryDisplay}</div>
                 <div>Price: ₹${product.price}</div>
             </div>
             <div class="item-card-actions">
