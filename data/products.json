@@ -1,5 +1,18 @@
 [
   {
+    "id": "test-unstitched-001",
+    "name": "Test Unstitched Cotton Salwar Material",
+    "category": "unstitched-salwar:cotton",
+    "price": "2500",
+    "description": "Fabric: Pure Cotton\nFeel: Soft and breathable\nWash Care: Machine wash",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1765886690319-0lpvtwvns.jpg"
+    ],
+    "alt": "Test Unstitched Salwar Material",
+    "createdAt": "2026-01-30T12:00:00.000Z",
+    "updatedAt": "2026-01-30T12:00:00.000Z"
+  },
+  {
     "id": "1764854457773pujelzhth",
     "name": "Kancheepuram Silk Sarees",
     "category": "kancheepuram-silk-sarees",
