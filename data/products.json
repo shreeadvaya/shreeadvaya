@@ -811,17 +811,5 @@
     ],
     "alt": "",
     "createdAt": "2026-01-29T07:00:55.450Z"
-  },
-  {
-    "id": "1769797551937eed5jylaf",
-    "name": "Dress Materials",
-    "category": "unstitched-salwar:cotton",
-    "price": "25",
-    "description": "",
-    "images": [
-      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769797541320-k9uwpitbj.jpg"
-    ],
-    "alt": "",
-    "createdAt": "2026-01-30T18:25:51.937Z"
   }
 ]
