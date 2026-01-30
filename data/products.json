@@ -239,7 +239,7 @@
   {
     "id": "17692621655521a8y5jeig",
     "name": "Dress Materials",
-    "category": "linen",
+    "category": "unstitched-salwar:linen",
     "price": "1550",
     "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
     "images": [
@@ -252,7 +252,7 @@
   {
     "id": "17694949384209aziaazs7",
     "name": "Dress Materials",
-    "category": "linen",
+    "category": "unstitched-salwar:linen",
     "price": "1550",
     "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
     "images": [
@@ -265,7 +265,7 @@
   {
     "id": "17694949811525o47515sf",
     "name": "Dress Materials",
-    "category": "linen",
+    "category": "unstitched-salwar:linen",
     "price": "1550",
     "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
     "images": [
@@ -278,7 +278,7 @@
   {
     "id": "1769495091895t2t38zx3h",
     "name": "Dress Materials",
-    "category": "linen",
+    "category": "unstitched-salwar:linen",
     "price": "1550",
     "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
     "images": [
@@ -291,7 +291,7 @@
   {
     "id": "1769495091895oeeh3yt1e",
     "name": "Dress Materials",
-    "category": "linen",
+    "category": "unstitched-salwar:linen",
     "price": "1550",
     "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
     "images": [
@@ -304,7 +304,7 @@
   {
     "id": "17694950918956hm4xwuyo",
     "name": "Dress Materials",
-    "category": "linen",
+    "category": "unstitched-salwar:linen",
     "price": "1550",
     "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
     "images": [
@@ -317,7 +317,7 @@
   {
     "id": "1769495136599lzw7rizbj",
     "name": "Dress Materials",
-    "category": "linen",
+    "category": "unstitched-salwar:linen",
     "price": "1550",
     "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
     "images": [
@@ -330,7 +330,7 @@
   {
     "id": "1769495190290yxjfvzwcw",
     "name": "Dress Materials",
-    "category": "linen",
+    "category": "unstitched-salwar:linen",
     "price": "1550",
     "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
     "images": [
@@ -343,7 +343,7 @@
   {
     "id": "1769590658745oy9mod3oj",
     "name": "Dress Materials",
-    "category": "cotton",
+    "category": "unstitched-salwar:cotton",
     "price": "1225",
     "description": "Fabric: Pure Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
@@ -356,7 +356,7 @@
   {
     "id": "1769590658746y6fi3xwmp",
     "name": "Dress Materials",
-    "category": "cotton",
+    "category": "unstitched-salwar:cotton",
     "price": "1225",
     "description": "Fabric: Pure Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
@@ -369,7 +369,7 @@
   {
     "id": "1769590780069khv4apbzv",
     "name": "Dress Materials",
-    "category": "cotton",
+    "category": "unstitched-salwar:cotton",
     "price": "1225",
     "description": "Fabric: Pure Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
@@ -382,7 +382,7 @@
   {
     "id": "1769590988162stj7d4eei",
     "name": "Dress Materials",
-    "category": "cotton",
+    "category": "unstitched-salwar:cotton",
     "price": "1550",
     "description": "Fabric: Pure Cotton with Kota dupatta\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
@@ -395,7 +395,7 @@
   {
     "id": "1769590988163m2u0lrcdk",
     "name": "Dress Materials",
-    "category": "cotton",
+    "category": "unstitched-salwar:cotton",
     "price": "1550",
     "description": "Fabric: Pure Cotton with Kota dupatta\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
@@ -408,7 +408,7 @@
   {
     "id": "1769590988163kti1bksj8",
     "name": "Dress Materials",
-    "category": "cotton",
+    "category": "unstitched-salwar:cotton",
     "price": "1550",
     "description": "Fabric: Pure Cotton with Kota dupatta\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
@@ -421,7 +421,7 @@
   {
     "id": "17695909881639muiuvyk0",
     "name": "Dress Materials",
-    "category": "cotton",
+    "category": "unstitched-salwar:cotton",
     "price": "1550",
     "description": "Fabric: Pure Cotton with Kota dupatta\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
@@ -434,7 +434,7 @@
   {
     "id": "1769590988163yjhta3tth",
     "name": "Dress Materials",
-    "category": "cotton",
+    "category": "unstitched-salwar:cotton",
     "price": "1550",
     "description": "Fabric: Pure Cotton with Kota dupatta\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
@@ -447,7 +447,7 @@
   {
     "id": "1769591567508mtliwdpaz",
     "name": "Dress Materials",
-    "category": "linen",
+    "category": "unstitched-salwar:linen",
     "price": "1550",
     "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
     "images": [
@@ -460,7 +460,7 @@
   {
     "id": "1769592013211kri7hh8bw",
     "name": "Dress Materials",
-    "category": "chanderi",
+    "category": "unstitched-salwar:chanderi",
     "price": "2575",
     "description": "Fabric: Chanderi Silk with cotton bottom\nFeel: Soft, breathable, and comfortable\nWash Care : Dry Clean",
     "images": [
@@ -473,7 +473,7 @@
   {
     "id": "1769592227324x6kl9p8th",
     "name": "Dress Materials",
-    "category": "modal-silk",
+    "category": "unstitched-salwar:modal-silk",
     "price": "3990",
     "description": "Fabric: Modal Silk\nFeel: Soft, smooth, and fluid\nWash Care : Dry Clean/ Hand wash gently in cold water & Dry in shade",
     "images": [

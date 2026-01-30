@@ -350,11 +350,11 @@ async function loadProducts() {
                         </div>
                         ${hasMultipleImages ? `
                             <div class="product-carousel-controls">
-                                <button class="carousel-prev" onclick="changeProductImage(this, -1)"><i class="fas fa-chevron-left"></i></button>
-                                <button class="carousel-next" onclick="changeProductImage(this, 1)"><i class="fas fa-chevron-right"></i></button>
+                                <button class="carousel-prev" onclick="event.stopPropagation(); changeProductImage(this, -1)"><i class="fas fa-chevron-left"></i></button>
+                                <button class="carousel-next" onclick="event.stopPropagation(); changeProductImage(this, 1)"><i class="fas fa-chevron-right"></i></button>
                                 <div class="carousel-indicators">
                                     ${images.map((_, imgIndex) => `
-                                        <span class="indicator ${imgIndex === 0 ? 'active' : ''}" onclick="goToProductImage(this, ${imgIndex})"></span>
+                                        <span class="indicator ${imgIndex === 0 ? 'active' : ''}" onclick="event.stopPropagation(); goToProductImage(this, ${imgIndex})"></span>
                                     `).join('')}
                                 </div>
                             </div>
