@@ -42,4 +42,6 @@ Access at `/admin` to manage:
 
 ---
 
+Developed by **Giridhar Salana**
+
 **ShreeAdvaya** - Where tradition meets elegance.
