@@ -239,7 +239,7 @@
   {
     "id": "17692621655521a8y5jeig",
     "name": "Dress Materials",
-    "category": "sarees:linen",
+    "category": "linen",
     "price": "1550",
     "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
     "images": [
@@ -247,12 +247,12 @@
     ],
     "alt": "",
     "createdAt": "2026-01-24T13:42:45.558Z",
-    "updatedAt": "2026-01-30T17:29:32.014Z"
+    "updatedAt": "2026-01-30T17:50:20.796Z"
   },
   {
     "id": "17694949384209aziaazs7",
     "name": "Dress Materials",
-    "category": "sarees:linen",
+    "category": "linen",
     "price": "1550",
     "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash care: Dry Clean/ Hand wash gently in cold water",
     "images": [
@@ -260,7 +260,7 @@
     ],
     "alt": "",
     "createdAt": "2026-01-27T06:22:18.421Z",
-    "updatedAt": "2026-01-30T17:15:07.051Z"
+    "updatedAt": "2026-01-30T17:50:20.796Z"
   },
   {
     "id": "17694949811525o47515sf",
