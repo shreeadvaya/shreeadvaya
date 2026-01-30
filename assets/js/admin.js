@@ -728,10 +728,17 @@ document.getElementById('productForm')?.addEventListener('submit', async (e) => 
         return;
     }
     
+    // Validate category is selected
+    const categoryValue = document.getElementById('productCategory').value;
+    if (!categoryValue) {
+        showNotification('Please select a category', 'error');
+        return;
+    }
+    
     try {
         const productData = {
             name: document.getElementById('productName').value,
-            category: document.getElementById('productCategory').value,
+            category: categoryValue,
             price: document.getElementById('productPrice').value,
             description: document.getElementById('productDescription').value.trim(),
             images: allImages, // Store as array of URLs (no base64)
@@ -1020,8 +1027,15 @@ function updateProductCategoryFromCollections(collections) {
     const currentValue = dropdown.value;
     dropdown.innerHTML = '';
     
+    // Add default placeholder option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Select Category *';
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    dropdown.appendChild(defaultOption);
+    
     if (!collections || collections.length === 0) {
-        dropdown.innerHTML = '<option value="">No collections available</option>';
         return;
     }
     
