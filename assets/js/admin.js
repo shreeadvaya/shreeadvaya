@@ -686,34 +686,9 @@ async function loadProductData(productId) {
         document.getElementById('productId').value = product.id;
         document.getElementById('productName').value = product.name;
         
-        // Handle category - try direct match first, then try to find composite ID for old simple categories
+        // Handle category - all products now use composite format (collectionId:subcategoryId)
         const categoryDropdown = document.getElementById('productCategory');
-        let categoryValue = product.category;
-        
-        // If category is a simple ID (no colon), try to find a matching composite ID
-        // Prefer "sarees" collection for backward compatibility
-        if (categoryValue && !categoryValue.includes(':')) {
-            const options = categoryDropdown.querySelectorAll('option');
-            let fallbackMatch = null;
-            
-            for (const option of options) {
-                if (option.value.endsWith(':' + categoryValue)) {
-                    // Prefer sarees collection for old products
-                    if (option.value.startsWith('sarees:')) {
-                        categoryValue = option.value;
-                        break;
-                    } else if (!fallbackMatch) {
-                        fallbackMatch = option.value;
-                    }
-                }
-            }
-            
-            // Use fallback if no sarees match found
-            if (!categoryValue.includes(':') && fallbackMatch) {
-                categoryValue = fallbackMatch;
-            }
-        }
-        categoryDropdown.value = categoryValue;
+        categoryDropdown.value = product.category || '';
         
         document.getElementById('productPrice').value = product.price;
         document.getElementById('productDescription').value = product.description || '';
