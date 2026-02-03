@@ -988,5 +988,18 @@
     ],
     "alt": "",
     "createdAt": "2026-02-03T08:33:04.522Z"
+  },
+  {
+    "id": "1770107661860qwi7ghj7j",
+    "name": "Semi Georgette",
+    "category": "sarees:semi-georgette",
+    "price": "2099",
+    "description": "Fabric: Semi Georgette Contrast blouse\nFeel: Lightweight, Easy to drape\nWash Care : Hand wash gently in cold water /Dry Clean \nS216/S217",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770107610675-vprr58z8c.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770107611494-1oayuc5s2.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-02-03T08:34:21.861Z"
   }
 ]
