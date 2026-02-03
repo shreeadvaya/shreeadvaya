@@ -48,10 +48,15 @@
         "id": "silk-cotton",
         "name": "Silk Cotton",
         "order": 9
+      },
+      {
+        "id": "semi-dola",
+        "name": "Semi Dola",
+        "order": 10
       }
     ],
     "createdAt": "2026-01-23T00:00:00.000Z",
-    "updatedAt": "2026-01-29T06:51:21.205Z"
+    "updatedAt": "2026-02-03T06:22:14.283Z"
   },
   {
     "id": "unstitched-salwar",
