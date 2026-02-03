@@ -975,5 +975,18 @@
     ],
     "alt": "",
     "createdAt": "2026-02-03T06:51:11.790Z"
+  },
+  {
+    "id": "1770107584521askpzxcbh",
+    "name": "Fancy Jute",
+    "category": "sarees:fancy-jute",
+    "price": "2099",
+    "description": "Fabric: Fancy Jute\t\nFeel: Lightweight, Easy to drape\nWash Care : Hand wash gently in cold water /Dry Clean \nS218/S219",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770107577091-irqhfg7t3.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770107577729-t3esmffx4.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-02-03T08:33:04.522Z"
   }
 ]
