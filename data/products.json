@@ -824,5 +824,19 @@
     ],
     "alt": "",
     "createdAt": "2026-02-03T06:34:11.840Z"
+  },
+  {
+    "id": "177010054745676ef9hmxd",
+    "name": "Semi Dola",
+    "category": "sarees:semi-dola",
+    "price": "1850",
+    "description": "Fabric: Semi Dola Fancy silk\t\nFeel: Lightweight, Easy to drape\nWash Care : Hand wash gently in cold water /Dry Clean \nS131/S132/S133",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770100485930-od52g3phw.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770100486572-wksr35ynf.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770100487082-ymozh47cy.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-02-03T06:35:47.456Z"
   }
 ]
