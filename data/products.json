@@ -1001,5 +1001,22 @@
     ],
     "alt": "",
     "createdAt": "2026-02-03T08:34:21.861Z"
+  },
+  {
+    "id": "17701080773238qy8xgelx",
+    "name": "Khadi Chiffon",
+    "category": "sarees:khadi-chiffon",
+    "price": "2830",
+    "description": "Fabric: Khadi Chiffon\nFeel: Lightweight, Easy to drape\nWash Care : Dry clean Only\nS173/S220/S221/S222/S223/S224",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770107820687-9e5jinmcz.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770107821676-36kc7dbah.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770107822741-3iy1tjv01.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770107823868-rulia6foj.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770107824589-w2o6v2css.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770107966795-bnx959r94.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-02-03T08:41:17.323Z"
   }
 ]
