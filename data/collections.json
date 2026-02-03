@@ -53,10 +53,25 @@
         "id": "semi-dola",
         "name": "Semi Dola",
         "order": 10
+      },
+      {
+        "id": "fancy-jute",
+        "name": "Fancy Jute",
+        "order": 11
+      },
+      {
+        "id": "khadi-chiffon",
+        "name": "Khadi Chiffon",
+        "order": 12
+      },
+      {
+        "id": "semi-georgette",
+        "name": "Semi Georgette",
+        "order": 13
       }
     ],
     "createdAt": "2026-01-23T00:00:00.000Z",
-    "updatedAt": "2026-02-03T06:22:14.283Z"
+    "updatedAt": "2026-02-03T08:31:31.446Z"
   },
   {
     "id": "unstitched-salwar",
