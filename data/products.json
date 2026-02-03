@@ -811,5 +811,18 @@
     ],
     "alt": "",
     "createdAt": "2026-01-29T07:00:55.450Z"
+  },
+  {
+    "id": "1770100451840trgzz85j5",
+    "name": "Semi Dola",
+    "category": "sarees:semi-dola",
+    "price": "1475",
+    "description": "Fabric: Semi Dola with Bandini print\t\nFeel: Lightweight, Easy to drape\nWash Care : Hand wash gently in cold water /Dry Clean \nS66/S69",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770100410633-c9bnlk6g5.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770100411287-kes6sapt0.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-02-03T06:34:11.840Z"
   }
 ]
