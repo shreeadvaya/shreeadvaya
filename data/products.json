@@ -1035,5 +1035,20 @@
     ],
     "alt": "",
     "createdAt": "2026-02-03T08:42:54.957Z"
+  },
+  {
+    "id": "17701082740796ck73fu2z",
+    "name": "Cotton Sarees",
+    "category": "sarees:cotton",
+    "price": "2099",
+    "description": "Fabric: Malai Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade\nS214/S215",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770108203343-8bwi2oxt8.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770108204128-pls2nqhi1.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770108204659-8c1xjf5g9.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1770108205241-5v0w6u3wj.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-02-03T08:44:34.079Z"
   }
 ]
