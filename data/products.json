@@ -44,14 +44,14 @@
     "name": "Banarasi Silk",
     "category": "sarees:banarasi-silk",
     "price": "11995",
-    "description": "Fabric: Pure Crepe Banarasi Silk\nFeel: Soft, fluid, and luxurious\nWash Care : Dry Clean only",
+    "description": "SOLD OUT \nFabric: Pure Crepe Banarasi Silk\nFeel: Soft, fluid, and luxurious\nWash Care : Dry Clean only",
     "images": [
       "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768982488686-s4y6e5pws.jpg",
       "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1768982489284-0orrxbleu.jpg"
     ],
     "alt": "",
     "createdAt": "2026-01-21T08:05:42.583Z",
-    "updatedAt": "2026-01-28T07:35:54.912Z"
+    "updatedAt": "2026-02-24T07:22:15.205Z"
   },
   {
     "id": "1768982742583jflesmk0l",
@@ -462,13 +462,13 @@
     "name": "Dress Materials",
     "category": "unstitched-salwar:chanderi",
     "price": "2575",
-    "description": "Fabric: Chanderi Silk with cotton bottom\nFeel: Soft, breathable, and comfortable\nWash Care : Dry Clean",
+    "description": "SOLD OUT \nFabric: Chanderi Silk with cotton bottom\nFeel: Soft, breathable, and comfortable\nWash Care : Dry Clean",
     "images": [
       "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769591717901-1qbs0yobk.jpg"
     ],
     "alt": "",
     "createdAt": "2026-01-28T09:20:13.211Z",
-    "updatedAt": "2026-01-29T06:19:05.774Z"
+    "updatedAt": "2026-02-24T07:22:15.205Z"
   },
   {
     "id": "1769592227324x6kl9p8th",
@@ -512,25 +512,26 @@
     "name": "Cotton Sarees",
     "category": "sarees:cotton",
     "price": "1170",
-    "description": "Fabric: Pure Handloom Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
+    "description": "SOLD OUT\nFabric: Pure Handloom Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
       "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769607603395-yd4tlj2tg.jpg"
     ],
     "alt": "",
-    "createdAt": "2026-01-28T13:41:06.763Z"
+    "createdAt": "2026-01-28T13:41:06.763Z",
+    "updatedAt": "2026-02-24T07:22:15.205Z"
   },
   {
     "id": "1769607666763rz8eypb6v",
     "name": "Cotton Sarees",
     "category": "sarees:cotton",
     "price": "1170",
-    "description": "Fabric: Pure Khadi Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
+    "description": "SOLD OUT\nFabric: Pure Khadi Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
       "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769607625343-trr85bjfv.jpg"
     ],
     "alt": "",
     "createdAt": "2026-01-28T13:41:06.763Z",
-    "updatedAt": "2026-01-28T13:46:16.646Z"
+    "updatedAt": "2026-02-24T07:22:15.205Z"
   },
   {
     "id": "1769607976646y941v06u0",
@@ -805,12 +806,13 @@
     "name": "Cotton Sarees",
     "category": "sarees:linen",
     "price": "2099",
-    "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash Care : Dry Clean/ Hand wash gently in cold water",
+    "description": "SOLD OUT Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash Care : Dry Clean/ Hand wash gently in cold water",
     "images": [
       "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769670034682-dkdme43x2.jpg"
     ],
     "alt": "",
-    "createdAt": "2026-01-29T07:00:55.450Z"
+    "createdAt": "2026-01-29T07:00:55.450Z",
+    "updatedAt": "2026-02-24T07:22:15.205Z"
   },
   {
     "id": "1770100451840trgzz85j5",
