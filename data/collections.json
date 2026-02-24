@@ -68,10 +68,35 @@
         "id": "semi-georgette",
         "name": "Semi Georgette",
         "order": 13
+      },
+      {
+        "id": "semi-crepe",
+        "name": "Semi Crepe",
+        "order": 14
+      },
+      {
+        "id": "soft-silk",
+        "name": "Soft Silk",
+        "order": 15
+      },
+      {
+        "id": "semi-tusser",
+        "name": "Semi Tusser",
+        "order": 16
+      },
+      {
+        "id": "organza",
+        "name": "Organza",
+        "order": 17
+      },
+      {
+        "id": "kota-doria",
+        "name": "Kota Doria",
+        "order": 18
       }
     ],
     "createdAt": "2026-01-23T00:00:00.000Z",
-    "updatedAt": "2026-02-03T08:31:32.332Z"
+    "updatedAt": "2026-02-24T07:04:15.317Z"
   },
   {
     "id": "unstitched-salwar",
