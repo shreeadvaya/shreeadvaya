@@ -1054,5 +1054,20 @@
     ],
     "alt": "",
     "createdAt": "2026-02-03T08:44:34.079Z"
+  },
+  {
+    "id": "1771916777274afgzh9g9m",
+    "name": "Semi Crepe",
+    "category": "sarees:semi-crepe",
+    "price": "2095",
+    "description": "Fabric: Semi Crepe silk\nFeel: Lightweight, Easy to drape\nWash Care : Hand wash gently in cold water/Dry Clean\nS73/S74",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1771916678093-ir0h7dgh0.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1771916678683-q0r0varmv.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1771916679234-qp3fd09mj.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1771916679718-q2f226nxl.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-02-24T07:06:17.275Z"
   }
 ]
