@@ -1097,5 +1097,17 @@
     ],
     "alt": "",
     "createdAt": "2026-02-24T07:15:45.992Z"
+  },
+  {
+    "id": "1771917388231utrojk6z2",
+    "name": "Semi Tusser",
+    "category": "sarees:semi-tusser",
+    "price": "1890",
+    "description": "Fabric: Semi Tusser\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water /Dry Clean \nS108",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1771917355184-nhxg3xeq6.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-02-24T07:16:28.231Z"
   }
 ]
