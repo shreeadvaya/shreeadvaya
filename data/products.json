@@ -1069,5 +1069,20 @@
     ],
     "alt": "",
     "createdAt": "2026-02-24T07:06:17.275Z"
+  },
+  {
+    "id": "17719169990686120ieody",
+    "name": "Soft silk",
+    "category": "sarees:soft-silk",
+    "price": "1890",
+    "description": "Fabric: Soft Silk\t\nFeel: Lightweight, Easy to drape\nWash Care : Hand wash gently in cold water /Dry Clean \nS88/S95/S60",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1771916806044-9alkr8kpx.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1771916806657-gullllyzd.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1771916807153-ni9nbu262.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1771916807593-i8vb88cl6.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-02-24T07:09:59.069Z"
   }
 ]
