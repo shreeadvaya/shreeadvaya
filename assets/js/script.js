@@ -1345,14 +1345,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize DOM elements and event listeners
     initDOM();
     
-    // Load dynamic content from APIs, then hide loader
-    loadDynamicContent().finally(() => {
-        const loader = document.getElementById('pageLoader');
-        if (loader) {
-            loader.classList.add('hidden');
-            setTimeout(() => loader.remove(), 500);
-        }
-    });
+    // Load dynamic content from APIs
+    loadDynamicContent();
     
     // Initialize scroll animations
     initScrollAnimations();
