@@ -209,6 +209,7 @@ h6 {
 /* Hero Section - With Background Slideshow */
 .hero {
     min-height: 100vh;
+    min-height: 100svh; /* Uses small viewport height on mobile - excludes dynamic address bar */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -238,9 +239,24 @@ h6 {
     background-position: center;
     background-repeat: no-repeat;
     animation: slideshow 24s infinite;
-    will-change: opacity;
+    will-change: opacity, transform;
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
+}
+
+@media (max-width: 768px) {
+    .hero-slide {
+        animation: slideshowMobile 24s infinite;
+        will-change: opacity;
+    }
+}
+
+@keyframes slideshowMobile {
+    0%   { opacity: 0; }
+    4%   { opacity: 1; }
+    25%  { opacity: 1; }
+    29%  { opacity: 0; }
+    100% { opacity: 0; }
 }
 
 .hero-slide:nth-child(1) {
@@ -956,23 +972,23 @@ h6 {
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .product-modal-main-image {
-        height: 400px;
+        height: 320px;
     }
 
     .product-modal-details {
-        padding: 25px;
+        padding: 25px 20px;
     }
 
     .product-modal-title {
-        font-size: 2rem;
-    }
-
-    .product-modal-price {
         font-size: 1.8rem;
     }
 
+    .product-modal-price {
+        font-size: 1.6rem;
+    }
+
     .product-modal-description {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .product-modal-actions {
@@ -1438,19 +1454,37 @@ h6 {
 
     .nav-menu {
         position: fixed;
-        left: -100%;
+        left: 0;
         top: 70px;
         flex-direction: column;
         background-color: white;
         width: 100%;
         text-align: center;
-        transition: 0.3s;
+        transition: max-height 0.35s ease, opacity 0.3s ease;
         box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
-        padding: 2rem 0;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 999;
+        gap: 0;
+        padding: 0;
     }
 
     .nav-menu.active {
-        left: 0;
+        max-height: 400px;
+        opacity: 1;
+        pointer-events: all;
+        padding: 1rem 0;
+    }
+
+    .nav-menu li {
+        padding: 0;
+    }
+
+    .nav-menu li .nav-link {
+        display: block;
+        padding: 0.75rem 0;
     }
 
     .hero {
@@ -1530,11 +1564,13 @@ h6 {
 
     .products-grid {
         gap: 1.5rem;
+        padding: 0 5px;
     }
 
     .product-card {
-        width: 280px;
-        flex: 0 0 280px;
+        width: 100%;
+        flex: 1 1 280px;
+        max-width: 380px;
     }
 
     .product-categories {
@@ -1681,6 +1717,68 @@ h6 {
         padding: 12px 24px;
         font-size: 0.9rem;
     }
+
+    /* Full-width product cards on small phones */
+    .products-grid {
+        gap: 1rem;
+        padding: 0;
+    }
+
+    .product-card {
+        width: 100%;
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    /* Better modal on small phones */
+    .product-modal.active {
+        padding: 0;
+        align-items: flex-end;
+    }
+
+    .product-modal-content {
+        border-radius: 20px 20px 0 0;
+        max-height: 95vh;
+    }
+
+    .product-modal-main-image {
+        height: 260px;
+    }
+
+    .product-modal-details {
+        padding: 20px 18px;
+    }
+
+    .product-modal-title {
+        font-size: 1.6rem;
+        margin-bottom: 12px;
+    }
+
+    .product-modal-price {
+        font-size: 1.6rem;
+        margin-bottom: 12px;
+    }
+
+    .product-modal-description {
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+    }
+
+    .product-modal-category {
+        padding: 8px 18px;
+        font-size: 0.8rem;
+        margin-bottom: 16px;
+    }
+
+    .product-modal-thumbnail {
+        width: 60px;
+        height: 60px;
+    }
+
+    .product-modal-thumbnails {
+        gap: 8px;
+        padding: 12px;
+    }
 }
 
 
@@ -1783,20 +1881,20 @@ h6 {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #d4af37;
+    background: #ccc;
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #b8941f;
+    background: #aaa;
 }
 
 /* Navigation Dropdown */
