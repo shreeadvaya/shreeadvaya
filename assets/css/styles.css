@@ -1438,19 +1438,24 @@ h6 {
 
     .nav-menu {
         position: fixed;
-        left: -100%;
+        left: 0;
         top: 70px;
         flex-direction: column;
         background-color: white;
         width: 100%;
         text-align: center;
-        transition: 0.3s;
+        transition: transform 0.3s ease, opacity 0.3s ease;
         box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
         padding: 2rem 0;
+        transform: translateY(-110%);
+        opacity: 0;
+        pointer-events: none;
     }
 
     .nav-menu.active {
-        left: 0;
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: all;
     }
 
     .hero {
