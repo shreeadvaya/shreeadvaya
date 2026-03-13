@@ -1450,6 +1450,7 @@ h6 {
         transform: translateY(-110%);
         opacity: 0;
         pointer-events: none;
+        z-index: 999;
     }
 
     .nav-menu.active {
