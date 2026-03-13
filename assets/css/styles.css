@@ -1467,16 +1467,24 @@ h6 {
         opacity: 0;
         pointer-events: none;
         z-index: 999;
+        gap: 0;
+        padding: 0;
     }
 
     .nav-menu.active {
         max-height: 400px;
         opacity: 1;
         pointer-events: all;
+        padding: 1rem 0;
     }
 
     .nav-menu li {
-        padding: 0.6rem 0;
+        padding: 0;
+    }
+
+    .nav-menu li .nav-link {
+        display: block;
+        padding: 0.75rem 0;
     }
 
     .hero {
