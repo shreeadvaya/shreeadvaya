@@ -500,38 +500,39 @@
     "name": "Cotton Sarees",
     "category": "sarees:cotton",
     "price": "1170",
-    "description": "SOLD OUT\nFabric: Pure Handloom Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
+    "description": "Fabric: Pure Handloom Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
       "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769607534151-cot58cha6.jpg"
     ],
     "alt": "",
-    "createdAt": "2026-01-28T13:41:06.763Z"
+    "createdAt": "2026-01-28T13:41:06.763Z",
+    "updatedAt": "2026-04-13T13:12:42.172Z"
   },
   {
     "id": "176960766676306ncu1cx0",
     "name": "Cotton Sarees",
     "category": "sarees:cotton",
     "price": "1170",
-    "description": "SOLD OUT\nFabric: Pure Handloom Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
+    "description": "Fabric: Pure Handloom Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
       "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769607603395-yd4tlj2tg.jpg"
     ],
     "alt": "",
     "createdAt": "2026-01-28T13:41:06.763Z",
-    "updatedAt": "2026-02-24T07:22:15.205Z"
+    "updatedAt": "2026-04-13T13:12:42.172Z"
   },
   {
     "id": "1769607666763rz8eypb6v",
     "name": "Cotton Sarees",
     "category": "sarees:cotton",
     "price": "1170",
-    "description": "SOLD OUT\nFabric: Pure Khadi Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
+    "description": "Fabric: Pure Khadi Cotton\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
     "images": [
       "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769607625343-trr85bjfv.jpg"
     ],
     "alt": "",
     "createdAt": "2026-01-28T13:41:06.763Z",
-    "updatedAt": "2026-02-24T07:22:15.205Z"
+    "updatedAt": "2026-04-13T13:12:42.172Z"
   },
   {
     "id": "1769607976646y941v06u0",
