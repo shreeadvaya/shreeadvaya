@@ -244,6 +244,11 @@ export default async function handler(req, res) {
         // Update reference (push commit)
         await updateReference(GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO, commit.sha);
 
+        // Also patch index.html if content was updated
+        if (body.content && body.content.update) {
+            await patchIndexHtml(GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO, body.content.update);
+        }
+
         return res.status(200).json({ 
             success: true, 
             message: 'All changes saved successfully in a single commit',
@@ -253,6 +258,75 @@ export default async function handler(req, res) {
     } catch (error) {
         console.error('Batch API Error:', error);
         return res.status(500).json({ error: error.message });
+    }
+}
+
+// Patch index.html directly with updated content values
+async function patchIndexHtml(token, owner, repo, content) {
+    try {
+        const response = await fetch(
+            `https://api.github.com/repos/${owner}/${repo}/contents/index.html`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'X-GitHub-Api-Version': '2022-11-28'
+                }
+            }
+        );
+        if (!response.ok) return;
+
+        const fileData = await response.json();
+        const sha = fileData.sha;
+        let html = Buffer.from(fileData.content, 'base64').toString('utf-8');
+
+        function patchById(html, id, newText) {
+            const regex = new RegExp(`(id="${id}"[^>]*>)([\\s\\S]*?)(<\\/[a-zA-Z0-9]+>)`, 'i');
+            return html.replace(regex, `$1${newText}$3`);
+        }
+
+        function patchAttr(html, id, attr, newValue) {
+            const regex = new RegExp(`(<[a-zA-Z]+[^>]*id="${id}"[^>]*)${attr}="[^"]*"`, 'i');
+            if (regex.test(html)) return html.replace(regex, `$1${attr}="${newValue}"`);
+            const regex2 = new RegExp(`(<[a-zA-Z]+[^>]*${attr}=")[^"]*("[^>]*id="${id}")`, 'i');
+            return html.replace(regex2, `$1${newValue}$2`);
+        }
+
+        if (content.logo)          html = patchAttr(html, 'siteLogo', 'src', content.logo);
+        if (content.siteName)      html = patchById(html, 'siteNameNav', content.siteName);
+        if (content.siteName)      html = patchById(html, 'siteNameFooter', content.siteName);
+        if (content.siteName)      html = patchById(html, 'siteNameCopyright', content.siteName);
+        if (content.hero?.title)   html = patchById(html, 'heroTitle', content.hero.title);
+        if (content.hero?.subtitle) html = patchById(html, 'heroSubtitle', content.hero.subtitle);
+        if (content.about)         html = patchById(html, 'aboutDescription', content.about);
+        if (content.whatsapp) {
+            const formatted = content.whatsapp.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2 $3');
+            html = patchById(html, 'whatsappNumber', formatted);
+            html = patchAttr(html, 'whatsappLink', 'href', `https://wa.me/${content.whatsapp}`);
+        }
+        if (content.email) html = patchById(html, 'contactEmail', content.email);
+        if (content.phone) html = patchById(html, 'contactPhone', content.phone);
+
+        const encodedContent = Buffer.from(html).toString('base64');
+        await fetch(
+            `https://api.github.com/repos/${owner}/${repo}/contents/index.html`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json',
+                    'X-GitHub-Api-Version': '2022-11-28'
+                },
+                body: JSON.stringify({
+                    message: `Update index.html via admin panel - ${new Date().toISOString()}`,
+                    content: encodedContent,
+                    sha
+                })
+            }
+        );
+    } catch (error) {
+        console.error('Error patching index.html:', error);
     }
 }
 
