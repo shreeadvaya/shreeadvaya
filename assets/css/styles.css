@@ -370,7 +370,7 @@ h6 {
 
 /* About Section - Perfectly Centered */
 .about {
-    padding: 120px 0;
+    padding: 80px 0 60px;
     background: #ffffff;
     position: relative;
 }
@@ -1022,7 +1022,7 @@ h6 {
 
 /* Contact Section - Perfectly Symmetrical */
 .contact {
-    padding: 120px 0;
+    padding: 60px 0 120px;
     background: linear-gradient(135deg, #fefbf5 0%, #f8f4eb 100%);
 }
 
