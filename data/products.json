@@ -1250,5 +1250,22 @@
     ],
     "alt": "",
     "createdAt": "2026-04-15T08:22:23.112Z"
+  },
+  {
+    "id": "1776241494713lovet9r9z",
+    "name": "Cotton Sarees",
+    "category": "sarees:linen",
+    "price": "2099",
+    "description": "Fabric: Linen Cotton\nFeel: Soft, breathable, and lightweight\nWash Care : Dry Clean/ Hand wash gently in cold water",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241386669-cyv3ofkgt.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241387389-u2i8m32e7.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241388033-9uf3ml5ya.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241388646-248wkpt04.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241389313-rtyjpb0qw.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241389948-n06x9vxrx.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-04-15T08:24:54.714Z"
   }
 ]
