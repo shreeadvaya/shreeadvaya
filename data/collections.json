@@ -93,10 +93,20 @@
         "id": "kota-doria",
         "name": "Kota Doria",
         "order": 18
+      },
+      {
+        "id": "semi-patola",
+        "name": "Semi Patola",
+        "order": 19
+      },
+      {
+        "id": "muslin",
+        "name": "Muslin",
+        "order": 20
       }
     ],
     "createdAt": "2026-01-23T00:00:00.000Z",
-    "updatedAt": "2026-02-24T07:04:15.317Z"
+    "updatedAt": "2026-04-15T08:03:45.302Z"
   },
   {
     "id": "unstitched-salwar",
