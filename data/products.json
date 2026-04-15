@@ -1204,5 +1204,51 @@
     ],
     "alt": "",
     "createdAt": "2026-04-15T08:14:51.482Z"
+  },
+  {
+    "id": "17762413431125o30f1crs",
+    "name": "Semi Mysore Crepe",
+    "category": "sarees:semi-crepe",
+    "price": "1650",
+    "description": "Fabric: Semi Crepe silk\nFeel: Lightweight, Easy to drape\nWash Care : Hand wash gently in cold water /Dry Clean",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241193700-r06erblhw.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241194361-z6j4lwjtj.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241194914-b8cjjfhis.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241195460-ez7typlb3.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241195989-88cr0idyw.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241196584-ifnp946n5.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-04-15T08:22:23.112Z"
+  },
+  {
+    "id": "1776241343112l6buwpysa",
+    "name": "Semi Mysore Crepe",
+    "category": "sarees:semi-crepe",
+    "price": "1180",
+    "description": "Fabric: Semi Crepe silk\nFeel: Lightweight, Easy to drape\nWash Care : Hand wash gently in cold water /Dry Clean",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241270733-rxwws7r3r.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241271437-qzwsoc0fl.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241272011-wpoek4r3n.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-04-15T08:22:23.112Z"
+  },
+  {
+    "id": "1776241343112kqf23h2vb",
+    "name": "Semi Mysore Crepe",
+    "category": "sarees:semi-crepe",
+    "price": "1580",
+    "description": "Fabric: Semi Crepe silk\nFeel: Lightweight, Easy to drape\nWash Care : Hand wash gently in cold water /Dry Clean",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241313022-6xmxpsz15.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241313656-969wwjqhb.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241314270-cqcjewyqb.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776241314826-6hmfqhbro.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-04-15T08:22:23.112Z"
   }
 ]
