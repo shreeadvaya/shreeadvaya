@@ -1267,5 +1267,20 @@
     ],
     "alt": "",
     "createdAt": "2026-04-15T08:24:54.714Z"
+  },
+  {
+    "id": "17762429756429ny69awbu",
+    "name": "Muslin saree",
+    "category": "sarees:muslin",
+    "price": "1480",
+    "description": "Fabric: Muslin\nFeel: Soft, breathable, and lightweight\nWash Care : Hand wash gently in cold water",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776242875733-caytm9lew.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776242876335-zj337rzf8.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776242876922-oq0o62ofs.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776242877487-jk5jnfs8g.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-04-15T08:49:35.643Z"
   }
 ]
