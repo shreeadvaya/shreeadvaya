@@ -578,10 +578,13 @@
     "description": "Fabric: Maheshwari Silk Cotton\nFeel: Lightweight, soft, and breathable\nWash Care : Dry Clean / Hand wash gently in cold water & Dry in shade",
     "images": [
       "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769608034887-jjw6ivwji.jpg",
-      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769608035599-5iv7gum8l.jpg"
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1769608035599-5iv7gum8l.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240764053-pf84umwqs.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240764779-0xx7o8hry.jpg"
     ],
     "alt": "",
-    "createdAt": "2026-01-28T13:49:16.199Z"
+    "createdAt": "2026-01-28T13:49:16.199Z",
+    "updatedAt": "2026-04-15T08:12:54.095Z"
   },
   {
     "id": "17696083332170f05gicz3",
@@ -1166,5 +1169,19 @@
     ],
     "alt": "",
     "createdAt": "2026-04-15T08:10:18.917Z"
+  },
+  {
+    "id": "1776240774095hui9pi4g3",
+    "name": "Cotton Sarees",
+    "category": "sarees:cotton",
+    "price": "1450",
+    "description": "Fabric: Maheshwari Silk Cotton\nFeel: Lightweight, soft, and breathable\nWash Care : Dry Clean / Hand wash gently in cold water & Dry in shade",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240649519-dg9251qy7.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240650177-tbmat6g06.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240650732-r7kaptuu8.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-04-15T08:12:54.095Z"
   }
 ]
