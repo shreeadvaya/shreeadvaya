@@ -1183,5 +1183,26 @@
     ],
     "alt": "",
     "createdAt": "2026-04-15T08:12:54.095Z"
+  },
+  {
+    "id": "1776240891482kal066y6f",
+    "name": "Semi Patola",
+    "category": "sarees:semi-patola",
+    "price": "1480",
+    "description": "Fabric: Dola Silk\nDesign: Patola Print\nWash Care : Dry Clean only",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240846608-w96pnodbu.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240847352-w17fzia7c.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240847960-dw29u1zxh.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240848780-mxmggpvu5.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240849668-8yzkpwk0d.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240850192-5egdl3neu.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240850784-6qheoqz42.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240851331-0dqdvru8s.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240851972-wqpowvyth.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240852541-1p771cs6u.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-04-15T08:14:51.482Z"
   }
 ]
