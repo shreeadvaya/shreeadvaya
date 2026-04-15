@@ -1139,5 +1139,19 @@
     ],
     "alt": "",
     "createdAt": "2026-02-24T07:17:52.805Z"
+  },
+  {
+    "id": "1776240546246kc9zo64i0",
+    "name": "Cotton Sarees",
+    "category": "sarees:cotton",
+    "price": "1100",
+    "description": "Fabric: Pure khadi Cotton with Polka dots\nFeel: Soft, breathable, and comfortable\nWash Care : Hand wash gently in cold water & Dry in shade",
+    "images": [
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240452873-n9c4qa6lr.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240453663-lt3h6e8jr.jpg",
+      "https://raw.githubusercontent.com/shreeadvaya/shreeadvaya/main/assets/images/image-1776240454315-f52r0qv4x.jpg"
+    ],
+    "alt": "",
+    "createdAt": "2026-04-15T08:09:06.247Z"
   }
 ]
